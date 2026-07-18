@@ -1,29 +1,47 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { BottomNav } from "@/components/BottomNav";
 
 export const Route = createFileRoute("/profile")({ component: Profile });
 
 function Profile() {
-  const { user, signOut } = useApp();
+  const { user, session, loading, signOut } = useApp();
   const nav = useNavigate();
-  if (!user) { nav({ to: "/auth" }); return null; }
+
+  useEffect(() => {
+    if (!loading && !session) nav({ to: "/auth" });
+  }, [loading, session, nav]);
+
+  if (loading || !user) return null;
+
+  const onSignOut = async () => { await signOut(); nav({ to: "/auth" }); };
 
   return (
     <div className="min-h-screen pb-28">
       <div className="relative overflow-hidden px-5 pb-10 pt-8 text-white" style={{ background: "var(--gradient-hero)" }}>
         <div className="absolute -right-16 top-0 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
         <div className="relative flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-emerald text-emerald-foreground font-[var(--font-display)] text-2xl font-bold ring-2 ring-white/20">
-            {user.name[0]}
+          <div className="relative">
+            {user.avatar_url ? (
+              <img src={user.avatar_url} alt={user.name} className="h-16 w-16 rounded-3xl object-cover ring-2 ring-white/20" />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-emerald text-emerald-foreground font-[var(--font-display)] text-2xl font-bold ring-2 ring-white/20">
+                {user.avatar}
+              </div>
+            )}
+            <Link to="/profile/edit" aria-label="Edit profile"
+              className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-primary shadow-md">
+              <Pencil className="h-3.5 w-3.5" />
+            </Link>
           </div>
           <div className="min-w-0">
-            <h1 className="truncate font-[var(--font-display)] text-2xl font-bold">{user.name}</h1>
+            <h1 className="truncate font-[var(--font-display)] text-2xl font-bold">{user.name || "Driver"}</h1>
             <p className="truncate text-sm text-white/70">{user.email}</p>
             <div className="mt-1 flex items-center gap-1 text-xs">
               <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-              <span className="font-semibold">{user.reputation}</span>
+              <span className="font-semibold">{user.reputation.toFixed(1)}</span>
               <span className="text-white/60">reputation</span>
             </div>
           </div>
@@ -38,10 +56,11 @@ function Profile() {
 
       <div className="px-4 pt-5">
         <div className="rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">
-          <Row icon={Bell} label="Notifications" hint="Push, email, in-app" />
-          <Row icon={CreditCard} label="Payment methods" hint="Visa •• 4242" />
-          <Row icon={Shield} label="Privacy & safety" hint="Location, data sharing" />
-          <Row icon={Settings} label="App preferences" hint="Language, appearance" />
+          <Link to="/profile/edit"><Row icon={Pencil} label="Edit profile" hint="Name, phone, vehicle plate" /></Link>
+          <Link to="/profile/edit"><Row icon={Bell} label="Notifications" hint={notifSummary(user.notification_prefs)} /></Link>
+          <Link to="/profile/edit"><Row icon={Shield} label="Privacy & safety" hint={user.location_prefs.share_location ? "Location sharing on" : "Location sharing off"} /></Link>
+          <Link to="/profile/edit"><Row icon={Settings} label="App preferences" hint={`${user.language.toUpperCase()} · ${user.theme}`} /></Link>
+          <Row icon={CreditCard} label="Payment methods" hint="Coming soon" />
           <Row icon={HelpCircle} label="Help center" hint="Docs, contact us" />
         </div>
 
@@ -59,7 +78,7 @@ function Profile() {
           ))}
         </div>
 
-        <button onClick={() => { signOut(); nav({ to: "/auth" }); }} className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-card py-3.5 text-sm font-semibold text-[color:var(--danger)] shadow-[var(--shadow-card)]">
+        <button onClick={onSignOut} className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-card py-3.5 text-sm font-semibold text-[color:var(--danger)] shadow-[var(--shadow-card)]">
           <LogOut className="h-4 w-4" /> Sign out
         </button>
       </div>
@@ -67,6 +86,11 @@ function Profile() {
       <BottomNav />
     </div>
   );
+}
+
+function notifSummary(p: { push: boolean; nearby_spots: boolean; reservations: boolean; points: boolean }) {
+  const on = [p.push && "Push", p.nearby_spots && "Nearby", p.reservations && "Reservations", p.points && "Points"].filter(Boolean);
+  return on.length ? on.join(", ") : "All off";
 }
 
 function MiniStat({ label, value }: { label: string; value: number }) {
@@ -78,15 +102,15 @@ function MiniStat({ label, value }: { label: string; value: number }) {
   );
 }
 
-function Row({ icon: Icon, label, hint }: { icon: any; label: string; hint: string }) {
+function Row({ icon: Icon, label, hint }: { icon: React.ComponentType<{ className?: string }>; label: string; hint: string }) {
   return (
-    <button className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left hover:bg-muted">
+    <div className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left hover:bg-muted">
       <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-muted"><Icon className="h-4 w-4" /></div>
       <div className="flex-1">
         <p className="text-sm font-semibold">{label}</p>
         <p className="text-xs text-muted-foreground">{hint}</p>
       </div>
       <ChevronRight className="h-4 w-4 text-muted-foreground" />
-    </button>
+    </div>
   );
 }
