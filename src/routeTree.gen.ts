@@ -69,6 +69,7 @@ import { Route as ProfileReputationRouteImport } from './routes/profile.reputati
 import { Route as ProfileHistoryRouteImport } from './routes/profile.history'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 import { Route as ProfileBadgesRouteImport } from './routes/profile.badges'
+import { Route as ProfileAchievementsRouteImport } from './routes/profile.achievements'
 import { Route as PaymentsSuccessRouteImport } from './routes/payments.success'
 import { Route as PaymentsSubscriptionsRouteImport } from './routes/payments.subscriptions'
 import { Route as PaymentsInvoicesRouteImport } from './routes/payments.invoices'
@@ -407,6 +408,11 @@ const ProfileBadgesRoute = ProfileBadgesRouteImport.update({
   path: '/badges',
   getParentRoute: () => ProfileRoute,
 } as any)
+const ProfileAchievementsRoute = ProfileAchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
+  getParentRoute: () => ProfileRoute,
+} as any)
 const PaymentsSuccessRoute = PaymentsSuccessRouteImport.update({
   id: '/success',
   path: '/success',
@@ -654,6 +660,7 @@ export interface FileRoutesByFullPath {
   '/payments/invoices': typeof PaymentsInvoicesRoute
   '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
   '/payments/success': typeof PaymentsSuccessRoute
+  '/profile/achievements': typeof ProfileAchievementsRoute
   '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile/history': typeof ProfileHistoryRoute
@@ -753,6 +760,7 @@ export interface FileRoutesByTo {
   '/payments/invoices': typeof PaymentsInvoicesRoute
   '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
   '/payments/success': typeof PaymentsSuccessRoute
+  '/profile/achievements': typeof ProfileAchievementsRoute
   '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile/history': typeof ProfileHistoryRoute
@@ -853,6 +861,7 @@ export interface FileRoutesById {
   '/payments/invoices': typeof PaymentsInvoicesRoute
   '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
   '/payments/success': typeof PaymentsSuccessRoute
+  '/profile/achievements': typeof ProfileAchievementsRoute
   '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile/history': typeof ProfileHistoryRoute
@@ -954,6 +963,7 @@ export interface FileRouteTypes {
     | '/payments/invoices'
     | '/payments/subscriptions'
     | '/payments/success'
+    | '/profile/achievements'
     | '/profile/badges'
     | '/profile/edit'
     | '/profile/history'
@@ -1053,6 +1063,7 @@ export interface FileRouteTypes {
     | '/payments/invoices'
     | '/payments/subscriptions'
     | '/payments/success'
+    | '/profile/achievements'
     | '/profile/badges'
     | '/profile/edit'
     | '/profile/history'
@@ -1152,6 +1163,7 @@ export interface FileRouteTypes {
     | '/payments/invoices'
     | '/payments/subscriptions'
     | '/payments/success'
+    | '/profile/achievements'
     | '/profile/badges'
     | '/profile/edit'
     | '/profile/history'
@@ -1657,6 +1669,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileBadgesRouteImport
       parentRoute: typeof ProfileRoute
     }
+    '/profile/achievements': {
+      id: '/profile/achievements'
+      path: '/achievements'
+      fullPath: '/profile/achievements'
+      preLoaderRoute: typeof ProfileAchievementsRouteImport
+      parentRoute: typeof ProfileRoute
+    }
     '/payments/success': {
       id: '/payments/success'
       path: '/success'
@@ -2051,6 +2070,7 @@ const ProfileVehiclesRouteWithChildren = ProfileVehiclesRoute._addFileChildren(
 )
 
 interface ProfileRouteChildren {
+  ProfileAchievementsRoute: typeof ProfileAchievementsRoute
   ProfileBadgesRoute: typeof ProfileBadgesRoute
   ProfileEditRoute: typeof ProfileEditRoute
   ProfileHistoryRoute: typeof ProfileHistoryRoute
@@ -2061,6 +2081,7 @@ interface ProfileRouteChildren {
 }
 
 const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileAchievementsRoute: ProfileAchievementsRoute,
   ProfileBadgesRoute: ProfileBadgesRoute,
   ProfileEditRoute: ProfileEditRoute,
   ProfileHistoryRoute: ProfileHistoryRoute,
