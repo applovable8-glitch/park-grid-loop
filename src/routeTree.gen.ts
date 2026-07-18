@@ -9,17 +9,92 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as VerifyPhoneRouteImport } from './routes/verify-phone'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ReservationSuccessRouteImport } from './routes/reservation-success'
+import { Route as ReservationCancelledRouteImport } from './routes/reservation-cancelled'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PaymentsRouteImport } from './routes/payments'
+import { Route as ParkingReleasedRouteImport } from './routes/parking-released'
+import { Route as OtpRouteImport } from './routes/otp'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as CreateProfileRouteImport } from './routes/create-profile'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsUnitsRouteImport } from './routes/settings.units'
+import { Route as SettingsThemeRouteImport } from './routes/settings.theme'
+import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
+import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
+import { Route as SettingsPreferencesRouteImport } from './routes/settings.preferences'
+import { Route as SettingsPermissionsRouteImport } from './routes/settings.permissions'
+import { Route as SettingsNotificationsRouteImport } from './routes/settings.notifications'
+import { Route as SettingsLocationRouteImport } from './routes/settings.location'
+import { Route as SettingsLanguageRouteImport } from './routes/settings.language'
+import { Route as SettingsAccountsRouteImport } from './routes/settings.accounts'
+import { Route as SearchSavedRouteImport } from './routes/search.saved'
+import { Route as SearchRecentRouteImport } from './routes/search.recent'
+import { Route as SearchFiltersRouteImport } from './routes/search.filters'
+import { Route as RewardsRedeemRouteImport } from './routes/rewards.redeem'
+import { Route as RewardsLeaderboardRouteImport } from './routes/rewards.leaderboard'
+import { Route as RewardsInviteRouteImport } from './routes/rewards.invite'
+import { Route as RewardsHistoryRouteImport } from './routes/rewards.history'
+import { Route as RewardsDailyRouteImport } from './routes/rewards.daily'
+import { Route as RewardsBuyRouteImport } from './routes/rewards.buy'
+import { Route as RewardsAchievementsRouteImport } from './routes/rewards.achievements'
+import { Route as ReservationIdRouteImport } from './routes/reservation.$id'
+import { Route as ProfileVehiclesRouteImport } from './routes/profile.vehicles'
+import { Route as ProfileStatsRouteImport } from './routes/profile.stats'
+import { Route as ProfileReservationsRouteImport } from './routes/profile.reservations'
+import { Route as ProfileReputationRouteImport } from './routes/profile.reputation'
+import { Route as ProfileHistoryRouteImport } from './routes/profile.history'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
+import { Route as ProfileBadgesRouteImport } from './routes/profile.badges'
+import { Route as PaymentsSuccessRouteImport } from './routes/payments.success'
+import { Route as PaymentsSubscriptionsRouteImport } from './routes/payments.subscriptions'
+import { Route as PaymentsInvoicesRouteImport } from './routes/payments.invoices'
+import { Route as PaymentsHistoryRouteImport } from './routes/payments.history'
+import { Route as PaymentsFailedRouteImport } from './routes/payments.failed'
+import { Route as PaymentsCheckoutRouteImport } from './routes/payments.checkout'
+import { Route as PaymentsAddRouteImport } from './routes/payments.add'
+import { Route as ParkingIdRouteImport } from './routes/parking.$id'
+import { Route as NotificationsPreferencesRouteImport } from './routes/notifications.preferences'
+import { Route as NotificationsIdRouteImport } from './routes/notifications.$id'
+import { Route as NavigateCompletedRouteImport } from './routes/navigate.completed'
+import { Route as NavigateIdRouteImport } from './routes/navigate.$id'
+import { Route as LeavingSuccessRouteImport } from './routes/leaving.success'
+import { Route as LeavingHistoryRouteImport } from './routes/leaving.history'
+import { Route as AuthSuccessRouteImport } from './routes/auth.success'
+import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
+import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyPhoneRoute = VerifyPhoneRouteImport.update({
+  id: '/verify-phone',
+  path: '/verify-phone',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -35,9 +110,39 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReservationSuccessRoute = ReservationSuccessRouteImport.update({
+  id: '/reservation-success',
+  path: '/reservation-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReservationCancelledRoute = ReservationCancelledRouteImport.update({
+  id: '/reservation-cancelled',
+  path: '/reservation-cancelled',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsRoute = PaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParkingReleasedRoute = ParkingReleasedRouteImport.update({
+  id: '/parking-released',
+  path: '/parking-released',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OtpRoute = OtpRouteImport.update({
+  id: '/otp',
+  path: '/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -55,6 +160,11 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CreateProfileRoute = CreateProfileRouteImport.update({
+  id: '/create-profile',
+  path: '/create-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -65,102 +175,696 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsUnitsRoute = SettingsUnitsRouteImport.update({
+  id: '/units',
+  path: '/units',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsThemeRoute = SettingsThemeRouteImport.update({
+  id: '/theme',
+  path: '/theme',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsPrivacyRoute = SettingsPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsPreferencesRoute = SettingsPreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsPermissionsRoute = SettingsPermissionsRouteImport.update({
+  id: '/permissions',
+  path: '/permissions',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsNotificationsRoute = SettingsNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsLocationRoute = SettingsLocationRouteImport.update({
+  id: '/location',
+  path: '/location',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsLanguageRoute = SettingsLanguageRouteImport.update({
+  id: '/language',
+  path: '/language',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsAccountsRoute = SettingsAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SearchSavedRoute = SearchSavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => SearchRoute,
+} as any)
+const SearchRecentRoute = SearchRecentRouteImport.update({
+  id: '/recent',
+  path: '/recent',
+  getParentRoute: () => SearchRoute,
+} as any)
+const SearchFiltersRoute = SearchFiltersRouteImport.update({
+  id: '/filters',
+  path: '/filters',
+  getParentRoute: () => SearchRoute,
+} as any)
+const RewardsRedeemRoute = RewardsRedeemRouteImport.update({
+  id: '/redeem',
+  path: '/redeem',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const RewardsLeaderboardRoute = RewardsLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const RewardsInviteRoute = RewardsInviteRouteImport.update({
+  id: '/invite',
+  path: '/invite',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const RewardsHistoryRoute = RewardsHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const RewardsDailyRoute = RewardsDailyRouteImport.update({
+  id: '/daily',
+  path: '/daily',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const RewardsBuyRoute = RewardsBuyRouteImport.update({
+  id: '/buy',
+  path: '/buy',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const RewardsAchievementsRoute = RewardsAchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const ReservationIdRoute = ReservationIdRouteImport.update({
+  id: '/reservation/$id',
+  path: '/reservation/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileVehiclesRoute = ProfileVehiclesRouteImport.update({
+  id: '/vehicles',
+  path: '/vehicles',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const ProfileStatsRoute = ProfileStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const ProfileReservationsRoute = ProfileReservationsRouteImport.update({
+  id: '/reservations',
+  path: '/reservations',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const ProfileReputationRoute = ProfileReputationRouteImport.update({
+  id: '/reputation',
+  path: '/reputation',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const ProfileHistoryRoute = ProfileHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => ProfileRoute,
+} as any)
 const ProfileEditRoute = ProfileEditRouteImport.update({
   id: '/edit',
   path: '/edit',
   getParentRoute: () => ProfileRoute,
 } as any)
+const ProfileBadgesRoute = ProfileBadgesRouteImport.update({
+  id: '/badges',
+  path: '/badges',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const PaymentsSuccessRoute = PaymentsSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const PaymentsSubscriptionsRoute = PaymentsSubscriptionsRouteImport.update({
+  id: '/subscriptions',
+  path: '/subscriptions',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const PaymentsInvoicesRoute = PaymentsInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const PaymentsHistoryRoute = PaymentsHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const PaymentsFailedRoute = PaymentsFailedRouteImport.update({
+  id: '/failed',
+  path: '/failed',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const PaymentsCheckoutRoute = PaymentsCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const PaymentsAddRoute = PaymentsAddRouteImport.update({
+  id: '/add',
+  path: '/add',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const ParkingIdRoute = ParkingIdRouteImport.update({
+  id: '/parking/$id',
+  path: '/parking/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsPreferencesRoute =
+  NotificationsPreferencesRouteImport.update({
+    id: '/preferences',
+    path: '/preferences',
+    getParentRoute: () => NotificationsRoute,
+  } as any)
+const NotificationsIdRoute = NotificationsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => NotificationsRoute,
+} as any)
+const NavigateCompletedRoute = NavigateCompletedRouteImport.update({
+  id: '/navigate/completed',
+  path: '/navigate/completed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NavigateIdRoute = NavigateIdRouteImport.update({
+  id: '/navigate/$id',
+  path: '/navigate/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeavingSuccessRoute = LeavingSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => LeavingRoute,
+} as any)
+const LeavingHistoryRoute = LeavingHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => LeavingRoute,
+} as any)
+const AuthSuccessRoute = AuthSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => AuthRoute,
+} as any)
+const RewardsRewardIdRoute = RewardsRewardIdRouteImport.update({
+  id: '/reward/$id',
+  path: '/reward/$id',
+  getParentRoute: () => RewardsRoute,
+} as any)
+const ProfileVehiclesAddRoute = ProfileVehiclesAddRouteImport.update({
+  id: '/add',
+  path: '/add',
+  getParentRoute: () => ProfileVehiclesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/create-profile': typeof CreateProfileRoute
   '/home': typeof HomeRoute
-  '/leaving': typeof LeavingRoute
-  '/notifications': typeof NotificationsRoute
+  '/leaving': typeof LeavingRouteWithChildren
+  '/notifications': typeof NotificationsRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
+  '/otp': typeof OtpRoute
+  '/parking-released': typeof ParkingReleasedRoute
+  '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRouteWithChildren
+  '/reservation-cancelled': typeof ReservationCancelledRoute
+  '/reservation-success': typeof ReservationSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/rewards': typeof RewardsRoute
-  '/search': typeof SearchRoute
+  '/rewards': typeof RewardsRouteWithChildren
+  '/search': typeof SearchRouteWithChildren
+  '/settings': typeof SettingsRouteWithChildren
+  '/verify-email': typeof VerifyEmailRoute
+  '/verify-phone': typeof VerifyPhoneRoute
+  '/welcome': typeof WelcomeRoute
+  '/auth/success': typeof AuthSuccessRoute
+  '/leaving/history': typeof LeavingHistoryRoute
+  '/leaving/success': typeof LeavingSuccessRoute
+  '/navigate/$id': typeof NavigateIdRoute
+  '/navigate/completed': typeof NavigateCompletedRoute
+  '/notifications/$id': typeof NotificationsIdRoute
+  '/notifications/preferences': typeof NotificationsPreferencesRoute
+  '/parking/$id': typeof ParkingIdRoute
+  '/payments/add': typeof PaymentsAddRoute
+  '/payments/checkout': typeof PaymentsCheckoutRoute
+  '/payments/failed': typeof PaymentsFailedRoute
+  '/payments/history': typeof PaymentsHistoryRoute
+  '/payments/invoices': typeof PaymentsInvoicesRoute
+  '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
+  '/payments/success': typeof PaymentsSuccessRoute
+  '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
+  '/profile/history': typeof ProfileHistoryRoute
+  '/profile/reputation': typeof ProfileReputationRoute
+  '/profile/reservations': typeof ProfileReservationsRoute
+  '/profile/stats': typeof ProfileStatsRoute
+  '/profile/vehicles': typeof ProfileVehiclesRouteWithChildren
+  '/reservation/$id': typeof ReservationIdRoute
+  '/rewards/achievements': typeof RewardsAchievementsRoute
+  '/rewards/buy': typeof RewardsBuyRoute
+  '/rewards/daily': typeof RewardsDailyRoute
+  '/rewards/history': typeof RewardsHistoryRoute
+  '/rewards/invite': typeof RewardsInviteRoute
+  '/rewards/leaderboard': typeof RewardsLeaderboardRoute
+  '/rewards/redeem': typeof RewardsRedeemRoute
+  '/search/filters': typeof SearchFiltersRoute
+  '/search/recent': typeof SearchRecentRoute
+  '/search/saved': typeof SearchSavedRoute
+  '/settings/accounts': typeof SettingsAccountsRoute
+  '/settings/language': typeof SettingsLanguageRoute
+  '/settings/location': typeof SettingsLocationRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
+  '/settings/permissions': typeof SettingsPermissionsRoute
+  '/settings/preferences': typeof SettingsPreferencesRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
+  '/settings/security': typeof SettingsSecurityRoute
+  '/settings/theme': typeof SettingsThemeRoute
+  '/settings/units': typeof SettingsUnitsRoute
+  '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
+  '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/create-profile': typeof CreateProfileRoute
   '/home': typeof HomeRoute
-  '/leaving': typeof LeavingRoute
-  '/notifications': typeof NotificationsRoute
+  '/leaving': typeof LeavingRouteWithChildren
+  '/notifications': typeof NotificationsRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
+  '/otp': typeof OtpRoute
+  '/parking-released': typeof ParkingReleasedRoute
+  '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRouteWithChildren
+  '/reservation-cancelled': typeof ReservationCancelledRoute
+  '/reservation-success': typeof ReservationSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/rewards': typeof RewardsRoute
-  '/search': typeof SearchRoute
+  '/rewards': typeof RewardsRouteWithChildren
+  '/search': typeof SearchRouteWithChildren
+  '/settings': typeof SettingsRouteWithChildren
+  '/verify-email': typeof VerifyEmailRoute
+  '/verify-phone': typeof VerifyPhoneRoute
+  '/welcome': typeof WelcomeRoute
+  '/auth/success': typeof AuthSuccessRoute
+  '/leaving/history': typeof LeavingHistoryRoute
+  '/leaving/success': typeof LeavingSuccessRoute
+  '/navigate/$id': typeof NavigateIdRoute
+  '/navigate/completed': typeof NavigateCompletedRoute
+  '/notifications/$id': typeof NotificationsIdRoute
+  '/notifications/preferences': typeof NotificationsPreferencesRoute
+  '/parking/$id': typeof ParkingIdRoute
+  '/payments/add': typeof PaymentsAddRoute
+  '/payments/checkout': typeof PaymentsCheckoutRoute
+  '/payments/failed': typeof PaymentsFailedRoute
+  '/payments/history': typeof PaymentsHistoryRoute
+  '/payments/invoices': typeof PaymentsInvoicesRoute
+  '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
+  '/payments/success': typeof PaymentsSuccessRoute
+  '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
+  '/profile/history': typeof ProfileHistoryRoute
+  '/profile/reputation': typeof ProfileReputationRoute
+  '/profile/reservations': typeof ProfileReservationsRoute
+  '/profile/stats': typeof ProfileStatsRoute
+  '/profile/vehicles': typeof ProfileVehiclesRouteWithChildren
+  '/reservation/$id': typeof ReservationIdRoute
+  '/rewards/achievements': typeof RewardsAchievementsRoute
+  '/rewards/buy': typeof RewardsBuyRoute
+  '/rewards/daily': typeof RewardsDailyRoute
+  '/rewards/history': typeof RewardsHistoryRoute
+  '/rewards/invite': typeof RewardsInviteRoute
+  '/rewards/leaderboard': typeof RewardsLeaderboardRoute
+  '/rewards/redeem': typeof RewardsRedeemRoute
+  '/search/filters': typeof SearchFiltersRoute
+  '/search/recent': typeof SearchRecentRoute
+  '/search/saved': typeof SearchSavedRoute
+  '/settings/accounts': typeof SettingsAccountsRoute
+  '/settings/language': typeof SettingsLanguageRoute
+  '/settings/location': typeof SettingsLocationRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
+  '/settings/permissions': typeof SettingsPermissionsRoute
+  '/settings/preferences': typeof SettingsPreferencesRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
+  '/settings/security': typeof SettingsSecurityRoute
+  '/settings/theme': typeof SettingsThemeRoute
+  '/settings/units': typeof SettingsUnitsRoute
+  '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
+  '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
+  '/create-profile': typeof CreateProfileRoute
   '/home': typeof HomeRoute
-  '/leaving': typeof LeavingRoute
-  '/notifications': typeof NotificationsRoute
+  '/leaving': typeof LeavingRouteWithChildren
+  '/notifications': typeof NotificationsRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
+  '/otp': typeof OtpRoute
+  '/parking-released': typeof ParkingReleasedRoute
+  '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRouteWithChildren
+  '/reservation-cancelled': typeof ReservationCancelledRoute
+  '/reservation-success': typeof ReservationSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/rewards': typeof RewardsRoute
-  '/search': typeof SearchRoute
+  '/rewards': typeof RewardsRouteWithChildren
+  '/search': typeof SearchRouteWithChildren
+  '/settings': typeof SettingsRouteWithChildren
+  '/verify-email': typeof VerifyEmailRoute
+  '/verify-phone': typeof VerifyPhoneRoute
+  '/welcome': typeof WelcomeRoute
+  '/auth/success': typeof AuthSuccessRoute
+  '/leaving/history': typeof LeavingHistoryRoute
+  '/leaving/success': typeof LeavingSuccessRoute
+  '/navigate/$id': typeof NavigateIdRoute
+  '/navigate/completed': typeof NavigateCompletedRoute
+  '/notifications/$id': typeof NotificationsIdRoute
+  '/notifications/preferences': typeof NotificationsPreferencesRoute
+  '/parking/$id': typeof ParkingIdRoute
+  '/payments/add': typeof PaymentsAddRoute
+  '/payments/checkout': typeof PaymentsCheckoutRoute
+  '/payments/failed': typeof PaymentsFailedRoute
+  '/payments/history': typeof PaymentsHistoryRoute
+  '/payments/invoices': typeof PaymentsInvoicesRoute
+  '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
+  '/payments/success': typeof PaymentsSuccessRoute
+  '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
+  '/profile/history': typeof ProfileHistoryRoute
+  '/profile/reputation': typeof ProfileReputationRoute
+  '/profile/reservations': typeof ProfileReservationsRoute
+  '/profile/stats': typeof ProfileStatsRoute
+  '/profile/vehicles': typeof ProfileVehiclesRouteWithChildren
+  '/reservation/$id': typeof ReservationIdRoute
+  '/rewards/achievements': typeof RewardsAchievementsRoute
+  '/rewards/buy': typeof RewardsBuyRoute
+  '/rewards/daily': typeof RewardsDailyRoute
+  '/rewards/history': typeof RewardsHistoryRoute
+  '/rewards/invite': typeof RewardsInviteRoute
+  '/rewards/leaderboard': typeof RewardsLeaderboardRoute
+  '/rewards/redeem': typeof RewardsRedeemRoute
+  '/search/filters': typeof SearchFiltersRoute
+  '/search/recent': typeof SearchRecentRoute
+  '/search/saved': typeof SearchSavedRoute
+  '/settings/accounts': typeof SettingsAccountsRoute
+  '/settings/language': typeof SettingsLanguageRoute
+  '/settings/location': typeof SettingsLocationRoute
+  '/settings/notifications': typeof SettingsNotificationsRoute
+  '/settings/permissions': typeof SettingsPermissionsRoute
+  '/settings/preferences': typeof SettingsPreferencesRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
+  '/settings/security': typeof SettingsSecurityRoute
+  '/settings/theme': typeof SettingsThemeRoute
+  '/settings/units': typeof SettingsUnitsRoute
+  '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
+  '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/create-profile'
     | '/home'
     | '/leaving'
     | '/notifications'
+    | '/onboarding'
+    | '/otp'
+    | '/parking-released'
+    | '/payments'
     | '/profile'
+    | '/reservation-cancelled'
+    | '/reservation-success'
     | '/reset-password'
     | '/rewards'
     | '/search'
+    | '/settings'
+    | '/verify-email'
+    | '/verify-phone'
+    | '/welcome'
+    | '/auth/success'
+    | '/leaving/history'
+    | '/leaving/success'
+    | '/navigate/$id'
+    | '/navigate/completed'
+    | '/notifications/$id'
+    | '/notifications/preferences'
+    | '/parking/$id'
+    | '/payments/add'
+    | '/payments/checkout'
+    | '/payments/failed'
+    | '/payments/history'
+    | '/payments/invoices'
+    | '/payments/subscriptions'
+    | '/payments/success'
+    | '/profile/badges'
     | '/profile/edit'
+    | '/profile/history'
+    | '/profile/reputation'
+    | '/profile/reservations'
+    | '/profile/stats'
+    | '/profile/vehicles'
+    | '/reservation/$id'
+    | '/rewards/achievements'
+    | '/rewards/buy'
+    | '/rewards/daily'
+    | '/rewards/history'
+    | '/rewards/invite'
+    | '/rewards/leaderboard'
+    | '/rewards/redeem'
+    | '/search/filters'
+    | '/search/recent'
+    | '/search/saved'
+    | '/settings/accounts'
+    | '/settings/language'
+    | '/settings/location'
+    | '/settings/notifications'
+    | '/settings/permissions'
+    | '/settings/preferences'
+    | '/settings/privacy'
+    | '/settings/security'
+    | '/settings/theme'
+    | '/settings/units'
+    | '/profile/vehicles/add'
+    | '/rewards/reward/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/create-profile'
     | '/home'
     | '/leaving'
     | '/notifications'
+    | '/onboarding'
+    | '/otp'
+    | '/parking-released'
+    | '/payments'
     | '/profile'
+    | '/reservation-cancelled'
+    | '/reservation-success'
     | '/reset-password'
     | '/rewards'
     | '/search'
+    | '/settings'
+    | '/verify-email'
+    | '/verify-phone'
+    | '/welcome'
+    | '/auth/success'
+    | '/leaving/history'
+    | '/leaving/success'
+    | '/navigate/$id'
+    | '/navigate/completed'
+    | '/notifications/$id'
+    | '/notifications/preferences'
+    | '/parking/$id'
+    | '/payments/add'
+    | '/payments/checkout'
+    | '/payments/failed'
+    | '/payments/history'
+    | '/payments/invoices'
+    | '/payments/subscriptions'
+    | '/payments/success'
+    | '/profile/badges'
     | '/profile/edit'
+    | '/profile/history'
+    | '/profile/reputation'
+    | '/profile/reservations'
+    | '/profile/stats'
+    | '/profile/vehicles'
+    | '/reservation/$id'
+    | '/rewards/achievements'
+    | '/rewards/buy'
+    | '/rewards/daily'
+    | '/rewards/history'
+    | '/rewards/invite'
+    | '/rewards/leaderboard'
+    | '/rewards/redeem'
+    | '/search/filters'
+    | '/search/recent'
+    | '/search/saved'
+    | '/settings/accounts'
+    | '/settings/language'
+    | '/settings/location'
+    | '/settings/notifications'
+    | '/settings/permissions'
+    | '/settings/preferences'
+    | '/settings/privacy'
+    | '/settings/security'
+    | '/settings/theme'
+    | '/settings/units'
+    | '/profile/vehicles/add'
+    | '/rewards/reward/$id'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/create-profile'
     | '/home'
     | '/leaving'
     | '/notifications'
+    | '/onboarding'
+    | '/otp'
+    | '/parking-released'
+    | '/payments'
     | '/profile'
+    | '/reservation-cancelled'
+    | '/reservation-success'
     | '/reset-password'
     | '/rewards'
     | '/search'
+    | '/settings'
+    | '/verify-email'
+    | '/verify-phone'
+    | '/welcome'
+    | '/auth/success'
+    | '/leaving/history'
+    | '/leaving/success'
+    | '/navigate/$id'
+    | '/navigate/completed'
+    | '/notifications/$id'
+    | '/notifications/preferences'
+    | '/parking/$id'
+    | '/payments/add'
+    | '/payments/checkout'
+    | '/payments/failed'
+    | '/payments/history'
+    | '/payments/invoices'
+    | '/payments/subscriptions'
+    | '/payments/success'
+    | '/profile/badges'
     | '/profile/edit'
+    | '/profile/history'
+    | '/profile/reputation'
+    | '/profile/reservations'
+    | '/profile/stats'
+    | '/profile/vehicles'
+    | '/reservation/$id'
+    | '/rewards/achievements'
+    | '/rewards/buy'
+    | '/rewards/daily'
+    | '/rewards/history'
+    | '/rewards/invite'
+    | '/rewards/leaderboard'
+    | '/rewards/redeem'
+    | '/search/filters'
+    | '/search/recent'
+    | '/search/saved'
+    | '/settings/accounts'
+    | '/settings/language'
+    | '/settings/location'
+    | '/settings/notifications'
+    | '/settings/permissions'
+    | '/settings/preferences'
+    | '/settings/privacy'
+    | '/settings/security'
+    | '/settings/theme'
+    | '/settings/units'
+    | '/profile/vehicles/add'
+    | '/rewards/reward/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  CreateProfileRoute: typeof CreateProfileRoute
   HomeRoute: typeof HomeRoute
-  LeavingRoute: typeof LeavingRoute
-  NotificationsRoute: typeof NotificationsRoute
+  LeavingRoute: typeof LeavingRouteWithChildren
+  NotificationsRoute: typeof NotificationsRouteWithChildren
+  OnboardingRoute: typeof OnboardingRoute
+  OtpRoute: typeof OtpRoute
+  ParkingReleasedRoute: typeof ParkingReleasedRoute
+  PaymentsRoute: typeof PaymentsRouteWithChildren
   ProfileRoute: typeof ProfileRouteWithChildren
+  ReservationCancelledRoute: typeof ReservationCancelledRoute
+  ReservationSuccessRoute: typeof ReservationSuccessRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  RewardsRoute: typeof RewardsRoute
-  SearchRoute: typeof SearchRoute
+  RewardsRoute: typeof RewardsRouteWithChildren
+  SearchRoute: typeof SearchRouteWithChildren
+  SettingsRoute: typeof SettingsRouteWithChildren
+  VerifyEmailRoute: typeof VerifyEmailRoute
+  VerifyPhoneRoute: typeof VerifyPhoneRoute
+  WelcomeRoute: typeof WelcomeRoute
+  NavigateIdRoute: typeof NavigateIdRoute
+  NavigateCompletedRoute: typeof NavigateCompletedRoute
+  ParkingIdRoute: typeof ParkingIdRoute
+  ReservationIdRoute: typeof ReservationIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-phone': {
+      id: '/verify-phone'
+      path: '/verify-phone'
+      fullPath: '/verify-phone'
+      preLoaderRoute: typeof VerifyPhoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -182,11 +886,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reservation-success': {
+      id: '/reservation-success'
+      path: '/reservation-success'
+      fullPath: '/reservation-success'
+      preLoaderRoute: typeof ReservationSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reservation-cancelled': {
+      id: '/reservation-cancelled'
+      path: '/reservation-cancelled'
+      fullPath: '/reservation-cancelled'
+      preLoaderRoute: typeof ReservationCancelledRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments': {
+      id: '/payments'
+      path: '/payments'
+      fullPath: '/payments'
+      preLoaderRoute: typeof PaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parking-released': {
+      id: '/parking-released'
+      path: '/parking-released'
+      fullPath: '/parking-released'
+      preLoaderRoute: typeof ParkingReleasedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/otp': {
+      id: '/otp'
+      path: '/otp'
+      fullPath: '/otp'
+      preLoaderRoute: typeof OtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -210,6 +956,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/create-profile': {
+      id: '/create-profile'
+      path: '/create-profile'
+      fullPath: '/create-profile'
+      preLoaderRoute: typeof CreateProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -224,6 +977,188 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings/units': {
+      id: '/settings/units'
+      path: '/units'
+      fullPath: '/settings/units'
+      preLoaderRoute: typeof SettingsUnitsRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/theme': {
+      id: '/settings/theme'
+      path: '/theme'
+      fullPath: '/settings/theme'
+      preLoaderRoute: typeof SettingsThemeRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/security': {
+      id: '/settings/security'
+      path: '/security'
+      fullPath: '/settings/security'
+      preLoaderRoute: typeof SettingsSecurityRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/privacy': {
+      id: '/settings/privacy'
+      path: '/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof SettingsPrivacyRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/preferences': {
+      id: '/settings/preferences'
+      path: '/preferences'
+      fullPath: '/settings/preferences'
+      preLoaderRoute: typeof SettingsPreferencesRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/permissions': {
+      id: '/settings/permissions'
+      path: '/permissions'
+      fullPath: '/settings/permissions'
+      preLoaderRoute: typeof SettingsPermissionsRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/notifications': {
+      id: '/settings/notifications'
+      path: '/notifications'
+      fullPath: '/settings/notifications'
+      preLoaderRoute: typeof SettingsNotificationsRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/location': {
+      id: '/settings/location'
+      path: '/location'
+      fullPath: '/settings/location'
+      preLoaderRoute: typeof SettingsLocationRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/language': {
+      id: '/settings/language'
+      path: '/language'
+      fullPath: '/settings/language'
+      preLoaderRoute: typeof SettingsLanguageRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/accounts': {
+      id: '/settings/accounts'
+      path: '/accounts'
+      fullPath: '/settings/accounts'
+      preLoaderRoute: typeof SettingsAccountsRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/search/saved': {
+      id: '/search/saved'
+      path: '/saved'
+      fullPath: '/search/saved'
+      preLoaderRoute: typeof SearchSavedRouteImport
+      parentRoute: typeof SearchRoute
+    }
+    '/search/recent': {
+      id: '/search/recent'
+      path: '/recent'
+      fullPath: '/search/recent'
+      preLoaderRoute: typeof SearchRecentRouteImport
+      parentRoute: typeof SearchRoute
+    }
+    '/search/filters': {
+      id: '/search/filters'
+      path: '/filters'
+      fullPath: '/search/filters'
+      preLoaderRoute: typeof SearchFiltersRouteImport
+      parentRoute: typeof SearchRoute
+    }
+    '/rewards/redeem': {
+      id: '/rewards/redeem'
+      path: '/redeem'
+      fullPath: '/rewards/redeem'
+      preLoaderRoute: typeof RewardsRedeemRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/rewards/leaderboard': {
+      id: '/rewards/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/rewards/leaderboard'
+      preLoaderRoute: typeof RewardsLeaderboardRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/rewards/invite': {
+      id: '/rewards/invite'
+      path: '/invite'
+      fullPath: '/rewards/invite'
+      preLoaderRoute: typeof RewardsInviteRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/rewards/history': {
+      id: '/rewards/history'
+      path: '/history'
+      fullPath: '/rewards/history'
+      preLoaderRoute: typeof RewardsHistoryRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/rewards/daily': {
+      id: '/rewards/daily'
+      path: '/daily'
+      fullPath: '/rewards/daily'
+      preLoaderRoute: typeof RewardsDailyRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/rewards/buy': {
+      id: '/rewards/buy'
+      path: '/buy'
+      fullPath: '/rewards/buy'
+      preLoaderRoute: typeof RewardsBuyRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/rewards/achievements': {
+      id: '/rewards/achievements'
+      path: '/achievements'
+      fullPath: '/rewards/achievements'
+      preLoaderRoute: typeof RewardsAchievementsRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/reservation/$id': {
+      id: '/reservation/$id'
+      path: '/reservation/$id'
+      fullPath: '/reservation/$id'
+      preLoaderRoute: typeof ReservationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/vehicles': {
+      id: '/profile/vehicles'
+      path: '/vehicles'
+      fullPath: '/profile/vehicles'
+      preLoaderRoute: typeof ProfileVehiclesRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/profile/stats': {
+      id: '/profile/stats'
+      path: '/stats'
+      fullPath: '/profile/stats'
+      preLoaderRoute: typeof ProfileStatsRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/profile/reservations': {
+      id: '/profile/reservations'
+      path: '/reservations'
+      fullPath: '/profile/reservations'
+      preLoaderRoute: typeof ProfileReservationsRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/profile/reputation': {
+      id: '/profile/reputation'
+      path: '/reputation'
+      fullPath: '/profile/reputation'
+      preLoaderRoute: typeof ProfileReputationRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/profile/history': {
+      id: '/profile/history'
+      path: '/history'
+      fullPath: '/profile/history'
+      preLoaderRoute: typeof ProfileHistoryRouteImport
+      parentRoute: typeof ProfileRoute
+    }
     '/profile/edit': {
       id: '/profile/edit'
       path: '/edit'
@@ -231,30 +1166,326 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileEditRouteImport
       parentRoute: typeof ProfileRoute
     }
+    '/profile/badges': {
+      id: '/profile/badges'
+      path: '/badges'
+      fullPath: '/profile/badges'
+      preLoaderRoute: typeof ProfileBadgesRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/payments/success': {
+      id: '/payments/success'
+      path: '/success'
+      fullPath: '/payments/success'
+      preLoaderRoute: typeof PaymentsSuccessRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/payments/subscriptions': {
+      id: '/payments/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/payments/subscriptions'
+      preLoaderRoute: typeof PaymentsSubscriptionsRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/payments/invoices': {
+      id: '/payments/invoices'
+      path: '/invoices'
+      fullPath: '/payments/invoices'
+      preLoaderRoute: typeof PaymentsInvoicesRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/payments/history': {
+      id: '/payments/history'
+      path: '/history'
+      fullPath: '/payments/history'
+      preLoaderRoute: typeof PaymentsHistoryRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/payments/failed': {
+      id: '/payments/failed'
+      path: '/failed'
+      fullPath: '/payments/failed'
+      preLoaderRoute: typeof PaymentsFailedRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/payments/checkout': {
+      id: '/payments/checkout'
+      path: '/checkout'
+      fullPath: '/payments/checkout'
+      preLoaderRoute: typeof PaymentsCheckoutRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/payments/add': {
+      id: '/payments/add'
+      path: '/add'
+      fullPath: '/payments/add'
+      preLoaderRoute: typeof PaymentsAddRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/parking/$id': {
+      id: '/parking/$id'
+      path: '/parking/$id'
+      fullPath: '/parking/$id'
+      preLoaderRoute: typeof ParkingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications/preferences': {
+      id: '/notifications/preferences'
+      path: '/preferences'
+      fullPath: '/notifications/preferences'
+      preLoaderRoute: typeof NotificationsPreferencesRouteImport
+      parentRoute: typeof NotificationsRoute
+    }
+    '/notifications/$id': {
+      id: '/notifications/$id'
+      path: '/$id'
+      fullPath: '/notifications/$id'
+      preLoaderRoute: typeof NotificationsIdRouteImport
+      parentRoute: typeof NotificationsRoute
+    }
+    '/navigate/completed': {
+      id: '/navigate/completed'
+      path: '/navigate/completed'
+      fullPath: '/navigate/completed'
+      preLoaderRoute: typeof NavigateCompletedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/navigate/$id': {
+      id: '/navigate/$id'
+      path: '/navigate/$id'
+      fullPath: '/navigate/$id'
+      preLoaderRoute: typeof NavigateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaving/success': {
+      id: '/leaving/success'
+      path: '/success'
+      fullPath: '/leaving/success'
+      preLoaderRoute: typeof LeavingSuccessRouteImport
+      parentRoute: typeof LeavingRoute
+    }
+    '/leaving/history': {
+      id: '/leaving/history'
+      path: '/history'
+      fullPath: '/leaving/history'
+      preLoaderRoute: typeof LeavingHistoryRouteImport
+      parentRoute: typeof LeavingRoute
+    }
+    '/auth/success': {
+      id: '/auth/success'
+      path: '/success'
+      fullPath: '/auth/success'
+      preLoaderRoute: typeof AuthSuccessRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/rewards/reward/$id': {
+      id: '/rewards/reward/$id'
+      path: '/reward/$id'
+      fullPath: '/rewards/reward/$id'
+      preLoaderRoute: typeof RewardsRewardIdRouteImport
+      parentRoute: typeof RewardsRoute
+    }
+    '/profile/vehicles/add': {
+      id: '/profile/vehicles/add'
+      path: '/add'
+      fullPath: '/profile/vehicles/add'
+      preLoaderRoute: typeof ProfileVehiclesAddRouteImport
+      parentRoute: typeof ProfileVehiclesRoute
+    }
   }
 }
 
+interface AuthRouteChildren {
+  AuthSuccessRoute: typeof AuthSuccessRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthSuccessRoute: AuthSuccessRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface LeavingRouteChildren {
+  LeavingHistoryRoute: typeof LeavingHistoryRoute
+  LeavingSuccessRoute: typeof LeavingSuccessRoute
+}
+
+const LeavingRouteChildren: LeavingRouteChildren = {
+  LeavingHistoryRoute: LeavingHistoryRoute,
+  LeavingSuccessRoute: LeavingSuccessRoute,
+}
+
+const LeavingRouteWithChildren =
+  LeavingRoute._addFileChildren(LeavingRouteChildren)
+
+interface NotificationsRouteChildren {
+  NotificationsIdRoute: typeof NotificationsIdRoute
+  NotificationsPreferencesRoute: typeof NotificationsPreferencesRoute
+}
+
+const NotificationsRouteChildren: NotificationsRouteChildren = {
+  NotificationsIdRoute: NotificationsIdRoute,
+  NotificationsPreferencesRoute: NotificationsPreferencesRoute,
+}
+
+const NotificationsRouteWithChildren = NotificationsRoute._addFileChildren(
+  NotificationsRouteChildren,
+)
+
+interface PaymentsRouteChildren {
+  PaymentsAddRoute: typeof PaymentsAddRoute
+  PaymentsCheckoutRoute: typeof PaymentsCheckoutRoute
+  PaymentsFailedRoute: typeof PaymentsFailedRoute
+  PaymentsHistoryRoute: typeof PaymentsHistoryRoute
+  PaymentsInvoicesRoute: typeof PaymentsInvoicesRoute
+  PaymentsSubscriptionsRoute: typeof PaymentsSubscriptionsRoute
+  PaymentsSuccessRoute: typeof PaymentsSuccessRoute
+}
+
+const PaymentsRouteChildren: PaymentsRouteChildren = {
+  PaymentsAddRoute: PaymentsAddRoute,
+  PaymentsCheckoutRoute: PaymentsCheckoutRoute,
+  PaymentsFailedRoute: PaymentsFailedRoute,
+  PaymentsHistoryRoute: PaymentsHistoryRoute,
+  PaymentsInvoicesRoute: PaymentsInvoicesRoute,
+  PaymentsSubscriptionsRoute: PaymentsSubscriptionsRoute,
+  PaymentsSuccessRoute: PaymentsSuccessRoute,
+}
+
+const PaymentsRouteWithChildren = PaymentsRoute._addFileChildren(
+  PaymentsRouteChildren,
+)
+
+interface ProfileVehiclesRouteChildren {
+  ProfileVehiclesAddRoute: typeof ProfileVehiclesAddRoute
+}
+
+const ProfileVehiclesRouteChildren: ProfileVehiclesRouteChildren = {
+  ProfileVehiclesAddRoute: ProfileVehiclesAddRoute,
+}
+
+const ProfileVehiclesRouteWithChildren = ProfileVehiclesRoute._addFileChildren(
+  ProfileVehiclesRouteChildren,
+)
+
 interface ProfileRouteChildren {
+  ProfileBadgesRoute: typeof ProfileBadgesRoute
   ProfileEditRoute: typeof ProfileEditRoute
+  ProfileHistoryRoute: typeof ProfileHistoryRoute
+  ProfileReputationRoute: typeof ProfileReputationRoute
+  ProfileReservationsRoute: typeof ProfileReservationsRoute
+  ProfileStatsRoute: typeof ProfileStatsRoute
+  ProfileVehiclesRoute: typeof ProfileVehiclesRouteWithChildren
 }
 
 const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileBadgesRoute: ProfileBadgesRoute,
   ProfileEditRoute: ProfileEditRoute,
+  ProfileHistoryRoute: ProfileHistoryRoute,
+  ProfileReputationRoute: ProfileReputationRoute,
+  ProfileReservationsRoute: ProfileReservationsRoute,
+  ProfileStatsRoute: ProfileStatsRoute,
+  ProfileVehiclesRoute: ProfileVehiclesRouteWithChildren,
 }
 
 const ProfileRouteWithChildren =
   ProfileRoute._addFileChildren(ProfileRouteChildren)
 
+interface RewardsRouteChildren {
+  RewardsAchievementsRoute: typeof RewardsAchievementsRoute
+  RewardsBuyRoute: typeof RewardsBuyRoute
+  RewardsDailyRoute: typeof RewardsDailyRoute
+  RewardsHistoryRoute: typeof RewardsHistoryRoute
+  RewardsInviteRoute: typeof RewardsInviteRoute
+  RewardsLeaderboardRoute: typeof RewardsLeaderboardRoute
+  RewardsRedeemRoute: typeof RewardsRedeemRoute
+  RewardsRewardIdRoute: typeof RewardsRewardIdRoute
+}
+
+const RewardsRouteChildren: RewardsRouteChildren = {
+  RewardsAchievementsRoute: RewardsAchievementsRoute,
+  RewardsBuyRoute: RewardsBuyRoute,
+  RewardsDailyRoute: RewardsDailyRoute,
+  RewardsHistoryRoute: RewardsHistoryRoute,
+  RewardsInviteRoute: RewardsInviteRoute,
+  RewardsLeaderboardRoute: RewardsLeaderboardRoute,
+  RewardsRedeemRoute: RewardsRedeemRoute,
+  RewardsRewardIdRoute: RewardsRewardIdRoute,
+}
+
+const RewardsRouteWithChildren =
+  RewardsRoute._addFileChildren(RewardsRouteChildren)
+
+interface SearchRouteChildren {
+  SearchFiltersRoute: typeof SearchFiltersRoute
+  SearchRecentRoute: typeof SearchRecentRoute
+  SearchSavedRoute: typeof SearchSavedRoute
+}
+
+const SearchRouteChildren: SearchRouteChildren = {
+  SearchFiltersRoute: SearchFiltersRoute,
+  SearchRecentRoute: SearchRecentRoute,
+  SearchSavedRoute: SearchSavedRoute,
+}
+
+const SearchRouteWithChildren =
+  SearchRoute._addFileChildren(SearchRouteChildren)
+
+interface SettingsRouteChildren {
+  SettingsAccountsRoute: typeof SettingsAccountsRoute
+  SettingsLanguageRoute: typeof SettingsLanguageRoute
+  SettingsLocationRoute: typeof SettingsLocationRoute
+  SettingsNotificationsRoute: typeof SettingsNotificationsRoute
+  SettingsPermissionsRoute: typeof SettingsPermissionsRoute
+  SettingsPreferencesRoute: typeof SettingsPreferencesRoute
+  SettingsPrivacyRoute: typeof SettingsPrivacyRoute
+  SettingsSecurityRoute: typeof SettingsSecurityRoute
+  SettingsThemeRoute: typeof SettingsThemeRoute
+  SettingsUnitsRoute: typeof SettingsUnitsRoute
+}
+
+const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsAccountsRoute: SettingsAccountsRoute,
+  SettingsLanguageRoute: SettingsLanguageRoute,
+  SettingsLocationRoute: SettingsLocationRoute,
+  SettingsNotificationsRoute: SettingsNotificationsRoute,
+  SettingsPermissionsRoute: SettingsPermissionsRoute,
+  SettingsPreferencesRoute: SettingsPreferencesRoute,
+  SettingsPrivacyRoute: SettingsPrivacyRoute,
+  SettingsSecurityRoute: SettingsSecurityRoute,
+  SettingsThemeRoute: SettingsThemeRoute,
+  SettingsUnitsRoute: SettingsUnitsRoute,
+}
+
+const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
+  SettingsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
+  CreateProfileRoute: CreateProfileRoute,
   HomeRoute: HomeRoute,
-  LeavingRoute: LeavingRoute,
-  NotificationsRoute: NotificationsRoute,
+  LeavingRoute: LeavingRouteWithChildren,
+  NotificationsRoute: NotificationsRouteWithChildren,
+  OnboardingRoute: OnboardingRoute,
+  OtpRoute: OtpRoute,
+  ParkingReleasedRoute: ParkingReleasedRoute,
+  PaymentsRoute: PaymentsRouteWithChildren,
   ProfileRoute: ProfileRouteWithChildren,
+  ReservationCancelledRoute: ReservationCancelledRoute,
+  ReservationSuccessRoute: ReservationSuccessRoute,
   ResetPasswordRoute: ResetPasswordRoute,
-  RewardsRoute: RewardsRoute,
-  SearchRoute: SearchRoute,
+  RewardsRoute: RewardsRouteWithChildren,
+  SearchRoute: SearchRouteWithChildren,
+  SettingsRoute: SettingsRouteWithChildren,
+  VerifyEmailRoute: VerifyEmailRoute,
+  VerifyPhoneRoute: VerifyPhoneRoute,
+  WelcomeRoute: WelcomeRoute,
+  NavigateIdRoute: NavigateIdRoute,
+  NavigateCompletedRoute: NavigateCompletedRoute,
+  ParkingIdRoute: ParkingIdRoute,
+  ReservationIdRoute: ReservationIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
