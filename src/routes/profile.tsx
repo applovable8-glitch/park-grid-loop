@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil } from "lucide-react";
+import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { BottomNav } from "@/components/BottomNav";
 
@@ -39,29 +39,37 @@ function Profile() {
           <div className="min-w-0">
             <h1 className="truncate font-[var(--font-display)] text-2xl font-bold">{user.name || "Driver"}</h1>
             <p className="truncate text-sm text-white/70">{user.email}</p>
-            <div className="mt-1 flex items-center gap-1 text-xs">
+            <Link to="/profile/reputation" className="mt-1 flex items-center gap-1 text-xs">
               <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
               <span className="font-semibold">{user.reputation.toFixed(1)}</span>
               <span className="text-white/60">reputation</span>
-            </div>
+            </Link>
           </div>
         </div>
 
         <div className="relative mt-6 grid grid-cols-3 gap-2">
-          <MiniStat label="Points" value={user.points} />
-          <MiniStat label="Shared" value={user.shared} />
-          <MiniStat label="Reserved" value={user.reservations} />
+          <Link to="/rewards"><MiniStat label="Points" value={user.points} /></Link>
+          <Link to="/leaving/history"><MiniStat label="Shared" value={user.shared} /></Link>
+          <Link to="/profile/reservations"><MiniStat label="Reserved" value={user.reservations} /></Link>
         </div>
       </div>
 
       <div className="px-4 pt-5">
         <div className="rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">
           <Link to="/profile/edit"><Row icon={Pencil} label="Edit profile" hint="Name, phone, vehicle plate" /></Link>
-          <Link to="/profile/edit"><Row icon={Bell} label="Notifications" hint={notifSummary(user.notification_prefs)} /></Link>
-          <Link to="/profile/edit"><Row icon={Shield} label="Privacy & safety" hint={user.location_prefs.share_location ? "Location sharing on" : "Location sharing off"} /></Link>
-          <Link to="/profile/edit"><Row icon={Settings} label="App preferences" hint={`${user.language.toUpperCase()} · ${user.theme}`} /></Link>
-          <Row icon={CreditCard} label="Payment methods" hint="Coming soon" />
-          <Row icon={HelpCircle} label="Help center" hint="Docs, contact us" />
+          <Link to="/profile/vehicles"><Row icon={Car} label="My vehicles" hint={user.plate ?? "Add your plate"} /></Link>
+          <Link to="/profile/history"><Row icon={Clock} label="Parking history" hint="All your shares & reservations" /></Link>
+          <Link to="/profile/stats"><Row icon={Award} label="Statistics" hint="Your activity at a glance" /></Link>
+        </div>
+
+        <h2 className="mt-6 px-1 font-[var(--font-display)] text-sm font-bold uppercase tracking-wider text-muted-foreground">More</h2>
+        <div className="mt-2 rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">
+          <Link to="/settings"><Row icon={Settings} label="Settings" hint={`${user.language.toUpperCase()} · ${user.theme}`} /></Link>
+          <Link to="/settings/notifications"><Row icon={Bell} label="Notifications" hint={notifSummary(user.notification_prefs)} /></Link>
+          <Link to="/settings/privacy"><Row icon={Shield} label="Privacy & safety" hint={user.location_prefs.share_location ? "Location sharing on" : "Location sharing off"} /></Link>
+          <Link to="/payments"><Row icon={CreditCard} label="Payment methods" hint="Cards, invoices, subscriptions" /></Link>
+          <Link to="/community"><Row icon={Users} label="Community" hint="Invite, leaderboard, referrals" /></Link>
+          <Link to="/help"><Row icon={HelpCircle} label="Help center" hint="FAQ, contact, chat" /></Link>
         </div>
 
         <h2 className="mt-6 px-1 font-[var(--font-display)] text-sm font-bold uppercase tracking-wider text-muted-foreground">Achievements</h2>
@@ -71,11 +79,16 @@ function Profile() {
             { icon: CheckCircle2, label: "10 handoffs", color: "text-blue-500" },
             { icon: Star, label: "5.0 streak", color: "text-yellow-500" },
           ].map((b) => (
-            <div key={b.label} className="flex flex-col items-center rounded-2xl bg-card p-3 text-center shadow-[var(--shadow-card)]">
+            <Link key={b.label} to="/profile/achievements" className="flex flex-col items-center rounded-2xl bg-card p-3 text-center shadow-[var(--shadow-card)]">
               <b.icon className={`h-6 w-6 ${b.color}`} />
               <p className="mt-2 text-[11px] font-semibold">{b.label}</p>
-            </div>
+            </Link>
           ))}
+        </div>
+
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <Link to="/profile/badges" className="rounded-2xl bg-card p-3 text-center text-xs font-semibold shadow-[var(--shadow-card)]">All badges</Link>
+          <Link to="/rewards/leaderboard" className="rounded-2xl bg-card p-3 text-center text-xs font-semibold shadow-[var(--shadow-card)]">Leaderboard</Link>
         </div>
 
         <button onClick={onSignOut} className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-card py-3.5 text-sm font-semibold text-[color:var(--danger)] shadow-[var(--shadow-card)]">
