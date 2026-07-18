@@ -26,6 +26,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as CreateProfileRouteImport } from './routes/create-profile'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -71,6 +72,16 @@ import { Route as NavigateCompletedRouteImport } from './routes/navigate.complet
 import { Route as NavigateIdRouteImport } from './routes/navigate.$id'
 import { Route as LeavingSuccessRouteImport } from './routes/leaving.success'
 import { Route as LeavingHistoryRouteImport } from './routes/leaving.history'
+import { Route as HelpTicketRouteImport } from './routes/help.ticket'
+import { Route as HelpTermsRouteImport } from './routes/help.terms'
+import { Route as HelpPrivacyRouteImport } from './routes/help.privacy'
+import { Route as HelpLicensesRouteImport } from './routes/help.licenses'
+import { Route as HelpFeatureRouteImport } from './routes/help.feature'
+import { Route as HelpFaqRouteImport } from './routes/help.faq'
+import { Route as HelpContactRouteImport } from './routes/help.contact'
+import { Route as HelpChatRouteImport } from './routes/help.chat'
+import { Route as HelpBugRouteImport } from './routes/help.bug'
+import { Route as HelpAboutRouteImport } from './routes/help.about'
 import { Route as AuthSuccessRouteImport } from './routes/auth.success'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
@@ -158,6 +169,11 @@ const LeavingRoute = LeavingRouteImport.update({
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreateProfileRoute = CreateProfileRouteImport.update({
@@ -386,6 +402,56 @@ const LeavingHistoryRoute = LeavingHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => LeavingRoute,
 } as any)
+const HelpTicketRoute = HelpTicketRouteImport.update({
+  id: '/ticket',
+  path: '/ticket',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpTermsRoute = HelpTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpPrivacyRoute = HelpPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpLicensesRoute = HelpLicensesRouteImport.update({
+  id: '/licenses',
+  path: '/licenses',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpFeatureRoute = HelpFeatureRouteImport.update({
+  id: '/feature',
+  path: '/feature',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpFaqRoute = HelpFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpContactRoute = HelpContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpChatRoute = HelpChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpBugRoute = HelpBugRouteImport.update({
+  id: '/bug',
+  path: '/bug',
+  getParentRoute: () => HelpRoute,
+} as any)
+const HelpAboutRoute = HelpAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => HelpRoute,
+} as any)
 const AuthSuccessRoute = AuthSuccessRouteImport.update({
   id: '/success',
   path: '/success',
@@ -406,6 +472,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
+  '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
   '/notifications': typeof NotificationsRouteWithChildren
@@ -424,6 +491,16 @@ export interface FileRoutesByFullPath {
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/help/about': typeof HelpAboutRoute
+  '/help/bug': typeof HelpBugRoute
+  '/help/chat': typeof HelpChatRoute
+  '/help/contact': typeof HelpContactRoute
+  '/help/faq': typeof HelpFaqRoute
+  '/help/feature': typeof HelpFeatureRoute
+  '/help/licenses': typeof HelpLicensesRoute
+  '/help/privacy': typeof HelpPrivacyRoute
+  '/help/terms': typeof HelpTermsRoute
+  '/help/ticket': typeof HelpTicketRoute
   '/leaving/history': typeof LeavingHistoryRoute
   '/leaving/success': typeof LeavingSuccessRoute
   '/navigate/$id': typeof NavigateIdRoute
@@ -473,6 +550,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
+  '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
   '/notifications': typeof NotificationsRouteWithChildren
@@ -491,6 +569,16 @@ export interface FileRoutesByTo {
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/help/about': typeof HelpAboutRoute
+  '/help/bug': typeof HelpBugRoute
+  '/help/chat': typeof HelpChatRoute
+  '/help/contact': typeof HelpContactRoute
+  '/help/faq': typeof HelpFaqRoute
+  '/help/feature': typeof HelpFeatureRoute
+  '/help/licenses': typeof HelpLicensesRoute
+  '/help/privacy': typeof HelpPrivacyRoute
+  '/help/terms': typeof HelpTermsRoute
+  '/help/ticket': typeof HelpTicketRoute
   '/leaving/history': typeof LeavingHistoryRoute
   '/leaving/success': typeof LeavingSuccessRoute
   '/navigate/$id': typeof NavigateIdRoute
@@ -541,6 +629,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
+  '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
   '/notifications': typeof NotificationsRouteWithChildren
@@ -559,6 +648,16 @@ export interface FileRoutesById {
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/help/about': typeof HelpAboutRoute
+  '/help/bug': typeof HelpBugRoute
+  '/help/chat': typeof HelpChatRoute
+  '/help/contact': typeof HelpContactRoute
+  '/help/faq': typeof HelpFaqRoute
+  '/help/feature': typeof HelpFeatureRoute
+  '/help/licenses': typeof HelpLicensesRoute
+  '/help/privacy': typeof HelpPrivacyRoute
+  '/help/terms': typeof HelpTermsRoute
+  '/help/ticket': typeof HelpTicketRoute
   '/leaving/history': typeof LeavingHistoryRoute
   '/leaving/success': typeof LeavingSuccessRoute
   '/navigate/$id': typeof NavigateIdRoute
@@ -610,6 +709,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/create-profile'
+    | '/help'
     | '/home'
     | '/leaving'
     | '/notifications'
@@ -628,6 +728,16 @@ export interface FileRouteTypes {
     | '/verify-phone'
     | '/welcome'
     | '/auth/success'
+    | '/help/about'
+    | '/help/bug'
+    | '/help/chat'
+    | '/help/contact'
+    | '/help/faq'
+    | '/help/feature'
+    | '/help/licenses'
+    | '/help/privacy'
+    | '/help/terms'
+    | '/help/ticket'
     | '/leaving/history'
     | '/leaving/success'
     | '/navigate/$id'
@@ -677,6 +787,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/create-profile'
+    | '/help'
     | '/home'
     | '/leaving'
     | '/notifications'
@@ -695,6 +806,16 @@ export interface FileRouteTypes {
     | '/verify-phone'
     | '/welcome'
     | '/auth/success'
+    | '/help/about'
+    | '/help/bug'
+    | '/help/chat'
+    | '/help/contact'
+    | '/help/faq'
+    | '/help/feature'
+    | '/help/licenses'
+    | '/help/privacy'
+    | '/help/terms'
+    | '/help/ticket'
     | '/leaving/history'
     | '/leaving/success'
     | '/navigate/$id'
@@ -744,6 +865,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/create-profile'
+    | '/help'
     | '/home'
     | '/leaving'
     | '/notifications'
@@ -762,6 +884,16 @@ export interface FileRouteTypes {
     | '/verify-phone'
     | '/welcome'
     | '/auth/success'
+    | '/help/about'
+    | '/help/bug'
+    | '/help/chat'
+    | '/help/contact'
+    | '/help/faq'
+    | '/help/feature'
+    | '/help/licenses'
+    | '/help/privacy'
+    | '/help/terms'
+    | '/help/ticket'
     | '/leaving/history'
     | '/leaving/success'
     | '/navigate/$id'
@@ -812,6 +944,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   CreateProfileRoute: typeof CreateProfileRoute
+  HelpRoute: typeof HelpRouteWithChildren
   HomeRoute: typeof HomeRoute
   LeavingRoute: typeof LeavingRouteWithChildren
   NotificationsRoute: typeof NotificationsRouteWithChildren
@@ -954,6 +1087,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/create-profile': {
@@ -1271,6 +1411,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeavingHistoryRouteImport
       parentRoute: typeof LeavingRoute
     }
+    '/help/ticket': {
+      id: '/help/ticket'
+      path: '/ticket'
+      fullPath: '/help/ticket'
+      preLoaderRoute: typeof HelpTicketRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/terms': {
+      id: '/help/terms'
+      path: '/terms'
+      fullPath: '/help/terms'
+      preLoaderRoute: typeof HelpTermsRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/privacy': {
+      id: '/help/privacy'
+      path: '/privacy'
+      fullPath: '/help/privacy'
+      preLoaderRoute: typeof HelpPrivacyRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/licenses': {
+      id: '/help/licenses'
+      path: '/licenses'
+      fullPath: '/help/licenses'
+      preLoaderRoute: typeof HelpLicensesRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/feature': {
+      id: '/help/feature'
+      path: '/feature'
+      fullPath: '/help/feature'
+      preLoaderRoute: typeof HelpFeatureRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/faq': {
+      id: '/help/faq'
+      path: '/faq'
+      fullPath: '/help/faq'
+      preLoaderRoute: typeof HelpFaqRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/contact': {
+      id: '/help/contact'
+      path: '/contact'
+      fullPath: '/help/contact'
+      preLoaderRoute: typeof HelpContactRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/chat': {
+      id: '/help/chat'
+      path: '/chat'
+      fullPath: '/help/chat'
+      preLoaderRoute: typeof HelpChatRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/bug': {
+      id: '/help/bug'
+      path: '/bug'
+      fullPath: '/help/bug'
+      preLoaderRoute: typeof HelpBugRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/help/about': {
+      id: '/help/about'
+      path: '/about'
+      fullPath: '/help/about'
+      preLoaderRoute: typeof HelpAboutRouteImport
+      parentRoute: typeof HelpRoute
+    }
     '/auth/success': {
       id: '/auth/success'
       path: '/success'
@@ -1304,6 +1514,34 @@ const AuthRouteChildren: AuthRouteChildren = {
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface HelpRouteChildren {
+  HelpAboutRoute: typeof HelpAboutRoute
+  HelpBugRoute: typeof HelpBugRoute
+  HelpChatRoute: typeof HelpChatRoute
+  HelpContactRoute: typeof HelpContactRoute
+  HelpFaqRoute: typeof HelpFaqRoute
+  HelpFeatureRoute: typeof HelpFeatureRoute
+  HelpLicensesRoute: typeof HelpLicensesRoute
+  HelpPrivacyRoute: typeof HelpPrivacyRoute
+  HelpTermsRoute: typeof HelpTermsRoute
+  HelpTicketRoute: typeof HelpTicketRoute
+}
+
+const HelpRouteChildren: HelpRouteChildren = {
+  HelpAboutRoute: HelpAboutRoute,
+  HelpBugRoute: HelpBugRoute,
+  HelpChatRoute: HelpChatRoute,
+  HelpContactRoute: HelpContactRoute,
+  HelpFaqRoute: HelpFaqRoute,
+  HelpFeatureRoute: HelpFeatureRoute,
+  HelpLicensesRoute: HelpLicensesRoute,
+  HelpPrivacyRoute: HelpPrivacyRoute,
+  HelpTermsRoute: HelpTermsRoute,
+  HelpTicketRoute: HelpTicketRoute,
+}
+
+const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
 
 interface LeavingRouteChildren {
   LeavingHistoryRoute: typeof LeavingHistoryRoute
@@ -1465,6 +1703,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   CreateProfileRoute: CreateProfileRoute,
+  HelpRoute: HelpRouteWithChildren,
   HomeRoute: HomeRoute,
   LeavingRoute: LeavingRouteWithChildren,
   NotificationsRoute: NotificationsRouteWithChildren,
