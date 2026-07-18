@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -24,6 +25,11 @@ const SearchRoute = SearchRouteImport.update({
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeavingRoute = LeavingRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/notifications': typeof NotificationsRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/notifications': typeof NotificationsRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
@@ -69,15 +77,38 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/notifications': typeof NotificationsRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home' | '/leaving' | '/rewards' | '/search'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/leaving'
+    | '/notifications'
+    | '/rewards'
+    | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/leaving' | '/rewards' | '/search'
-  id: '__root__' | '/' | '/auth' | '/home' | '/leaving' | '/rewards' | '/search'
+  to:
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/leaving'
+    | '/notifications'
+    | '/rewards'
+    | '/search'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/home'
+    | '/leaving'
+    | '/notifications'
+    | '/rewards'
+    | '/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -85,6 +116,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   HomeRoute: typeof HomeRoute
   LeavingRoute: typeof LeavingRoute
+  NotificationsRoute: typeof NotificationsRoute
   RewardsRoute: typeof RewardsRoute
   SearchRoute: typeof SearchRoute
 }
@@ -103,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leaving': {
@@ -141,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   HomeRoute: HomeRoute,
   LeavingRoute: LeavingRoute,
+  NotificationsRoute: NotificationsRoute,
   RewardsRoute: RewardsRoute,
   SearchRoute: SearchRoute,
 }
