@@ -4,13 +4,16 @@ import { Search, Layers, LocateFixed, Zap, Clock, MapPin } from "lucide-react";
 import { useApp, type ParkingSpot } from "@/lib/parkout-store";
 import { MapCanvas } from "@/components/MapCanvas";
 import { BottomNav } from "@/components/BottomNav";
+import { useRequireAuth } from "@/lib/use-require-auth";
 
 export const Route = createFileRoute("/home")({ component: Home });
 
 function Home() {
+  const { ready } = useRequireAuth();
   const { spots, user } = useApp();
   const nav = useNavigate();
   const [selected, setSelected] = useState<ParkingSpot | null>(null);
+  if (!ready) return null;
 
   const available = spots.filter((s) => s.status === "available").length;
   const leaving = spots.filter((s) => s.status === "leaving").length;
