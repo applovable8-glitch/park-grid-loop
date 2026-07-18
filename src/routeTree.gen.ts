@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeavingRoute = LeavingRouteImport.update({
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,15 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home' | '/leaving' | '/search'
+  fullPaths: '/' | '/auth' | '/home' | '/leaving' | '/rewards' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/leaving' | '/search'
-  id: '__root__' | '/' | '/auth' | '/home' | '/leaving' | '/search'
+  to: '/' | '/auth' | '/home' | '/leaving' | '/rewards' | '/search'
+  id: '__root__' | '/' | '/auth' | '/home' | '/leaving' | '/rewards' | '/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +85,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   HomeRoute: typeof HomeRoute
   LeavingRoute: typeof LeavingRoute
+  RewardsRoute: typeof RewardsRoute
   SearchRoute: typeof SearchRoute
 }
 
@@ -86,6 +96,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leaving': {
@@ -124,6 +141,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   HomeRoute: HomeRoute,
   LeavingRoute: LeavingRoute,
+  RewardsRoute: RewardsRoute,
   SearchRoute: SearchRoute,
 }
 export const routeTree = rootRouteImport
