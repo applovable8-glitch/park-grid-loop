@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RewardsRouteImport } from './routes/rewards'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LeavingRouteImport } from './routes/leaving'
@@ -26,6 +27,11 @@ const SearchRoute = SearchRouteImport.update({
 const RewardsRoute = RewardsRouteImport.update({
   id: '/rewards',
   path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/leaving': typeof LeavingRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/leaving': typeof LeavingRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/leaving': typeof LeavingRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRoute
   '/search': typeof SearchRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/leaving'
     | '/notifications'
     | '/profile'
+    | '/reset-password'
     | '/rewards'
     | '/search'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/leaving'
     | '/notifications'
     | '/profile'
+    | '/reset-password'
     | '/rewards'
     | '/search'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/leaving'
     | '/notifications'
     | '/profile'
+    | '/reset-password'
     | '/rewards'
     | '/search'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   LeavingRoute: typeof LeavingRoute
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRoute
   SearchRoute: typeof SearchRoute
 }
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/rewards'
       fullPath: '/rewards'
       preLoaderRoute: typeof RewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   LeavingRoute: LeavingRoute,
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRoute,
   SearchRoute: SearchRoute,
 }
