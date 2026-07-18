@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LeavingRoute = LeavingRouteImport.update({
   id: '/leaving',
   path: '/leaving',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/search': typeof SearchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/search': typeof SearchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRoute
+  '/search': typeof SearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/home' | '/leaving'
+  fullPaths: '/' | '/auth' | '/home' | '/leaving' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/home' | '/leaving'
-  id: '__root__' | '/' | '/auth' | '/home' | '/leaving'
+  to: '/' | '/auth' | '/home' | '/leaving' | '/search'
+  id: '__root__' | '/' | '/auth' | '/home' | '/leaving' | '/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +76,18 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   HomeRoute: typeof HomeRoute
   LeavingRoute: typeof LeavingRoute
+  SearchRoute: typeof SearchRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/leaving': {
       id: '/leaving'
       path: '/leaving'
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   HomeRoute: HomeRoute,
   LeavingRoute: LeavingRoute,
+  SearchRoute: SearchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
