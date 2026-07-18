@@ -24,6 +24,7 @@ import { Route as ParkingReleasedRouteImport } from './routes/parking-released'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as LoadingRouteImport } from './routes/loading'
 import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HelpRouteImport } from './routes/help'
@@ -32,6 +33,10 @@ import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SuccessVehicleAddedRouteImport } from './routes/success.vehicle-added'
+import { Route as SuccessProfileUpdatedRouteImport } from './routes/success.profile-updated'
+import { Route as SuccessPasswordChangedRouteImport } from './routes/success.password-changed'
+import { Route as SuccessParkingSharedRouteImport } from './routes/success.parking-shared'
 import { Route as SettingsUnitsRouteImport } from './routes/settings.units'
 import { Route as SettingsThemeRouteImport } from './routes/settings.theme'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
@@ -88,6 +93,10 @@ import { Route as HelpContactRouteImport } from './routes/help.contact'
 import { Route as HelpChatRouteImport } from './routes/help.chat'
 import { Route as HelpBugRouteImport } from './routes/help.bug'
 import { Route as HelpAboutRouteImport } from './routes/help.about'
+import { Route as ErrorsUnknownRouteImport } from './routes/errors.unknown'
+import { Route as ErrorsNetworkRouteImport } from './routes/errors.network'
+import { Route as ErrorsLocationRouteImport } from './routes/errors.location'
+import { Route as ErrorsGpsRouteImport } from './routes/errors.gps'
 import { Route as CommunityTopRouteImport } from './routes/community.top'
 import { Route as CommunityReputationRouteImport } from './routes/community.reputation'
 import { Route as CommunityReferralRouteImport } from './routes/community.referral'
@@ -173,6 +182,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoadingRoute = LoadingRouteImport.update({
+  id: '/loading',
+  path: '/loading',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LeavingRoute = LeavingRouteImport.update({
   id: '/leaving',
   path: '/leaving',
@@ -211,6 +225,26 @@ const AdminRoute = AdminRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccessVehicleAddedRoute = SuccessVehicleAddedRouteImport.update({
+  id: '/success/vehicle-added',
+  path: '/success/vehicle-added',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccessProfileUpdatedRoute = SuccessProfileUpdatedRouteImport.update({
+  id: '/success/profile-updated',
+  path: '/success/profile-updated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccessPasswordChangedRoute = SuccessPasswordChangedRouteImport.update({
+  id: '/success/password-changed',
+  path: '/success/password-changed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuccessParkingSharedRoute = SuccessParkingSharedRouteImport.update({
+  id: '/success/parking-shared',
+  path: '/success/parking-shared',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsUnitsRoute = SettingsUnitsRouteImport.update({
@@ -494,6 +528,26 @@ const HelpAboutRoute = HelpAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => HelpRoute,
 } as any)
+const ErrorsUnknownRoute = ErrorsUnknownRouteImport.update({
+  id: '/errors/unknown',
+  path: '/errors/unknown',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ErrorsNetworkRoute = ErrorsNetworkRouteImport.update({
+  id: '/errors/network',
+  path: '/errors/network',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ErrorsLocationRoute = ErrorsLocationRouteImport.update({
+  id: '/errors/location',
+  path: '/errors/location',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ErrorsGpsRoute = ErrorsGpsRouteImport.update({
+  id: '/errors/gps',
+  path: '/errors/gps',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityTopRoute = CommunityTopRouteImport.update({
   id: '/top',
   path: '/top',
@@ -549,6 +603,7 @@ export interface FileRoutesByFullPath {
   '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
+  '/loading': typeof LoadingRoute
   '/notifications': typeof NotificationsRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
@@ -571,6 +626,10 @@ export interface FileRoutesByFullPath {
   '/community/referral': typeof CommunityReferralRoute
   '/community/reputation': typeof CommunityReputationRoute
   '/community/top': typeof CommunityTopRoute
+  '/errors/gps': typeof ErrorsGpsRoute
+  '/errors/location': typeof ErrorsLocationRoute
+  '/errors/network': typeof ErrorsNetworkRoute
+  '/errors/unknown': typeof ErrorsUnknownRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -627,6 +686,10 @@ export interface FileRoutesByFullPath {
   '/settings/security': typeof SettingsSecurityRoute
   '/settings/theme': typeof SettingsThemeRoute
   '/settings/units': typeof SettingsUnitsRoute
+  '/success/parking-shared': typeof SuccessParkingSharedRoute
+  '/success/password-changed': typeof SuccessPasswordChangedRoute
+  '/success/profile-updated': typeof SuccessProfileUpdatedRoute
+  '/success/vehicle-added': typeof SuccessVehicleAddedRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
@@ -639,6 +702,7 @@ export interface FileRoutesByTo {
   '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
+  '/loading': typeof LoadingRoute
   '/notifications': typeof NotificationsRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
@@ -661,6 +725,10 @@ export interface FileRoutesByTo {
   '/community/referral': typeof CommunityReferralRoute
   '/community/reputation': typeof CommunityReputationRoute
   '/community/top': typeof CommunityTopRoute
+  '/errors/gps': typeof ErrorsGpsRoute
+  '/errors/location': typeof ErrorsLocationRoute
+  '/errors/network': typeof ErrorsNetworkRoute
+  '/errors/unknown': typeof ErrorsUnknownRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -717,6 +785,10 @@ export interface FileRoutesByTo {
   '/settings/security': typeof SettingsSecurityRoute
   '/settings/theme': typeof SettingsThemeRoute
   '/settings/units': typeof SettingsUnitsRoute
+  '/success/parking-shared': typeof SuccessParkingSharedRoute
+  '/success/password-changed': typeof SuccessPasswordChangedRoute
+  '/success/profile-updated': typeof SuccessProfileUpdatedRoute
+  '/success/vehicle-added': typeof SuccessVehicleAddedRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
@@ -730,6 +802,7 @@ export interface FileRoutesById {
   '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
+  '/loading': typeof LoadingRoute
   '/notifications': typeof NotificationsRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
@@ -752,6 +825,10 @@ export interface FileRoutesById {
   '/community/referral': typeof CommunityReferralRoute
   '/community/reputation': typeof CommunityReputationRoute
   '/community/top': typeof CommunityTopRoute
+  '/errors/gps': typeof ErrorsGpsRoute
+  '/errors/location': typeof ErrorsLocationRoute
+  '/errors/network': typeof ErrorsNetworkRoute
+  '/errors/unknown': typeof ErrorsUnknownRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -808,6 +885,10 @@ export interface FileRoutesById {
   '/settings/security': typeof SettingsSecurityRoute
   '/settings/theme': typeof SettingsThemeRoute
   '/settings/units': typeof SettingsUnitsRoute
+  '/success/parking-shared': typeof SuccessParkingSharedRoute
+  '/success/password-changed': typeof SuccessPasswordChangedRoute
+  '/success/profile-updated': typeof SuccessProfileUpdatedRoute
+  '/success/vehicle-added': typeof SuccessVehicleAddedRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
@@ -822,6 +903,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/home'
     | '/leaving'
+    | '/loading'
     | '/notifications'
     | '/onboarding'
     | '/otp'
@@ -844,6 +926,10 @@ export interface FileRouteTypes {
     | '/community/referral'
     | '/community/reputation'
     | '/community/top'
+    | '/errors/gps'
+    | '/errors/location'
+    | '/errors/network'
+    | '/errors/unknown'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -900,6 +986,10 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/settings/theme'
     | '/settings/units'
+    | '/success/parking-shared'
+    | '/success/password-changed'
+    | '/success/profile-updated'
+    | '/success/vehicle-added'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -912,6 +1002,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/home'
     | '/leaving'
+    | '/loading'
     | '/notifications'
     | '/onboarding'
     | '/otp'
@@ -934,6 +1025,10 @@ export interface FileRouteTypes {
     | '/community/referral'
     | '/community/reputation'
     | '/community/top'
+    | '/errors/gps'
+    | '/errors/location'
+    | '/errors/network'
+    | '/errors/unknown'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -990,6 +1085,10 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/settings/theme'
     | '/settings/units'
+    | '/success/parking-shared'
+    | '/success/password-changed'
+    | '/success/profile-updated'
+    | '/success/vehicle-added'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
   id:
@@ -1002,6 +1101,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/home'
     | '/leaving'
+    | '/loading'
     | '/notifications'
     | '/onboarding'
     | '/otp'
@@ -1024,6 +1124,10 @@ export interface FileRouteTypes {
     | '/community/referral'
     | '/community/reputation'
     | '/community/top'
+    | '/errors/gps'
+    | '/errors/location'
+    | '/errors/network'
+    | '/errors/unknown'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -1080,6 +1184,10 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/settings/theme'
     | '/settings/units'
+    | '/success/parking-shared'
+    | '/success/password-changed'
+    | '/success/profile-updated'
+    | '/success/vehicle-added'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
   fileRoutesById: FileRoutesById
@@ -1093,6 +1201,7 @@ export interface RootRouteChildren {
   HelpRoute: typeof HelpRouteWithChildren
   HomeRoute: typeof HomeRoute
   LeavingRoute: typeof LeavingRouteWithChildren
+  LoadingRoute: typeof LoadingRoute
   NotificationsRoute: typeof NotificationsRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   OtpRoute: typeof OtpRoute
@@ -1108,6 +1217,10 @@ export interface RootRouteChildren {
   VerifyEmailRoute: typeof VerifyEmailRoute
   VerifyPhoneRoute: typeof VerifyPhoneRoute
   WelcomeRoute: typeof WelcomeRoute
+  ErrorsGpsRoute: typeof ErrorsGpsRoute
+  ErrorsLocationRoute: typeof ErrorsLocationRoute
+  ErrorsNetworkRoute: typeof ErrorsNetworkRoute
+  ErrorsUnknownRoute: typeof ErrorsUnknownRoute
   NavigateIdRoute: typeof NavigateIdRoute
   NavigateCompletedRoute: typeof NavigateCompletedRoute
   ParkingIdRoute: typeof ParkingIdRoute
@@ -1116,6 +1229,10 @@ export interface RootRouteChildren {
   ReportsFakeRoute: typeof ReportsFakeRoute
   ReportsUserRoute: typeof ReportsUserRoute
   ReservationIdRoute: typeof ReservationIdRoute
+  SuccessParkingSharedRoute: typeof SuccessParkingSharedRoute
+  SuccessPasswordChangedRoute: typeof SuccessPasswordChangedRoute
+  SuccessProfileUpdatedRoute: typeof SuccessProfileUpdatedRoute
+  SuccessVehicleAddedRoute: typeof SuccessVehicleAddedRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1225,6 +1342,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loading': {
+      id: '/loading'
+      path: '/loading'
+      fullPath: '/loading'
+      preLoaderRoute: typeof LoadingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/leaving': {
       id: '/leaving'
       path: '/leaving'
@@ -1279,6 +1403,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success/vehicle-added': {
+      id: '/success/vehicle-added'
+      path: '/success/vehicle-added'
+      fullPath: '/success/vehicle-added'
+      preLoaderRoute: typeof SuccessVehicleAddedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success/profile-updated': {
+      id: '/success/profile-updated'
+      path: '/success/profile-updated'
+      fullPath: '/success/profile-updated'
+      preLoaderRoute: typeof SuccessProfileUpdatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success/password-changed': {
+      id: '/success/password-changed'
+      path: '/success/password-changed'
+      fullPath: '/success/password-changed'
+      preLoaderRoute: typeof SuccessPasswordChangedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success/parking-shared': {
+      id: '/success/parking-shared'
+      path: '/success/parking-shared'
+      fullPath: '/success/parking-shared'
+      preLoaderRoute: typeof SuccessParkingSharedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings/units': {
@@ -1673,6 +1825,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelpAboutRouteImport
       parentRoute: typeof HelpRoute
     }
+    '/errors/unknown': {
+      id: '/errors/unknown'
+      path: '/errors/unknown'
+      fullPath: '/errors/unknown'
+      preLoaderRoute: typeof ErrorsUnknownRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/errors/network': {
+      id: '/errors/network'
+      path: '/errors/network'
+      fullPath: '/errors/network'
+      preLoaderRoute: typeof ErrorsNetworkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/errors/location': {
+      id: '/errors/location'
+      path: '/errors/location'
+      fullPath: '/errors/location'
+      preLoaderRoute: typeof ErrorsLocationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/errors/gps': {
+      id: '/errors/gps'
+      path: '/errors/gps'
+      fullPath: '/errors/gps'
+      preLoaderRoute: typeof ErrorsGpsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community/top': {
       id: '/community/top'
       path: '/top'
@@ -1972,6 +2152,7 @@ const rootRouteChildren: RootRouteChildren = {
   HelpRoute: HelpRouteWithChildren,
   HomeRoute: HomeRoute,
   LeavingRoute: LeavingRouteWithChildren,
+  LoadingRoute: LoadingRoute,
   NotificationsRoute: NotificationsRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   OtpRoute: OtpRoute,
@@ -1987,6 +2168,10 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyEmailRoute: VerifyEmailRoute,
   VerifyPhoneRoute: VerifyPhoneRoute,
   WelcomeRoute: WelcomeRoute,
+  ErrorsGpsRoute: ErrorsGpsRoute,
+  ErrorsLocationRoute: ErrorsLocationRoute,
+  ErrorsNetworkRoute: ErrorsNetworkRoute,
+  ErrorsUnknownRoute: ErrorsUnknownRoute,
   NavigateIdRoute: NavigateIdRoute,
   NavigateCompletedRoute: NavigateCompletedRoute,
   ParkingIdRoute: ParkingIdRoute,
@@ -1995,6 +2180,10 @@ const rootRouteChildren: RootRouteChildren = {
   ReportsFakeRoute: ReportsFakeRoute,
   ReportsUserRoute: ReportsUserRoute,
   ReservationIdRoute: ReservationIdRoute,
+  SuccessParkingSharedRoute: SuccessParkingSharedRoute,
+  SuccessPasswordChangedRoute: SuccessPasswordChangedRoute,
+  SuccessProfileUpdatedRoute: SuccessProfileUpdatedRoute,
+  SuccessVehicleAddedRoute: SuccessVehicleAddedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
