@@ -241,15 +241,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     updateProfile: async (patch) => {
       if (!session?.user) return { error: "Not signed in" };
-      const dbPatch: Record<string, unknown> = {};
-      if (patch.name !== undefined) dbPatch.name = patch.name;
-      if (patch.phone !== undefined) dbPatch.phone = patch.phone;
-      if (patch.plate !== undefined) dbPatch.plate = patch.plate;
-      if (patch.language !== undefined) dbPatch.language = patch.language;
-      if (patch.theme !== undefined) dbPatch.theme = patch.theme;
-      if (patch.avatar_url !== undefined) dbPatch.avatar_url = patch.avatar_url;
-      if (patch.notification_prefs !== undefined) dbPatch.notification_prefs = patch.notification_prefs;
-      if (patch.location_prefs !== undefined) dbPatch.location_prefs = patch.location_prefs;
+      const dbPatch = {
+        ...(patch.name !== undefined && { name: patch.name }),
+        ...(patch.phone !== undefined && { phone: patch.phone }),
+        ...(patch.plate !== undefined && { plate: patch.plate }),
+        ...(patch.language !== undefined && { language: patch.language }),
+        ...(patch.theme !== undefined && { theme: patch.theme }),
+        ...(patch.avatar_url !== undefined && { avatar_url: patch.avatar_url }),
+        ...(patch.notification_prefs !== undefined && { notification_prefs: patch.notification_prefs as unknown as never }),
+        ...(patch.location_prefs !== undefined && { location_prefs: patch.location_prefs as unknown as never }),
+      };
       const { error } = await supabase.from("profiles").update(dbPatch).eq("user_id", session.user.id);
       if (error) return { error: error.message };
       await loadProfile(session.user.id, session.user.email ?? "");
