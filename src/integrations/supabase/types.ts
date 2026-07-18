@@ -14,7 +14,209 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          icon: string
+          id: string
+          metadata: Json
+          read: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          metadata?: Json
+          read?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          icon?: string
+          id?: string
+          metadata?: Json
+          read?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      parking_spots: {
+        Row: {
+          address: string | null
+          cost: number
+          created_at: string
+          expires_at: string
+          id: string
+          lat: number
+          leave_at: string
+          lng: number
+          reserved_by: string | null
+          reserved_until: string | null
+          status: Database["public"]["Enums"]["spot_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          cost?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          lat: number
+          leave_at?: string
+          lng: number
+          reserved_by?: string | null
+          reserved_until?: string | null
+          status?: Database["public"]["Enums"]["spot_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          cost?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          lat?: number
+          leave_at?: string
+          lng?: number
+          reserved_by?: string | null
+          reserved_until?: string | null
+          status?: Database["public"]["Enums"]["spot_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      points_transactions: {
+        Row: {
+          created_at: string
+          delta: number
+          id: string
+          metadata: Json
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          delta: number
+          id?: string
+          metadata?: Json
+          reason: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          delta?: number
+          id?: string
+          metadata?: Json
+          reason?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          language: string
+          location_prefs: Json
+          name: string
+          notification_prefs: Json
+          phone: string | null
+          plate: string | null
+          points: number
+          reputation: number
+          reservation_count: number
+          shared_count: number
+          theme: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          language?: string
+          location_prefs?: Json
+          name?: string
+          notification_prefs?: Json
+          phone?: string | null
+          plate?: string | null
+          points?: number
+          reputation?: number
+          reservation_count?: number
+          shared_count?: number
+          theme?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          language?: string
+          location_prefs?: Json
+          name?: string
+          notification_prefs?: Json
+          phone?: string | null
+          plate?: string | null
+          points?: number
+          reputation?: number
+          reservation_count?: number
+          shared_count?: number
+          theme?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reservations: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          spot_id: string
+          status: Database["public"]["Enums"]["reservation_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          spot_id: string
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          spot_id?: string
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "parking_spots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +225,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      reservation_status: "active" | "completed" | "expired" | "cancelled"
+      spot_status:
+        | "available"
+        | "leaving"
+        | "reserved"
+        | "expired"
+        | "completed"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +359,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      reservation_status: ["active", "completed", "expired", "cancelled"],
+      spot_status: [
+        "available",
+        "leaving",
+        "reserved",
+        "expired",
+        "completed",
+        "cancelled",
+      ],
+    },
   },
 } as const
