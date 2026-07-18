@@ -7,11 +7,12 @@ export const Route = createFileRoute("/")({ component: Splash });
 
 function Splash() {
   const navigate = useNavigate();
-  const { user } = useApp();
+  const { session, loading } = useApp();
   useEffect(() => {
-    const t = setTimeout(() => navigate({ to: user ? "/home" : "/auth" }), 1400);
+    if (loading) return;
+    const t = setTimeout(() => navigate({ to: session ? "/home" : "/auth" }), 900);
     return () => clearTimeout(t);
-  }, [navigate, user]);
+  }, [navigate, session, loading]);
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden text-white" style={{ background: "var(--gradient-hero)" }}>

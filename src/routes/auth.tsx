@@ -1,32 +1,60 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Lock, ArrowRight, MapPin } from "lucide-react";
+import { toast } from "sonner";
+import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 
 export const Route = createFileRoute("/auth")({ component: Auth });
 
 function Auth() {
   const nav = useNavigate();
-  const { signIn } = useApp();
+  const { signInWithEmail, signUpWithEmail, signInWithOAuth, resetPassword } = useApp();
   const [mode, setMode] = useState<"login" | "register">("login");
-  const [email, setEmail] = useState("driver@parkout.app");
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("••••••••");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState<null | "email" | "google" | "apple" | "reset">(null);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    signIn(email, name);
+    if (busy) return;
+    setBusy("email");
+    if (mode === "login") {
+      const { error } = await signInWithEmail(email, password);
+      setBusy(null);
+      if (error) { toast.error(error); return; }
+      toast.success("Welcome back");
+      nav({ to: "/home" });
+    } else {
+      if (!name.trim()) { setBusy(null); toast.error("Please enter your name"); return; }
+      const { error } = await signUpWithEmail(email, password, name.trim());
+      setBusy(null);
+      if (error) { toast.error(error); return; }
+      toast.success("Account created — check your email if confirmation is required");
+      nav({ to: "/home" });
+    }
+  };
+
+  const oauth = async (provider: "google" | "apple") => {
+    setBusy(provider);
+    const { error } = await signInWithOAuth(provider);
+    if (error) { setBusy(null); toast.error(error); return; }
+    // The OAuth helper either redirects or sets the session; navigate on success
+    setBusy(null);
     nav({ to: "/home" });
   };
 
-  const oauth = (label: string) => {
-    signIn(`${label.toLowerCase()}@parkout.app`, label + " User");
-    nav({ to: "/home" });
+  const forgot = async () => {
+    if (!email) { toast.error("Enter your email first"); return; }
+    setBusy("reset");
+    const { error } = await resetPassword(email);
+    setBusy(null);
+    if (error) toast.error(error);
+    else toast.success("Password reset email sent");
   };
 
   return (
     <div className="relative flex min-h-screen w-full flex-col">
-      {/* Header */}
       <div className="relative h-56 overflow-hidden text-white" style={{ background: "var(--gradient-hero)" }}>
         <div className="absolute -right-10 -top-10 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
         <div className="relative flex h-full flex-col justify-end p-6">
@@ -41,17 +69,12 @@ function Auth() {
         </div>
       </div>
 
-      {/* Card */}
       <div className="-mt-8 flex-1 rounded-t-[28px] bg-background px-6 pb-10 pt-6 shadow-[var(--shadow-elevated)]">
         <div className="flex rounded-full bg-muted p-1">
           {(["login", "register"] as const).map((m) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
+            <button key={m} type="button" onClick={() => setMode(m)}
               className={`flex-1 rounded-full py-2 text-sm font-semibold transition-all ${
-                mode === m ? "bg-background text-foreground shadow-[var(--shadow-card)]" : "text-muted-foreground"
-              }`}
-            >
+                mode === m ? "bg-background text-foreground shadow-[var(--shadow-card)]" : "text-muted-foreground"}`}>
               {m === "login" ? "Log in" : "Sign up"}
             </button>
           ))}
@@ -61,43 +84,59 @@ function Auth() {
           {mode === "register" && (
             <label className="block">
               <span className="mb-1 block text-xs font-medium text-muted-foreground">Name</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Alex Driver" className="w-full rounded-2xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+              <input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Alex Driver"
+                className="w-full rounded-2xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
             </label>
           )}
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-muted-foreground">Email</span>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" required
+                className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
             </div>
           </label>
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-muted-foreground">Password</span>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+              <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"
+                autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={6}
+                className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
             </div>
           </label>
 
-          <button type="submit" className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98]">
-            {mode === "login" ? "Log in" : "Create account"}
-            <ArrowRight className="h-4 w-4" />
+          {mode === "login" && (
+            <button type="button" onClick={forgot} className="ml-1 text-xs font-medium text-muted-foreground underline">
+              Forgot password?
+            </button>
+          )}
+
+          <button type="submit" disabled={busy !== null}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60">
+            {busy === "email" ? <Loader2 className="h-4 w-4 animate-spin" /> : <>
+              {mode === "login" ? "Log in" : "Create account"} <ArrowRight className="h-4 w-4" />
+            </>}
           </button>
         </form>
 
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <div className="h-px flex-1 bg-border" />
-          or continue with
-          <div className="h-px flex-1 bg-border" />
+          <div className="h-px flex-1 bg-border" /> or continue with <div className="h-px flex-1 bg-border" />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <button onClick={() => oauth("Google")} className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card py-3 text-sm font-semibold hover:bg-muted">
-            <svg viewBox="0 0 24 24" className="h-4 w-4"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1a6.2 6.2 0 1 1 0-12.4 5.6 5.6 0 0 1 3.95 1.53l2.7-2.6A9.4 9.4 0 0 0 12 2.4a9.6 9.6 0 1 0 0 19.2c5.55 0 9.2-3.9 9.2-9.4 0-.65-.07-1.15-.16-2H12z"/></svg>
+          <button onClick={() => oauth("google")} disabled={busy !== null}
+            className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card py-3 text-sm font-semibold hover:bg-muted disabled:opacity-60">
+            {busy === "google" ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+              <svg viewBox="0 0 24 24" className="h-4 w-4"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1a6.2 6.2 0 1 1 0-12.4 5.6 5.6 0 0 1 3.95 1.53l2.7-2.6A9.4 9.4 0 0 0 12 2.4a9.6 9.6 0 1 0 0 19.2c5.55 0 9.2-3.9 9.2-9.4 0-.65-.07-1.15-.16-2H12z" /></svg>
+            )}
             Google
           </button>
-          <button onClick={() => oauth("Apple")} className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card py-3 text-sm font-semibold hover:bg-muted">
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor"><path d="M16.365 1.43c0 1.14-.42 2.23-1.19 3.02-.83.87-2.17 1.52-3.28 1.44-.13-1.09.4-2.22 1.15-3.02.83-.87 2.24-1.5 3.32-1.44zM20.5 17.4c-.55 1.27-.82 1.83-1.53 2.95-.99 1.55-2.39 3.48-4.11 3.5-1.53.02-1.93-.99-4.01-.98-2.08.01-2.52 1-4.05.98-1.72-.02-3.05-1.76-4.04-3.31C.5 16.3-.06 11.9 2.13 9.29c1.11-1.32 2.86-2.16 4.5-2.16 1.68 0 2.73.9 4.11.9 1.34 0 2.15-.9 4.1-.9 1.47 0 3.03.8 4.14 2.19-3.64 2-3.05 7.2 1.52 8.08z"/></svg>
+          <button onClick={() => oauth("apple")} disabled={busy !== null}
+            className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card py-3 text-sm font-semibold hover:bg-muted disabled:opacity-60">
+            {busy === "apple" ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor"><path d="M16.365 1.43c0 1.14-.42 2.23-1.19 3.02-.83.87-2.17 1.52-3.28 1.44-.13-1.09.4-2.22 1.15-3.02.83-.87 2.24-1.5 3.32-1.44zM20.5 17.4c-.55 1.27-.82 1.83-1.53 2.95-.99 1.55-2.39 3.48-4.11 3.5-1.53.02-1.93-.99-4.01-.98-2.08.01-2.52 1-4.05.98-1.72-.02-3.05-1.76-4.04-3.31C.5 16.3-.06 11.9 2.13 9.29c1.11-1.32 2.86-2.16 4.5-2.16 1.68 0 2.73.9 4.11.9 1.34 0 2.15-.9 4.1-.9 1.47 0 3.03.8 4.14 2.19-3.64 2-3.05 7.2 1.52 8.08z" /></svg>
+            )}
             Apple
           </button>
         </div>
