@@ -28,7 +28,9 @@ import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as CreateProfileRouteImport } from './routes/create-profile'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsUnitsRouteImport } from './routes/settings.units'
 import { Route as SettingsThemeRouteImport } from './routes/settings.theme'
@@ -51,6 +53,10 @@ import { Route as RewardsDailyRouteImport } from './routes/rewards.daily'
 import { Route as RewardsBuyRouteImport } from './routes/rewards.buy'
 import { Route as RewardsAchievementsRouteImport } from './routes/rewards.achievements'
 import { Route as ReservationIdRouteImport } from './routes/reservation.$id'
+import { Route as ReportsUserRouteImport } from './routes/reports.user'
+import { Route as ReportsFakeRouteImport } from './routes/reports.fake'
+import { Route as ReportsBlockedRouteImport } from './routes/reports.blocked'
+import { Route as ReportsAppealRouteImport } from './routes/reports.appeal'
 import { Route as ProfileVehiclesRouteImport } from './routes/profile.vehicles'
 import { Route as ProfileStatsRouteImport } from './routes/profile.stats'
 import { Route as ProfileReservationsRouteImport } from './routes/profile.reservations'
@@ -82,7 +88,13 @@ import { Route as HelpContactRouteImport } from './routes/help.contact'
 import { Route as HelpChatRouteImport } from './routes/help.chat'
 import { Route as HelpBugRouteImport } from './routes/help.bug'
 import { Route as HelpAboutRouteImport } from './routes/help.about'
+import { Route as CommunityTopRouteImport } from './routes/community.top'
+import { Route as CommunityReputationRouteImport } from './routes/community.reputation'
+import { Route as CommunityReferralRouteImport } from './routes/community.referral'
+import { Route as CommunityGuidelinesRouteImport } from './routes/community.guidelines'
 import { Route as AuthSuccessRouteImport } from './routes/auth.success'
+import { Route as AdminRolesRouteImport } from './routes/admin.roles'
+import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
 
@@ -181,9 +193,19 @@ const CreateProfileRoute = CreateProfileRouteImport.update({
   path: '/create-profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -294,6 +316,26 @@ const RewardsAchievementsRoute = RewardsAchievementsRouteImport.update({
 const ReservationIdRoute = ReservationIdRouteImport.update({
   id: '/reservation/$id',
   path: '/reservation/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsUserRoute = ReportsUserRouteImport.update({
+  id: '/reports/user',
+  path: '/reports/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsFakeRoute = ReportsFakeRouteImport.update({
+  id: '/reports/fake',
+  path: '/reports/fake',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsBlockedRoute = ReportsBlockedRouteImport.update({
+  id: '/reports/blocked',
+  path: '/reports/blocked',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsAppealRoute = ReportsAppealRouteImport.update({
+  id: '/reports/appeal',
+  path: '/reports/appeal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileVehiclesRoute = ProfileVehiclesRouteImport.update({
@@ -452,10 +494,40 @@ const HelpAboutRoute = HelpAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => HelpRoute,
 } as any)
+const CommunityTopRoute = CommunityTopRouteImport.update({
+  id: '/top',
+  path: '/top',
+  getParentRoute: () => CommunityRoute,
+} as any)
+const CommunityReputationRoute = CommunityReputationRouteImport.update({
+  id: '/reputation',
+  path: '/reputation',
+  getParentRoute: () => CommunityRoute,
+} as any)
+const CommunityReferralRoute = CommunityReferralRouteImport.update({
+  id: '/referral',
+  path: '/referral',
+  getParentRoute: () => CommunityRoute,
+} as any)
+const CommunityGuidelinesRoute = CommunityGuidelinesRouteImport.update({
+  id: '/guidelines',
+  path: '/guidelines',
+  getParentRoute: () => CommunityRoute,
+} as any)
 const AuthSuccessRoute = AuthSuccessRouteImport.update({
   id: '/success',
   path: '/success',
   getParentRoute: () => AuthRoute,
+} as any)
+const AdminRolesRoute = AdminRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminModeratorRoute = AdminModeratorRouteImport.update({
+  id: '/moderator',
+  path: '/moderator',
+  getParentRoute: () => AdminRoute,
 } as any)
 const RewardsRewardIdRoute = RewardsRewardIdRouteImport.update({
   id: '/reward/$id',
@@ -470,7 +542,9 @@ const ProfileVehiclesAddRoute = ProfileVehiclesAddRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/community': typeof CommunityRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
   '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
@@ -490,7 +564,13 @@ export interface FileRoutesByFullPath {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/moderator': typeof AdminModeratorRoute
+  '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/community/guidelines': typeof CommunityGuidelinesRoute
+  '/community/referral': typeof CommunityReferralRoute
+  '/community/reputation': typeof CommunityReputationRoute
+  '/community/top': typeof CommunityTopRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -522,6 +602,10 @@ export interface FileRoutesByFullPath {
   '/profile/reservations': typeof ProfileReservationsRoute
   '/profile/stats': typeof ProfileStatsRoute
   '/profile/vehicles': typeof ProfileVehiclesRouteWithChildren
+  '/reports/appeal': typeof ReportsAppealRoute
+  '/reports/blocked': typeof ReportsBlockedRoute
+  '/reports/fake': typeof ReportsFakeRoute
+  '/reports/user': typeof ReportsUserRoute
   '/reservation/$id': typeof ReservationIdRoute
   '/rewards/achievements': typeof RewardsAchievementsRoute
   '/rewards/buy': typeof RewardsBuyRoute
@@ -548,7 +632,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/community': typeof CommunityRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
   '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
@@ -568,7 +654,13 @@ export interface FileRoutesByTo {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/moderator': typeof AdminModeratorRoute
+  '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/community/guidelines': typeof CommunityGuidelinesRoute
+  '/community/referral': typeof CommunityReferralRoute
+  '/community/reputation': typeof CommunityReputationRoute
+  '/community/top': typeof CommunityTopRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -600,6 +692,10 @@ export interface FileRoutesByTo {
   '/profile/reservations': typeof ProfileReservationsRoute
   '/profile/stats': typeof ProfileStatsRoute
   '/profile/vehicles': typeof ProfileVehiclesRouteWithChildren
+  '/reports/appeal': typeof ReportsAppealRoute
+  '/reports/blocked': typeof ReportsBlockedRoute
+  '/reports/fake': typeof ReportsFakeRoute
+  '/reports/user': typeof ReportsUserRoute
   '/reservation/$id': typeof ReservationIdRoute
   '/rewards/achievements': typeof RewardsAchievementsRoute
   '/rewards/buy': typeof RewardsBuyRoute
@@ -627,7 +723,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/community': typeof CommunityRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
   '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
@@ -647,7 +745,13 @@ export interface FileRoutesById {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/moderator': typeof AdminModeratorRoute
+  '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/community/guidelines': typeof CommunityGuidelinesRoute
+  '/community/referral': typeof CommunityReferralRoute
+  '/community/reputation': typeof CommunityReputationRoute
+  '/community/top': typeof CommunityTopRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -679,6 +783,10 @@ export interface FileRoutesById {
   '/profile/reservations': typeof ProfileReservationsRoute
   '/profile/stats': typeof ProfileStatsRoute
   '/profile/vehicles': typeof ProfileVehiclesRouteWithChildren
+  '/reports/appeal': typeof ReportsAppealRoute
+  '/reports/blocked': typeof ReportsBlockedRoute
+  '/reports/fake': typeof ReportsFakeRoute
+  '/reports/user': typeof ReportsUserRoute
   '/reservation/$id': typeof ReservationIdRoute
   '/rewards/achievements': typeof RewardsAchievementsRoute
   '/rewards/buy': typeof RewardsBuyRoute
@@ -707,7 +815,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/auth'
+    | '/community'
     | '/create-profile'
     | '/help'
     | '/home'
@@ -727,7 +837,13 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/moderator'
+    | '/admin/roles'
     | '/auth/success'
+    | '/community/guidelines'
+    | '/community/referral'
+    | '/community/reputation'
+    | '/community/top'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -759,6 +875,10 @@ export interface FileRouteTypes {
     | '/profile/reservations'
     | '/profile/stats'
     | '/profile/vehicles'
+    | '/reports/appeal'
+    | '/reports/blocked'
+    | '/reports/fake'
+    | '/reports/user'
     | '/reservation/$id'
     | '/rewards/achievements'
     | '/rewards/buy'
@@ -785,7 +905,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/auth'
+    | '/community'
     | '/create-profile'
     | '/help'
     | '/home'
@@ -805,7 +927,13 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/moderator'
+    | '/admin/roles'
     | '/auth/success'
+    | '/community/guidelines'
+    | '/community/referral'
+    | '/community/reputation'
+    | '/community/top'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -837,6 +965,10 @@ export interface FileRouteTypes {
     | '/profile/reservations'
     | '/profile/stats'
     | '/profile/vehicles'
+    | '/reports/appeal'
+    | '/reports/blocked'
+    | '/reports/fake'
+    | '/reports/user'
     | '/reservation/$id'
     | '/rewards/achievements'
     | '/rewards/buy'
@@ -863,7 +995,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/auth'
+    | '/community'
     | '/create-profile'
     | '/help'
     | '/home'
@@ -883,7 +1017,13 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/moderator'
+    | '/admin/roles'
     | '/auth/success'
+    | '/community/guidelines'
+    | '/community/referral'
+    | '/community/reputation'
+    | '/community/top'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -915,6 +1055,10 @@ export interface FileRouteTypes {
     | '/profile/reservations'
     | '/profile/stats'
     | '/profile/vehicles'
+    | '/reports/appeal'
+    | '/reports/blocked'
+    | '/reports/fake'
+    | '/reports/user'
     | '/reservation/$id'
     | '/rewards/achievements'
     | '/rewards/buy'
@@ -942,7 +1086,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  CommunityRoute: typeof CommunityRouteWithChildren
   CreateProfileRoute: typeof CreateProfileRoute
   HelpRoute: typeof HelpRouteWithChildren
   HomeRoute: typeof HomeRoute
@@ -965,6 +1111,10 @@ export interface RootRouteChildren {
   NavigateIdRoute: typeof NavigateIdRoute
   NavigateCompletedRoute: typeof NavigateCompletedRoute
   ParkingIdRoute: typeof ParkingIdRoute
+  ReportsAppealRoute: typeof ReportsAppealRoute
+  ReportsBlockedRoute: typeof ReportsBlockedRoute
+  ReportsFakeRoute: typeof ReportsFakeRoute
+  ReportsUserRoute: typeof ReportsUserRoute
   ReservationIdRoute: typeof ReservationIdRoute
 }
 
@@ -1103,11 +1253,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -1262,6 +1426,34 @@ declare module '@tanstack/react-router' {
       path: '/reservation/$id'
       fullPath: '/reservation/$id'
       preLoaderRoute: typeof ReservationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/user': {
+      id: '/reports/user'
+      path: '/reports/user'
+      fullPath: '/reports/user'
+      preLoaderRoute: typeof ReportsUserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/fake': {
+      id: '/reports/fake'
+      path: '/reports/fake'
+      fullPath: '/reports/fake'
+      preLoaderRoute: typeof ReportsFakeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/blocked': {
+      id: '/reports/blocked'
+      path: '/reports/blocked'
+      fullPath: '/reports/blocked'
+      preLoaderRoute: typeof ReportsBlockedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/appeal': {
+      id: '/reports/appeal'
+      path: '/reports/appeal'
+      fullPath: '/reports/appeal'
+      preLoaderRoute: typeof ReportsAppealRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile/vehicles': {
@@ -1481,12 +1673,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelpAboutRouteImport
       parentRoute: typeof HelpRoute
     }
+    '/community/top': {
+      id: '/community/top'
+      path: '/top'
+      fullPath: '/community/top'
+      preLoaderRoute: typeof CommunityTopRouteImport
+      parentRoute: typeof CommunityRoute
+    }
+    '/community/reputation': {
+      id: '/community/reputation'
+      path: '/reputation'
+      fullPath: '/community/reputation'
+      preLoaderRoute: typeof CommunityReputationRouteImport
+      parentRoute: typeof CommunityRoute
+    }
+    '/community/referral': {
+      id: '/community/referral'
+      path: '/referral'
+      fullPath: '/community/referral'
+      preLoaderRoute: typeof CommunityReferralRouteImport
+      parentRoute: typeof CommunityRoute
+    }
+    '/community/guidelines': {
+      id: '/community/guidelines'
+      path: '/guidelines'
+      fullPath: '/community/guidelines'
+      preLoaderRoute: typeof CommunityGuidelinesRouteImport
+      parentRoute: typeof CommunityRoute
+    }
     '/auth/success': {
       id: '/auth/success'
       path: '/success'
       fullPath: '/auth/success'
       preLoaderRoute: typeof AuthSuccessRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/admin/roles': {
+      id: '/admin/roles'
+      path: '/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AdminRolesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/moderator': {
+      id: '/admin/moderator'
+      path: '/moderator'
+      fullPath: '/admin/moderator'
+      preLoaderRoute: typeof AdminModeratorRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/rewards/reward/$id': {
       id: '/rewards/reward/$id'
@@ -1505,6 +1739,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminModeratorRoute: typeof AdminModeratorRoute
+  AdminRolesRoute: typeof AdminRolesRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminModeratorRoute: AdminModeratorRoute,
+  AdminRolesRoute: AdminRolesRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface AuthRouteChildren {
   AuthSuccessRoute: typeof AuthSuccessRoute
 }
@@ -1514,6 +1760,24 @@ const AuthRouteChildren: AuthRouteChildren = {
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface CommunityRouteChildren {
+  CommunityGuidelinesRoute: typeof CommunityGuidelinesRoute
+  CommunityReferralRoute: typeof CommunityReferralRoute
+  CommunityReputationRoute: typeof CommunityReputationRoute
+  CommunityTopRoute: typeof CommunityTopRoute
+}
+
+const CommunityRouteChildren: CommunityRouteChildren = {
+  CommunityGuidelinesRoute: CommunityGuidelinesRoute,
+  CommunityReferralRoute: CommunityReferralRoute,
+  CommunityReputationRoute: CommunityReputationRoute,
+  CommunityTopRoute: CommunityTopRoute,
+}
+
+const CommunityRouteWithChildren = CommunityRoute._addFileChildren(
+  CommunityRouteChildren,
+)
 
 interface HelpRouteChildren {
   HelpAboutRoute: typeof HelpAboutRoute
@@ -1701,7 +1965,9 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  CommunityRoute: CommunityRouteWithChildren,
   CreateProfileRoute: CreateProfileRoute,
   HelpRoute: HelpRouteWithChildren,
   HomeRoute: HomeRoute,
@@ -1724,6 +1990,10 @@ const rootRouteChildren: RootRouteChildren = {
   NavigateIdRoute: NavigateIdRoute,
   NavigateCompletedRoute: NavigateCompletedRoute,
   ParkingIdRoute: ParkingIdRoute,
+  ReportsAppealRoute: ReportsAppealRoute,
+  ReportsBlockedRoute: ReportsBlockedRoute,
+  ReportsFakeRoute: ReportsFakeRoute,
+  ReportsUserRoute: ReportsUserRoute,
   ReservationIdRoute: ReservationIdRoute,
 }
 export const routeTree = rootRouteImport
