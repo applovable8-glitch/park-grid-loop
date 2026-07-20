@@ -13,6 +13,7 @@ import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppProvider } from "../lib/parkout-store";
+import { I18nProvider, useI18n } from "../lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -83,14 +84,24 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        {/* Mobile-first frame; on desktop we center a phone-sized viewport for a native-app feel */}
-        <div className="min-h-screen w-full bg-[oklch(0.94_0.01_240)]">
-          <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background shadow-none md:my-6 md:min-h-[calc(100vh-3rem)] md:overflow-hidden md:rounded-[36px] md:shadow-[var(--shadow-elevated)] md:ring-1 md:ring-black/5">
-            <Outlet />
-          </div>
-        </div>
-        <Toaster position="top-center" richColors closeButton />
+        <I18nProvider>
+          <LocalizedShell />
+        </I18nProvider>
       </AppProvider>
     </QueryClientProvider>
+  );
+}
+
+function LocalizedShell() {
+  const { dir } = useI18n();
+  return (
+    <>
+      <div dir={dir} className="min-h-screen w-full bg-[oklch(0.94_0.01_240)]">
+        <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background shadow-none md:my-6 md:min-h-[calc(100vh-3rem)] md:overflow-hidden md:rounded-[36px] md:shadow-[var(--shadow-elevated)] md:ring-1 md:ring-black/5">
+          <Outlet />
+        </div>
+      </div>
+      <Toaster position="top-center" richColors closeButton dir={dir} />
+    </>
   );
 }
