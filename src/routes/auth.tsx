@@ -3,12 +3,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/auth")({ component: Auth });
 
 function Auth() {
   const nav = useNavigate();
   const { signInWithEmail, signUpWithEmail, signInWithOAuth, resetPassword } = useApp();
+  const { t } = useI18n();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -63,9 +65,9 @@ function Auth() {
             <span className="text-sm font-semibold tracking-wide">ParkOut</span>
           </div>
           <h1 className="mt-2 font-[var(--font-display)] text-3xl font-bold leading-tight">
-            {mode === "login" ? "Welcome back." : "Join the movement."}
+            {mode === "login" ? t("welcome_back") : t("join_movement")}
           </h1>
-          <p className="mt-1 text-sm text-white/70">Find parking. Share parking. Earn points.</p>
+          <p className="mt-1 text-sm text-white/70">{t("auth_tagline")}</p>
         </div>
       </div>
 
@@ -75,7 +77,7 @@ function Auth() {
             <button key={m} type="button" onClick={() => setMode(m)}
               className={`flex-1 rounded-full py-2 text-sm font-semibold transition-all ${
                 mode === m ? "bg-background text-foreground shadow-[var(--shadow-card)]" : "text-muted-foreground"}`}>
-              {m === "login" ? "Log in" : "Sign up"}
+              {m === "login" ? t("log_in") : t("sign_up")}
             </button>
           ))}
         </div>
@@ -83,13 +85,13 @@ function Auth() {
         <form onSubmit={submit} className="mt-5 space-y-3">
           {mode === "register" && (
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-muted-foreground">Name</span>
+              <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("name")}</span>
               <input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Alex Driver"
                 className="w-full rounded-2xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
             </label>
           )}
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-muted-foreground">Email</span>
+            <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("email")}</span>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" required
@@ -97,7 +99,7 @@ function Auth() {
             </div>
           </label>
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-muted-foreground">Password</span>
+            <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("password")}</span>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"
@@ -108,20 +110,20 @@ function Auth() {
 
           {mode === "login" && (
             <button type="button" onClick={forgot} className="ml-1 text-xs font-medium text-muted-foreground underline">
-              Forgot password?
+              {t("forgot_password")}
             </button>
           )}
 
           <button type="submit" disabled={busy !== null}
             className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60">
             {busy === "email" ? <Loader2 className="h-4 w-4 animate-spin" /> : <>
-              {mode === "login" ? "Log in" : "Create account"} <ArrowRight className="h-4 w-4" />
+              {mode === "login" ? t("log_in") : t("create_account")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </>}
           </button>
         </form>
 
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <div className="h-px flex-1 bg-border" /> or continue with <div className="h-px flex-1 bg-border" />
+          <div className="h-px flex-1 bg-border" /> {t("or_continue_with")} <div className="h-px flex-1 bg-border" />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -142,7 +144,7 @@ function Auth() {
         </div>
 
         <p className="mt-5 text-center text-xs text-muted-foreground">
-          By continuing you agree to ParkOut's <span className="underline">Terms</span> and <span className="underline">Privacy Policy</span>.
+          {t("terms_agree")}
         </p>
       </div>
     </div>

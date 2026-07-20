@@ -14,7 +14,7 @@ export function Screen({
         <div className="sticky top-0 z-10 flex items-center gap-3 bg-background/90 px-4 py-3 backdrop-blur-xl">
           {back !== false && (
             <Link to={back as string} className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
             </Link>
           )}
           <h1 className="flex-1 truncate font-[var(--font-display)] text-lg font-bold">{title}</h1>
@@ -34,7 +34,7 @@ export function Hero({ title, subtitle, back = "/home", children }: { title: str
       <div className="relative">
         {back !== false && (
           <Link to={back as string} className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur-md">
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Link>
         )}
         <h1 className="font-[var(--font-display)] text-2xl font-bold leading-tight">{title}</h1>
@@ -60,7 +60,7 @@ export function Row({ icon: Icon, label, hint, to, right, danger, onClick }: {
         <p className="text-sm font-semibold truncate">{label}</p>
         {hint && <p className="text-xs text-muted-foreground truncate">{hint}</p>}
       </div>
-      {right ?? <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+      {right ?? <ChevronRight className="h-4 w-4 text-muted-foreground rtl:rotate-180" />}
     </div>
   );
   if (to) return <Link to={to}>{body}</Link>;
