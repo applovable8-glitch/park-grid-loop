@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users } from "lucide-react";
+import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users, Gift } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
