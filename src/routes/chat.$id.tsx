@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useParams, useSearch } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Car, Phone, Send, Info, Star, Share2, IdCard } from "lucide-react";
+import { ArrowLeft, Car, Phone, Send, Info, Star, Share2, IdCard, ImagePlus, Camera, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
 import { carLabel, markThreadRead, useDriverProfile, useThread } from "@/lib/chat";
@@ -18,12 +18,26 @@ function ChatScreen() {
   const { spot } = useSearch({ from: "/chat/$id" });
   const { user } = useApp();
   const { profile } = useDriverProfile(id);
-  const { messages, send } = useThread(user?.id, id, spot ?? null);
+  const { messages, send, sendImage } = useThread(user?.id, id, spot ?? null);
   const { lang } = useI18n();
   const ar = lang === "ar";
   const [text, setText] = useState("");
   const [showInfo, setShowInfo] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
+
+  const pickImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    const { error } = await sendImage(file);
+    setUploading(false);
+    if (error) toast.error(error);
+  };
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages.length]);
   useEffect(() => { void markThreadRead(user?.id, id); }, [user?.id, id, messages.length]);
@@ -122,7 +136,17 @@ function ChatScreen() {
                   mine ? "bg-[var(--emerald)] text-white" : "bg-card shadow-[var(--shadow-card)]"
                 }`}
               >
-                <p className="whitespace-pre-wrap break-words">{m.body}</p>
+                {m.image_url && (
+                  <button type="button" onClick={() => setPreview(m.image_url)} className="block">
+                    <img
+                      src={m.image_url}
+                      alt={ar ? "صورة" : "Photo"}
+                      loading="lazy"
+                      className="mb-1 max-h-64 w-full rounded-xl object-cover"
+                    />
+                  </button>
+                )}
+                {m.body && <p className="whitespace-pre-wrap break-words">{m.body}</p>}
                 <p className={`mt-1 text-[10px] ${mine ? "text-white/70" : "text-muted-foreground"}`}>
                   {new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </p>
@@ -134,6 +158,26 @@ function ChatScreen() {
       </div>
 
       <form onSubmit={submit} className="sticky bottom-0 flex items-center gap-2 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-xl">
+        <input ref={galleryRef} type="file" accept="image/*" hidden onChange={pickImage} />
+        <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={pickImage} />
+        <button
+          type="button"
+          onClick={() => cameraRef.current?.click()}
+          disabled={uploading}
+          aria-label={ar ? "التقاط صورة" : "Take photo"}
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-muted disabled:opacity-50"
+        >
+          <Camera className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => galleryRef.current?.click()}
+          disabled={uploading}
+          aria-label={ar ? "إرسال صورة" : "Send photo"}
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-muted disabled:opacity-50"
+        >
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+        </button>
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -145,6 +189,23 @@ function ChatScreen() {
           <Send className="h-4 w-4 rtl:rotate-180" />
         </button>
       </form>
+
+      {preview && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setPreview(null)}
+        >
+          <button
+            type="button"
+            aria-label={ar ? "إغلاق" : "Close"}
+            className="absolute end-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white"
+            onClick={() => setPreview(null)}
+          >
+            <X className="h-5 w-5" />
+          </button>
+          <img src={preview} alt={ar ? "صورة" : "Photo"} className="max-h-full max-w-full rounded-2xl object-contain" />
+        </div>
+      )}
     </div>
   );
 }
