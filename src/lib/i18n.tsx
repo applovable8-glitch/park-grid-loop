@@ -80,6 +80,18 @@ const dict = {
     perm_device_hint: "If a permission is blocked, enable it from your browser or device settings.",
     email_account: "Email", primary: "Primary", connected: "Connected", not_connected: "Not connected",
     connect: "Connect", google: "Google", apple: "Apple",
+    // Handoff
+    handoff: "Handoff", did_you_take: "Did you take the parking spot?",
+    did_you_take_hint: "Confirm the handoff so points are transferred and the spot is removed from the map.",
+    yes_took_it: "Yes, I took it", no_didnt: "No, I didn't",
+    rate_owner: "Rate the driver", rate_hint: "How was the handoff?",
+    add_note: "Add a note (optional)", submit_rating: "Submit rating", skip: "Skip",
+    handoff_done: "Handoff complete", points_charged: "Points charged",
+    share_your_exit: "Share your exit time?",
+    share_your_exit_hint: "You are parked here now. Share when you'll leave and earn points — the same location is kept, only your car details change.",
+    share_and_earn: "Share and earn", not_now: "Not now",
+    confirm_handoff_cta: "Confirm handoff",
+    spot_released: "The spot was released for other drivers.",
   },
   ar: {
     nav_home: "الرئيسية", nav_search: "بحث", nav_rewards: "المكافآت", nav_alerts: "التنبيهات", nav_profile: "حسابي",
