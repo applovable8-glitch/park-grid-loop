@@ -19,15 +19,17 @@ export type Database = {
           body: string
           created_at: string
           id: string
+          image_url: string | null
           read: boolean
           recipient_id: string
           sender_id: string
           spot_id: string | null
         }
         Insert: {
-          body: string
+          body?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           read?: boolean
           recipient_id: string
           sender_id: string
@@ -37,6 +39,7 @@ export type Database = {
           body?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           read?: boolean
           recipient_id?: string
           sender_id?: string
