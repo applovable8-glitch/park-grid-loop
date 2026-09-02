@@ -102,6 +102,7 @@ import { Route as CommunityTopRouteImport } from './routes/community.top'
 import { Route as CommunityReputationRouteImport } from './routes/community.reputation'
 import { Route as CommunityReferralRouteImport } from './routes/community.referral'
 import { Route as CommunityGuidelinesRouteImport } from './routes/community.guidelines'
+import { Route as ChatIdRouteImport } from './routes/chat.$id'
 import { Route as AuthSuccessRouteImport } from './routes/auth.success'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
@@ -574,6 +575,11 @@ const CommunityGuidelinesRoute = CommunityGuidelinesRouteImport.update({
   path: '/guidelines',
   getParentRoute: () => CommunityRoute,
 } as any)
+const ChatIdRoute = ChatIdRouteImport.update({
+  id: '/chat/$id',
+  path: '/chat/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthSuccessRoute = AuthSuccessRouteImport.update({
   id: '/success',
   path: '/success',
@@ -628,6 +634,7 @@ export interface FileRoutesByFullPath {
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
   '/community/referral': typeof CommunityReferralRoute
   '/community/reputation': typeof CommunityReputationRoute
@@ -728,6 +735,7 @@ export interface FileRoutesByTo {
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
   '/community/referral': typeof CommunityReferralRoute
   '/community/reputation': typeof CommunityReputationRoute
@@ -829,6 +837,7 @@ export interface FileRoutesById {
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
+  '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
   '/community/referral': typeof CommunityReferralRoute
   '/community/reputation': typeof CommunityReputationRoute
@@ -931,6 +940,7 @@ export interface FileRouteTypes {
     | '/admin/moderator'
     | '/admin/roles'
     | '/auth/success'
+    | '/chat/$id'
     | '/community/guidelines'
     | '/community/referral'
     | '/community/reputation'
@@ -1031,6 +1041,7 @@ export interface FileRouteTypes {
     | '/admin/moderator'
     | '/admin/roles'
     | '/auth/success'
+    | '/chat/$id'
     | '/community/guidelines'
     | '/community/referral'
     | '/community/reputation'
@@ -1131,6 +1142,7 @@ export interface FileRouteTypes {
     | '/admin/moderator'
     | '/admin/roles'
     | '/auth/success'
+    | '/chat/$id'
     | '/community/guidelines'
     | '/community/referral'
     | '/community/reputation'
@@ -1229,6 +1241,7 @@ export interface RootRouteChildren {
   VerifyEmailRoute: typeof VerifyEmailRoute
   VerifyPhoneRoute: typeof VerifyPhoneRoute
   WelcomeRoute: typeof WelcomeRoute
+  ChatIdRoute: typeof ChatIdRoute
   ErrorsGpsRoute: typeof ErrorsGpsRoute
   ErrorsLocationRoute: typeof ErrorsLocationRoute
   ErrorsNetworkRoute: typeof ErrorsNetworkRoute
@@ -1900,6 +1913,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunityGuidelinesRouteImport
       parentRoute: typeof CommunityRoute
     }
+    '/chat/$id': {
+      id: '/chat/$id'
+      path: '/chat/$id'
+      fullPath: '/chat/$id'
+      preLoaderRoute: typeof ChatIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/success': {
       id: '/auth/success'
       path: '/success'
@@ -2189,6 +2209,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyEmailRoute: VerifyEmailRoute,
   VerifyPhoneRoute: VerifyPhoneRoute,
   WelcomeRoute: WelcomeRoute,
+  ChatIdRoute: ChatIdRoute,
   ErrorsGpsRoute: ErrorsGpsRoute,
   ErrorsLocationRoute: ErrorsLocationRoute,
   ErrorsNetworkRoute: ErrorsNetworkRoute,
