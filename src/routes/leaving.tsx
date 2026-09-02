@@ -6,6 +6,7 @@ import { useApp } from "@/lib/parkout-store";
 import { useGeolocation } from "@/lib/use-geolocation";
 import { useAreaName } from "@/lib/use-area-name";
 import { PinPicker } from "@/components/PinPicker";
+import { useRequireProfile } from "@/lib/use-require-auth";
 import {
   approveRequest,
   cancelRequest,
@@ -35,6 +36,7 @@ function toLocalInput(d: Date) {
 
 function Leaving() {
   const nav = useNavigate();
+  useRequireProfile();
   const { user } = useApp();
   const { position, status } = useGeolocation();
   const [minutes, setMinutes] = useState<number | "custom">(0);

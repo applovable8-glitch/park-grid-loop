@@ -8,7 +8,7 @@ import { useApp } from "@/lib/parkout-store";
 import { BottomNav } from "@/components/BottomNav";
 import { AreaMap } from "@/components/AreaMap";
 import { SpotSheet } from "@/components/SpotSheet";
-import { useRequireAuth } from "@/lib/use-require-auth";
+import { useRequireProfile } from "@/lib/use-require-auth";
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/use-geolocation";
 import { useAreaName } from "@/lib/use-area-name";
@@ -51,7 +51,7 @@ interface PickedPlace {
 }
 
 function Home() {
-  const { ready } = useRequireAuth();
+  const { ready } = useRequireProfile();
   const { user } = useApp();
   const { t } = useI18n();
   const nav = useNavigate();

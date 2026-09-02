@@ -32,8 +32,8 @@ function Auth() {
       const { error } = await signUpWithEmail(email, password, name.trim());
       setBusy(null);
       if (error) { toast.error(error); return; }
-      toast.success("Account created — check your email if confirmation is required");
-      nav({ to: "/home" });
+      toast.success("Account created — complete your profile");
+      nav({ to: "/create-profile" });
     }
   };
 
