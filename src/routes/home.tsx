@@ -130,9 +130,13 @@ function Home() {
 
   // Map center: picked area > user location > fallback.
   const center = useMemo(() => {
-    if (nearMe || !place) return position ? { lat: position.lat, lng: position.lng } : (place ?? FALLBACK_CENTER);
+    if (nearMe || !place) {
+      if (position) return { lat: position.lat, lng: position.lng };
+      if (mySpot) return { lat: mySpot.lat, lng: mySpot.lng };
+      return place ?? FALLBACK_CENTER;
+    }
     return { lat: place.lat, lng: place.lng };
-  }, [nearMe, place, position]);
+  }, [nearMe, place, position, mySpot?.lat, mySpot?.lng]);
 
   const list = useMemo(() => {
     const preset = TIME_FILTERS.find((f) => f.id === timeFilter) ?? TIME_FILTERS[0];
