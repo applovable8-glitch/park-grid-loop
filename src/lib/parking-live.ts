@@ -266,6 +266,11 @@ export async function answerExtension(reservationId: string, accept: boolean) {
   return { error: error ? msg(error) : undefined };
 }
 
+export async function declineRequest(reservationId: string) {
+  const { error } = await supabase.rpc("respond_to_request", { p_reservation_id: reservationId, p_action: "decline" });
+  return { error: error ? msg(error) : undefined };
+}
+
 export async function cancelRequest(reservationId: string) {
   const { error } = await supabase.rpc("cancel_request", { p_reservation_id: reservationId });
   return { error: error ? msg(error) : undefined };
