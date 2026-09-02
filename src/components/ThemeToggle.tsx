@@ -26,10 +26,10 @@ export function ThemeToggle({ variant = "light" }: { variant?: "light" | "onHero
     >
       <span
         aria-hidden
-        className={`absolute inset-y-1 w-[calc(33.333%-0.166rem)] rounded-xl transition-transform duration-300 ease-out ${
+        className={`absolute inset-y-1 w-[calc(33.333%-0.166rem)] rounded-xl transition-[inset-inline-start] duration-300 ease-out ${
           onHero ? "bg-white/25" : "bg-card shadow-[var(--shadow-card)]"
         }`}
-        style={{ transform: `translateX(calc(${idx} * 100% + ${idx} * 0.25rem))` }}
+        style={{ insetInlineStart: `calc(0.25rem + ${idx} * (33.333% - 0.166rem) + ${idx} * 0.083rem)` }}
       />
       {ORDER.map((v) => {
         const Icon = icons[v];
