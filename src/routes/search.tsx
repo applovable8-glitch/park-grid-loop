@@ -172,7 +172,6 @@ function SearchPage() {
           <div className="flex flex-1 items-center gap-2 rounded-2xl border border-border bg-card px-3.5 py-3 shadow-[var(--shadow-card)]">
             <SearchIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
             <input
-              ref={inputRef}
               value={q}
               onChange={(e) => { setQ(e.target.value); if (place && e.target.value !== place.label) setPlace(null); }}
               placeholder="Search an area, mall, street…"
