@@ -40,7 +40,10 @@ function Leaving() {
   const [custom, setCustom] = useState(() => toLocalInput(new Date(Date.now() + 60 * 60000)));
   const [spotId, setSpotId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
   const [, tick] = useState(0);
+
+  const pinName = useAreaName(pin);
 
   const { spot } = useSpot(spotId ?? undefined);
   const { requests } = useIncomingRequests(user?.id);
@@ -57,20 +60,21 @@ function Leaving() {
   );
 
   const confirm = async () => {
-    if (!position) { toast.error("Waiting for your GPS location…"); return; }
+    const loc = pin ?? (position ? { lat: position.lat, lng: position.lng } : null);
+    if (!loc) { toast.error("Pin your parking spot on the map first"); return; }
     if (Number.isNaN(leaveAt.getTime())) { toast.error("Pick a valid exit time"); return; }
     setBusy(true);
     const { id, error } = await shareSpot({
-      lat: position.lat,
-      lng: position.lng,
+      lat: loc.lat,
+      lng: loc.lng,
       leaveAt,
-      address: "Your current location",
+      address: pinName ?? "Pinned parking spot",
       cost: 10,
     });
     setBusy(false);
     if (error || !id) { toast.error(error ?? "Could not share the spot"); return; }
     setSpotId(id);
-    toast.success(`Spot shared · exit at ${clockOf(leaveAt.toISOString())}`);
+    toast.success(`Your car is live on the map · exit at ${clockOf(leaveAt.toISOString())}`);
   };
 
   const cancelShare = async () => {
@@ -101,10 +105,27 @@ function Leaving() {
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-white/10 ring-1 ring-white/20 backdrop-blur-xl">
                 <Zap className="h-7 w-7 fill-[var(--emerald)] text-[var(--emerald)]" />
               </div>
-              <h1 className="font-[var(--font-display)] text-3xl font-bold">When will you leave?</h1>
-              <p className="mt-1 max-w-xs text-sm text-white/70">Drivers nearby will see your expected exit time and can ask for your spot.</p>
+              <h1 className="font-[var(--font-display)] text-3xl font-bold">Share your spot</h1>
+              <p className="mt-1 max-w-xs text-sm text-white/70">Pin where your car is parked, then pick when you&apos;ll leave — your car appears on the map with that countdown.</p>
             </div>
 
+            <div className="w-full max-w-sm">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-white/70">1 · Pin your parking spot</p>
+              <PinPicker
+                initial={position ? { lat: position.lat, lng: position.lng } : null}
+                onChange={setPin}
+              />
+              <div className="mt-2 flex items-center gap-2 rounded-2xl bg-white/10 p-3 text-xs text-white/80 ring-1 ring-white/10 backdrop-blur-md">
+                <MapPin className="h-4 w-4 shrink-0 text-[var(--emerald)]" />
+                {pin
+                  ? (pinName ?? "Pin set — drag the map to adjust")
+                  : status === "granted"
+                    ? "Drag the map so the pin sits on your parked car."
+                    : "Enable location or drag the map to pin your car."}
+              </div>
+            </div>
+
+            <p className="mt-5 mb-2 w-full max-w-sm text-xs font-semibold uppercase tracking-wider text-white/70">2 · When will you leave?</p>
             <div className="w-full max-w-sm space-y-3">
               {PRESETS.map((o) => {
                 const active = minutes === o.m;
