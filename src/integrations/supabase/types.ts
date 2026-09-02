@@ -171,6 +171,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          app_prefs: Json
           avatar_url: string | null
           car_color: string | null
           car_make: string | null
@@ -194,6 +195,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          app_prefs?: Json
           avatar_url?: string | null
           car_color?: string | null
           car_make?: string | null
@@ -217,6 +219,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          app_prefs?: Json
           avatar_url?: string | null
           car_color?: string | null
           car_make?: string | null
