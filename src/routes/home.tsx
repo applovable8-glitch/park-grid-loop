@@ -32,6 +32,18 @@ const FALLBACK_CENTER = { lat: 25.2048, lng: 55.2708 }; // Dubai
 
 type TimeFilter = (typeof TIME_FILTERS)[number]["id"];
 
+/** "01:24" style countdown to an ISO timestamp. */
+function countdown(iso: string | null | undefined) {
+  if (!iso) return "--:--";
+  const s = Math.max(0, Math.round((new Date(iso).getTime() - Date.now()) / 1000));
+  if (s === 0) return "Leaving now";
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const p = (n: number) => String(n).padStart(2, "0");
+  return h > 0 ? `${h}:${p(m)}:${p(sec)}` : `${p(m)}:${p(sec)}`;
+}
+
 interface PickedPlace {
   label: string;
   lat: number;
@@ -58,6 +70,13 @@ function Home() {
   const [showList, setShowList] = useState(false);
   const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string }>>([]);
   const tokenRef = useRef<GAny | null>(null);
+  const [, setTick] = useState(0);
+
+  // keep the shared-spot countdown ticking
+  useEffect(() => {
+    const t = setInterval(() => setTick((n) => n + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   // Places autocomplete — debounced.
   useEffect(() => {
@@ -111,9 +130,13 @@ function Home() {
 
   // Map center: picked area > user location > fallback.
   const center = useMemo(() => {
-    if (nearMe || !place) return position ? { lat: position.lat, lng: position.lng } : (place ?? FALLBACK_CENTER);
+    if (nearMe || !place) {
+      if (position) return { lat: position.lat, lng: position.lng };
+      if (mySpot) return { lat: mySpot.lat, lng: mySpot.lng };
+      return place ?? FALLBACK_CENTER;
+    }
     return { lat: place.lat, lng: place.lng };
-  }, [nearMe, place, position]);
+  }, [nearMe, place, position, mySpot?.lat, mySpot?.lng]);
 
   const list = useMemo(() => {
     const preset = TIME_FILTERS.find((f) => f.id === timeFilter) ?? TIME_FILTERS[0];
@@ -323,15 +346,33 @@ function Home() {
         ) : null}
       </div>
 
-      {/* I'm Leaving FAB */}
-      <Link
-        to="/leaving"
-        className="absolute bottom-[170px] right-5 z-30 flex items-center gap-2 rounded-full px-5 py-3.5 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-elevated)] pulse-emerald"
-        style={{ background: "var(--gradient-emerald)" }}
-      >
-        <Zap className="h-4 w-4 fill-white" />
-        {t("im_leaving")}
-      </Link>
+      {/* I'm Leaving FAB — becomes a live countdown once a spot is shared */}
+      {mySpot ? (
+        <Link
+          to="/leaving"
+          className="absolute bottom-[170px] right-5 z-30 flex items-center gap-2 rounded-2xl px-4 py-3 text-left shadow-[var(--shadow-elevated)] text-white"
+          style={{ background: "var(--gradient-emerald)" }}
+        >
+          <Clock className="h-4 w-4" />
+          <span>
+            <span className="block text-[10px] font-semibold uppercase tracking-wider text-white/80">
+              Exit set · {clockOf(mySpot.planned_leave_at ?? mySpot.leave_at)}
+            </span>
+            <span className="block font-[var(--font-display)] text-sm font-bold">
+              {countdown(mySpot.planned_leave_at ?? mySpot.leave_at)}
+            </span>
+          </span>
+        </Link>
+      ) : (
+        <Link
+          to="/leaving"
+          className="absolute bottom-[170px] right-5 z-30 flex items-center gap-2 rounded-full px-5 py-3.5 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-elevated)] pulse-emerald"
+          style={{ background: "var(--gradient-emerald)" }}
+        >
+          <Zap className="h-4 w-4 fill-white" />
+          {t("im_leaving")}
+        </Link>
+      )}
 
       <BottomNav />
     </div>
