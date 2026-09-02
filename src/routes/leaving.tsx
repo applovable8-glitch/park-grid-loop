@@ -279,12 +279,17 @@ function RequestCard({ id, state, exitIso }: { id: string; state: string; exitIs
       <p className="font-[var(--font-display)] text-base font-bold">A driver wants your spot</p>
       <p className="mt-1 text-xs text-muted-foreground">They plan to take it at your {clockOf(exitIso)} exit time.</p>
       {!showExtend ? (
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <button disabled={busy} onClick={approve} className="flex items-center justify-center gap-1 rounded-xl py-3 text-sm font-bold text-white disabled:opacity-60" style={{ background: "var(--gradient-emerald)" }}>
-            <Check className="h-4 w-4" /> Approve
-          </button>
-          <button disabled={busy} onClick={() => setShowExtend(true)} className="flex items-center justify-center gap-1 rounded-xl bg-muted py-3 text-sm font-bold disabled:opacity-60">
-            <TimerReset className="h-4 w-4" /> Need more time
+        <div className="mt-3 space-y-2">
+          <div className="grid grid-cols-2 gap-2">
+            <button disabled={busy} onClick={approve} className="flex items-center justify-center gap-1 rounded-xl py-3 text-sm font-bold text-white disabled:opacity-60" style={{ background: "var(--gradient-emerald)" }}>
+              <Check className="h-4 w-4" /> Approve
+            </button>
+            <button disabled={busy} onClick={() => setShowExtend(true)} className="flex items-center justify-center gap-1 rounded-xl bg-muted py-3 text-sm font-bold disabled:opacity-60">
+              <TimerReset className="h-4 w-4" /> Need more time
+            </button>
+          </div>
+          <button disabled={busy} onClick={decline} className="flex w-full items-center justify-center gap-1 rounded-xl bg-red-50 py-3 text-sm font-bold text-[color:var(--danger)] ring-1 ring-red-200 disabled:opacity-60">
+            <X className="h-4 w-4" /> Decline
           </button>
         </div>
       ) : (
