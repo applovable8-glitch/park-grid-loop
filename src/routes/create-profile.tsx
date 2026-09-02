@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Screen, Field, inputCls, Button } from "@/components/kit";
 import { useApp } from "@/lib/parkout-store";
 import { isProfileComplete } from "@/lib/use-require-auth";
+import { redeemPendingReferral } from "@/lib/referrals";
 
 export const Route = createFileRoute("/create-profile")({ component: CreateProfile });
 
