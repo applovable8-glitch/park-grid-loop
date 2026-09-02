@@ -162,6 +162,17 @@ const dict = {
     perm_device_hint: "إذا كان الإذن محظورًا، فعّله من إعدادات المتصفح أو الجهاز.",
     email_account: "البريد الإلكتروني", primary: "أساسي", connected: "مرتبط", not_connected: "غير مرتبط",
     connect: "ربط", google: "جوجل", apple: "آبل",
+    handoff: "تسليم الموقف", did_you_take: "هل قمت بأخذ الباركينج؟",
+    did_you_take_hint: "أكّد الاستلام ليتم خصم النقاط وإزالة الموقف من الخريطة.",
+    yes_took_it: "نعم، أخذته", no_didnt: "لا، لم آخذه",
+    rate_owner: "قيّم صاحب الباركينج", rate_hint: "كيف كانت عملية التسليم؟",
+    add_note: "أضف ملاحظة (اختياري)", submit_rating: "إرسال التقييم", skip: "تخطي",
+    handoff_done: "تم التسليم", points_charged: "تم خصم النقاط",
+    share_your_exit: "هل تريد مشاركة وقت خروجك؟",
+    share_your_exit_hint: "أنت الآن متوقف هنا. شارك وقت خروجك واربح نقاطًا — يتم حفظ نفس المكان تلقائيًا وتتغير بيانات السيارة إلى بياناتك.",
+    share_and_earn: "شارك واربح", not_now: "ليس الآن",
+    confirm_handoff_cta: "تأكيد الاستلام",
+    spot_released: "تم تحرير الموقف للسائقين الآخرين.",
   },
 } as const;
 
