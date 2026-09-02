@@ -51,7 +51,7 @@ interface PickedPlace {
 }
 
 function Home() {
-  const { ready } = useRequireAuth();
+  const { ready } = useRequireProfile();
   const { user } = useApp();
   const { t } = useI18n();
   const nav = useNavigate();
