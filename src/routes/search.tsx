@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Search as SearchIcon, MapPin, Clock, Navigation2, Zap, SlidersHorizontal, LocateFixed, X } from "lucide-react";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
+import { AreaMap } from "@/components/AreaMap";
 import { useApp } from "@/lib/parkout-store";
 import { useGeolocation } from "@/lib/use-geolocation";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
@@ -205,6 +206,18 @@ function SearchPage() {
           </div>
         )}
       </header>
+
+      {(place || nearMe) && center && (
+        <div className="px-4 pt-3">
+          <AreaMap
+            center={center}
+            spots={list}
+            label={nearMe ? `Within ${NEAR_ME_KM} km of you` : place?.label}
+            radius={nearMe ? NEAR_ME_KM * 1000 : 1500}
+            onSpotClick={(id) => nav({ to: "/parking/$id", params: { id } })}
+          />
+        </div>
+      )}
 
       {request && (
         <div className="mx-4 mt-3 rounded-2xl bg-emerald/10 p-3 text-xs text-[color:var(--emerald)]">
