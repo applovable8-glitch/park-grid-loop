@@ -133,6 +133,12 @@ function Home() {
       .sort((a, b) => a.distance - b.distance);
   }, [spots, q, place, timeFilter, center, nearMe, user?.id]);
 
+  const mapSpots = useMemo<LiveSpot[]>(() => {
+    const base: LiveSpot[] = [...list];
+    if (mySpot) base.push(mySpot);
+    return base;
+  }, [list, mySpot]);
+
   const ask = async (spotId: string) => {
     setBusy(spotId);
     const { id, error } = await requestSpot(spotId);
@@ -173,7 +179,8 @@ function Home() {
           variant="full"
           center={center}
           userLocation={position}
-          spots={list}
+          ownSpotId={mySpot?.id ?? null}
+          spots={mapSpots}
           activeId={selected?.id ?? null}
           radius={nearMe ? NEAR_ME_KM * 1000 : 1800}
           onSpotClick={(id) => { setSelectedId(id); setShowList(false); }}
