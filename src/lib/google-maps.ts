@@ -22,7 +22,7 @@ export function loadGoogleMaps(): Promise<GAny> {
     w[cb] = () => resolve(w["google"] as GAny);
     const s = document.createElement("script");
     s.src =
-      `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&loading=async&callback=${cb}` +
+      `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&loading=async&libraries=places&callback=${cb}` +
       (CHANNEL ? `&channel=${CHANNEL}` : "");
     s.async = true;
     s.onerror = () => reject(new Error("Failed to load Google Maps"));
