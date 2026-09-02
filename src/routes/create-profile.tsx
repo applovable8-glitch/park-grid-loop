@@ -1,8 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Screen, Field, inputCls, Button } from "@/components/kit";
 import { useApp } from "@/lib/parkout-store";
+import { isProfileComplete } from "@/lib/use-require-auth";
 
 export const Route = createFileRoute("/create-profile")({ component: CreateProfile });
 
