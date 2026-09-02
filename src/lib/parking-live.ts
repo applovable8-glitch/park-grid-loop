@@ -290,7 +290,7 @@ export async function rateUser(reservationId: string, stars: number, comment?: s
   const { error } = await supabase.rpc("rate_user", {
     p_reservation_id: reservationId,
     p_stars: stars,
-    p_comment: comment?.trim() ? comment.trim() : null,
+    p_comment: comment?.trim() ? comment.trim() : undefined,
   });
   return { error: error ? msg(error) : undefined };
 }

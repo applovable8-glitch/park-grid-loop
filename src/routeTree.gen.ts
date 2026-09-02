@@ -95,6 +95,7 @@ import { Route as HelpContactRouteImport } from './routes/help.contact'
 import { Route as HelpChatRouteImport } from './routes/help.chat'
 import { Route as HelpBugRouteImport } from './routes/help.bug'
 import { Route as HelpAboutRouteImport } from './routes/help.about'
+import { Route as HandoffIdRouteImport } from './routes/handoff.$id'
 import { Route as ErrorsUnknownRouteImport } from './routes/errors.unknown'
 import { Route as ErrorsNetworkRouteImport } from './routes/errors.network'
 import { Route as ErrorsLocationRouteImport } from './routes/errors.location'
@@ -541,6 +542,11 @@ const HelpAboutRoute = HelpAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => HelpRoute,
 } as any)
+const HandoffIdRoute = HandoffIdRouteImport.update({
+  id: '/handoff/$id',
+  path: '/handoff/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ErrorsUnknownRoute = ErrorsUnknownRouteImport.update({
   id: '/errors/unknown',
   path: '/errors/unknown',
@@ -650,6 +656,7 @@ export interface FileRoutesByFullPath {
   '/errors/location': typeof ErrorsLocationRoute
   '/errors/network': typeof ErrorsNetworkRoute
   '/errors/unknown': typeof ErrorsUnknownRoute
+  '/handoff/$id': typeof HandoffIdRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -752,6 +759,7 @@ export interface FileRoutesByTo {
   '/errors/location': typeof ErrorsLocationRoute
   '/errors/network': typeof ErrorsNetworkRoute
   '/errors/unknown': typeof ErrorsUnknownRoute
+  '/handoff/$id': typeof HandoffIdRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -855,6 +863,7 @@ export interface FileRoutesById {
   '/errors/location': typeof ErrorsLocationRoute
   '/errors/network': typeof ErrorsNetworkRoute
   '/errors/unknown': typeof ErrorsUnknownRoute
+  '/handoff/$id': typeof HandoffIdRoute
   '/help/about': typeof HelpAboutRoute
   '/help/bug': typeof HelpBugRoute
   '/help/chat': typeof HelpChatRoute
@@ -959,6 +968,7 @@ export interface FileRouteTypes {
     | '/errors/location'
     | '/errors/network'
     | '/errors/unknown'
+    | '/handoff/$id'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -1061,6 +1071,7 @@ export interface FileRouteTypes {
     | '/errors/location'
     | '/errors/network'
     | '/errors/unknown'
+    | '/handoff/$id'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -1163,6 +1174,7 @@ export interface FileRouteTypes {
     | '/errors/location'
     | '/errors/network'
     | '/errors/unknown'
+    | '/handoff/$id'
     | '/help/about'
     | '/help/bug'
     | '/help/chat'
@@ -1259,6 +1271,7 @@ export interface RootRouteChildren {
   ErrorsLocationRoute: typeof ErrorsLocationRoute
   ErrorsNetworkRoute: typeof ErrorsNetworkRoute
   ErrorsUnknownRoute: typeof ErrorsUnknownRoute
+  HandoffIdRoute: typeof HandoffIdRoute
   NavigateIdRoute: typeof NavigateIdRoute
   NavigateCompletedRoute: typeof NavigateCompletedRoute
   ParkingIdRoute: typeof ParkingIdRoute
@@ -1877,6 +1890,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelpAboutRouteImport
       parentRoute: typeof HelpRoute
     }
+    '/handoff/$id': {
+      id: '/handoff/$id'
+      path: '/handoff/$id'
+      fullPath: '/handoff/$id'
+      preLoaderRoute: typeof HandoffIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/errors/unknown': {
       id: '/errors/unknown'
       path: '/errors/unknown'
@@ -2235,6 +2255,7 @@ const rootRouteChildren: RootRouteChildren = {
   ErrorsLocationRoute: ErrorsLocationRoute,
   ErrorsNetworkRoute: ErrorsNetworkRoute,
   ErrorsUnknownRoute: ErrorsUnknownRoute,
+  HandoffIdRoute: HandoffIdRoute,
   NavigateIdRoute: NavigateIdRoute,
   NavigateCompletedRoute: NavigateCompletedRoute,
   ParkingIdRoute: ParkingIdRoute,
