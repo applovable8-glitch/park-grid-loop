@@ -11,8 +11,28 @@ const CAR_TYPES = ["Sedan", "SUV", "Hatchback", "Pickup", "Van", "Coupe", "Elect
 const COLORS = ["White", "Black", "Silver", "Grey", "Blue", "Red", "Green", "Other"];
 
 function CreateProfile() {
-  const { updateProfile } = useApp();
+  const { updateProfile, session, user, loading } = useApp();
   const nav = useNavigate();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!session) { nav({ to: "/auth" }); return; }
+    if (isProfileComplete(user)) nav({ to: "/home" });
+  }, [loading, session, user, nav]);
+
+  useEffect(() => {
+    if (user) {
+      setName((v) => v || user.name || "");
+      setPhone((v) => v || user.phone || "");
+      setPlate((v) => v || user.plate || "");
+      setCarType((v) => user.car_type || v);
+      setMake((v) => v || user.car_make || "");
+      setModel((v) => v || user.car_model || "");
+      setColor((v) => user.car_color || v);
+      setShowPhone(user.show_phone ?? true);
+    }
+  }, [user]);
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [plate, setPlate] = useState("");
