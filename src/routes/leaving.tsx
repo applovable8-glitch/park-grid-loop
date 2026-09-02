@@ -4,6 +4,8 @@ import { ArrowLeft, MapPin, Zap, X, Clock, Check, TimerReset } from "lucide-reac
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
 import { useGeolocation } from "@/lib/use-geolocation";
+import { useAreaName } from "@/lib/use-area-name";
+import { PinPicker } from "@/components/PinPicker";
 import {
   approveRequest,
   cancelRequest,
