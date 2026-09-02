@@ -1,40 +1,66 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Share2, MapPin, Star, Coins, TrendingUp } from "lucide-react";
 import { Screen, Card } from "@/components/kit";
 import { useApp } from "@/lib/parkout-store";
-import { TrendingUp, Clock, Star, Share2 } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
+import { usePointsHistory, weeklyBuckets } from "@/lib/profile-data";
 
 export const Route = createFileRoute("/profile/stats")({ component: Stats });
 
 function Stats() {
   const { user } = useApp();
-  const stats = [
-    { icon: Share2, label: "Total shares", value: user?.shared ?? 0, color: "text-[color:var(--emerald)]" },
-    { icon: Clock, label: "Reservations", value: user?.reservations ?? 0, color: "text-blue-500" },
-    { icon: Star, label: "Reputation", value: (user?.reputation ?? 5).toFixed(1), color: "text-yellow-500" },
-    { icon: TrendingUp, label: "Points earned", value: user?.points ?? 0, color: "text-primary" },
-  ];
+  const { lang } = useI18n();
+  const ar = lang === "ar";
+  const { items } = usePointsHistory(user?.id, 200);
+  const week = weeklyBuckets(items);
+  const max = Math.max(1, ...week.map((d) => d.count));
+
+  const earned = items.filter((i) => i.delta > 0).reduce((s, i) => s + i.delta, 0);
+
   return (
-    <Screen title="Statistics" back="/profile">
+    <Screen title={ar ? "الإحصائيات" : "Statistics"} back="/profile">
       <div className="grid grid-cols-2 gap-3">
-        {stats.map((s) => (
-          <Card key={s.label}>
-            <s.icon className={`h-5 w-5 ${s.color}`} />
-            <p className="mt-3 font-[var(--font-display)] text-2xl font-bold">{s.value}</p>
-            <p className="text-xs text-muted-foreground">{s.label}</p>
-          </Card>
-        ))}
+        <Tile icon={Share2} label={ar ? "مشاركات" : "Spots shared"} value={user?.shared ?? 0} />
+        <Tile icon={MapPin} label={ar ? "حجوزات" : "Reservations"} value={user?.reservations ?? 0} />
+        <Tile icon={Coins} label={ar ? "نقاط مكتسبة" : "Points earned"} value={earned} tone />
+        <Tile icon={Star} label={ar ? "التقييم" : "Reputation"} value={Number((user?.reputation ?? 5).toFixed(1))} />
       </div>
+
       <Card className="mt-4">
-        <p className="text-sm font-semibold">This week</p>
-        <div className="mt-3 flex items-end justify-between gap-1 h-24">
-          {[30, 55, 45, 80, 60, 90, 40].map((h, i) => (
-            <div key={i} className="flex-1 rounded-t-md bg-emerald/40" style={{ height: `${h}%` }} />
+        <p className="flex items-center gap-2 text-sm font-semibold"><TrendingUp className="h-4 w-4 text-[color:var(--emerald)]" /> {ar ? "نشاط آخر 7 أيام" : "Last 7 days activity"}</p>
+        <div className="mt-4 flex h-28 items-end gap-2">
+          {week.map((d, i) => (
+            <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
+              <div className="flex w-full flex-1 items-end">
+                <div
+                  className="w-full rounded-t-lg bg-[var(--emerald)] transition-all duration-500"
+                  style={{ height: `${Math.max(6, (d.count / max) * 100)}%`, opacity: d.count ? 1 : 0.25 }}
+                />
+              </div>
+              <span className="text-[10px] text-muted-foreground">
+                {d.date.toLocaleDateString(ar ? "ar" : "en", { weekday: "narrow" })}
+              </span>
+            </div>
           ))}
         </div>
-        <div className="mt-2 flex justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
-          {["M","T","W","T","F","S","S"].map((d, i) => <span key={i}>{d}</span>)}
-        </div>
       </Card>
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <Link to="/rewards/history" className="rounded-2xl bg-card p-3 text-center text-xs font-semibold shadow-[var(--shadow-card)] transition active:scale-95">{ar ? "سجل النقاط" : "Points history"}</Link>
+        <Link to="/profile/history" className="rounded-2xl bg-card p-3 text-center text-xs font-semibold shadow-[var(--shadow-card)] transition active:scale-95">{ar ? "سجل المواقف" : "Parking history"}</Link>
+      </div>
     </Screen>
+  );
+}
+
+function Tile({ icon: Icon, label, value, tone }: { icon: React.ComponentType<{ className?: string }>; label: string; value: number; tone?: boolean }) {
+  return (
+    <div className="rounded-3xl bg-card p-4 shadow-[var(--shadow-card)]">
+      <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${tone ? "bg-emerald/15 text-[color:var(--emerald)]" : "bg-muted"}`}>
+        <Icon className="h-5 w-5" />
+      </div>
+      <p className="mt-3 font-[var(--font-display)] text-3xl font-bold tabular-nums">{value}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
+    </div>
   );
 }
