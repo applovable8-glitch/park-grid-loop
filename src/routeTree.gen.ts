@@ -34,6 +34,12 @@ import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings.index'
+import { Route as ProfileIndexRouteImport } from './routes/profile.index'
+import { Route as PaymentsIndexRouteImport } from './routes/payments.index'
+import { Route as HelpIndexRouteImport } from './routes/help.index'
+import { Route as CommunityIndexRouteImport } from './routes/community.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SuccessVehicleAddedRouteImport } from './routes/success.vehicle-added'
 import { Route as SuccessProfileUpdatedRouteImport } from './routes/success.profile-updated'
 import { Route as SuccessPasswordChangedRouteImport } from './routes/success.password-changed'
@@ -235,6 +241,36 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const ProfileIndexRoute = ProfileIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProfileRoute,
+} as any)
+const PaymentsIndexRoute = PaymentsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PaymentsRoute,
+} as any)
+const HelpIndexRoute = HelpIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HelpRoute,
+} as any)
+const CommunityIndexRoute = CommunityIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CommunityRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const SuccessVehicleAddedRoute = SuccessVehicleAddedRouteImport.update({
   id: '/success/vehicle-added',
@@ -718,16 +754,19 @@ export interface FileRoutesByFullPath {
   '/success/password-changed': typeof SuccessPasswordChangedRoute
   '/success/profile-updated': typeof SuccessProfileUpdatedRoute
   '/success/vehicle-added': typeof SuccessVehicleAddedRoute
+  '/admin/': typeof AdminIndexRoute
+  '/community/': typeof CommunityIndexRoute
+  '/help/': typeof HelpIndexRoute
+  '/payments/': typeof PaymentsIndexRoute
+  '/profile/': typeof ProfileIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
-  '/community': typeof CommunityRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
-  '/help': typeof HelpRouteWithChildren
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
   '/loading': typeof LoadingRoute
@@ -736,14 +775,11 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
   '/parking-released': typeof ParkingReleasedRoute
-  '/payments': typeof PaymentsRouteWithChildren
-  '/profile': typeof ProfileRouteWithChildren
   '/reservation-cancelled': typeof ReservationCancelledRoute
   '/reservation-success': typeof ReservationSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRouteWithChildren
   '/search': typeof SearchRouteWithChildren
-  '/settings': typeof SettingsRouteWithChildren
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
@@ -821,6 +857,12 @@ export interface FileRoutesByTo {
   '/success/password-changed': typeof SuccessPasswordChangedRoute
   '/success/profile-updated': typeof SuccessProfileUpdatedRoute
   '/success/vehicle-added': typeof SuccessVehicleAddedRoute
+  '/admin': typeof AdminIndexRoute
+  '/community': typeof CommunityIndexRoute
+  '/help': typeof HelpIndexRoute
+  '/payments': typeof PaymentsIndexRoute
+  '/profile': typeof ProfileIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
@@ -925,6 +967,12 @@ export interface FileRoutesById {
   '/success/password-changed': typeof SuccessPasswordChangedRoute
   '/success/profile-updated': typeof SuccessProfileUpdatedRoute
   '/success/vehicle-added': typeof SuccessVehicleAddedRoute
+  '/admin/': typeof AdminIndexRoute
+  '/community/': typeof CommunityIndexRoute
+  '/help/': typeof HelpIndexRoute
+  '/payments/': typeof PaymentsIndexRoute
+  '/profile/': typeof ProfileIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
 }
@@ -1030,16 +1078,19 @@ export interface FileRouteTypes {
     | '/success/password-changed'
     | '/success/profile-updated'
     | '/success/vehicle-added'
+    | '/admin/'
+    | '/community/'
+    | '/help/'
+    | '/payments/'
+    | '/profile/'
+    | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/auth'
-    | '/community'
     | '/create-profile'
-    | '/help'
     | '/home'
     | '/leaving'
     | '/loading'
@@ -1048,14 +1099,11 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/otp'
     | '/parking-released'
-    | '/payments'
-    | '/profile'
     | '/reservation-cancelled'
     | '/reservation-success'
     | '/reset-password'
     | '/rewards'
     | '/search'
-    | '/settings'
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
@@ -1133,6 +1181,12 @@ export interface FileRouteTypes {
     | '/success/password-changed'
     | '/success/profile-updated'
     | '/success/vehicle-added'
+    | '/admin'
+    | '/community'
+    | '/help'
+    | '/payments'
+    | '/profile'
+    | '/settings'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
   id:
@@ -1236,6 +1290,12 @@ export interface FileRouteTypes {
     | '/success/password-changed'
     | '/success/profile-updated'
     | '/success/vehicle-added'
+    | '/admin/'
+    | '/community/'
+    | '/help/'
+    | '/payments/'
+    | '/profile/'
+    | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
   fileRoutesById: FileRoutesById
@@ -1462,6 +1522,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/profile/': {
+      id: '/profile/'
+      path: '/'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof ProfileRoute
+    }
+    '/payments/': {
+      id: '/payments/'
+      path: '/'
+      fullPath: '/payments/'
+      preLoaderRoute: typeof PaymentsIndexRouteImport
+      parentRoute: typeof PaymentsRoute
+    }
+    '/help/': {
+      id: '/help/'
+      path: '/'
+      fullPath: '/help/'
+      preLoaderRoute: typeof HelpIndexRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/community/': {
+      id: '/community/'
+      path: '/'
+      fullPath: '/community/'
+      preLoaderRoute: typeof CommunityIndexRouteImport
+      parentRoute: typeof CommunityRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/success/vehicle-added': {
       id: '/success/vehicle-added'
@@ -2001,11 +2103,13 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminModeratorRoute: typeof AdminModeratorRoute
   AdminRolesRoute: typeof AdminRolesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminModeratorRoute: AdminModeratorRoute,
   AdminRolesRoute: AdminRolesRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -2025,6 +2129,7 @@ interface CommunityRouteChildren {
   CommunityReferralRoute: typeof CommunityReferralRoute
   CommunityReputationRoute: typeof CommunityReputationRoute
   CommunityTopRoute: typeof CommunityTopRoute
+  CommunityIndexRoute: typeof CommunityIndexRoute
 }
 
 const CommunityRouteChildren: CommunityRouteChildren = {
@@ -2032,6 +2137,7 @@ const CommunityRouteChildren: CommunityRouteChildren = {
   CommunityReferralRoute: CommunityReferralRoute,
   CommunityReputationRoute: CommunityReputationRoute,
   CommunityTopRoute: CommunityTopRoute,
+  CommunityIndexRoute: CommunityIndexRoute,
 }
 
 const CommunityRouteWithChildren = CommunityRoute._addFileChildren(
@@ -2049,6 +2155,7 @@ interface HelpRouteChildren {
   HelpPrivacyRoute: typeof HelpPrivacyRoute
   HelpTermsRoute: typeof HelpTermsRoute
   HelpTicketRoute: typeof HelpTicketRoute
+  HelpIndexRoute: typeof HelpIndexRoute
 }
 
 const HelpRouteChildren: HelpRouteChildren = {
@@ -2062,6 +2169,7 @@ const HelpRouteChildren: HelpRouteChildren = {
   HelpPrivacyRoute: HelpPrivacyRoute,
   HelpTermsRoute: HelpTermsRoute,
   HelpTicketRoute: HelpTicketRoute,
+  HelpIndexRoute: HelpIndexRoute,
 }
 
 const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
@@ -2101,6 +2209,7 @@ interface PaymentsRouteChildren {
   PaymentsInvoicesRoute: typeof PaymentsInvoicesRoute
   PaymentsSubscriptionsRoute: typeof PaymentsSubscriptionsRoute
   PaymentsSuccessRoute: typeof PaymentsSuccessRoute
+  PaymentsIndexRoute: typeof PaymentsIndexRoute
 }
 
 const PaymentsRouteChildren: PaymentsRouteChildren = {
@@ -2111,6 +2220,7 @@ const PaymentsRouteChildren: PaymentsRouteChildren = {
   PaymentsInvoicesRoute: PaymentsInvoicesRoute,
   PaymentsSubscriptionsRoute: PaymentsSubscriptionsRoute,
   PaymentsSuccessRoute: PaymentsSuccessRoute,
+  PaymentsIndexRoute: PaymentsIndexRoute,
 }
 
 const PaymentsRouteWithChildren = PaymentsRoute._addFileChildren(
@@ -2138,6 +2248,7 @@ interface ProfileRouteChildren {
   ProfileReservationsRoute: typeof ProfileReservationsRoute
   ProfileStatsRoute: typeof ProfileStatsRoute
   ProfileVehiclesRoute: typeof ProfileVehiclesRouteWithChildren
+  ProfileIndexRoute: typeof ProfileIndexRoute
 }
 
 const ProfileRouteChildren: ProfileRouteChildren = {
@@ -2149,6 +2260,7 @@ const ProfileRouteChildren: ProfileRouteChildren = {
   ProfileReservationsRoute: ProfileReservationsRoute,
   ProfileStatsRoute: ProfileStatsRoute,
   ProfileVehiclesRoute: ProfileVehiclesRouteWithChildren,
+  ProfileIndexRoute: ProfileIndexRoute,
 }
 
 const ProfileRouteWithChildren =
@@ -2205,6 +2317,7 @@ interface SettingsRouteChildren {
   SettingsSecurityRoute: typeof SettingsSecurityRoute
   SettingsThemeRoute: typeof SettingsThemeRoute
   SettingsUnitsRoute: typeof SettingsUnitsRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 const SettingsRouteChildren: SettingsRouteChildren = {
@@ -2218,6 +2331,7 @@ const SettingsRouteChildren: SettingsRouteChildren = {
   SettingsSecurityRoute: SettingsSecurityRoute,
   SettingsThemeRoute: SettingsThemeRoute,
   SettingsUnitsRoute: SettingsUnitsRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 
 const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
