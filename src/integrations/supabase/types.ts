@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          read: boolean
+          recipient_id: string
+          sender_id: string
+          spot_id: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          recipient_id: string
+          sender_id: string
+          spot_id?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          recipient_id?: string
+          sender_id?: string
+          spot_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "parking_spots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string
@@ -131,6 +169,10 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          car_color: string | null
+          car_make: string | null
+          car_model: string | null
+          car_type: string | null
           created_at: string
           email: string | null
           language: string
@@ -143,12 +185,17 @@ export type Database = {
           reputation: number
           reservation_count: number
           shared_count: number
+          show_phone: boolean
           theme: string
           updated_at: string
           user_id: string
         }
         Insert: {
           avatar_url?: string | null
+          car_color?: string | null
+          car_make?: string | null
+          car_model?: string | null
+          car_type?: string | null
           created_at?: string
           email?: string | null
           language?: string
@@ -161,12 +208,17 @@ export type Database = {
           reputation?: number
           reservation_count?: number
           shared_count?: number
+          show_phone?: boolean
           theme?: string
           updated_at?: string
           user_id: string
         }
         Update: {
           avatar_url?: string | null
+          car_color?: string | null
+          car_make?: string | null
+          car_model?: string | null
+          car_type?: string | null
           created_at?: string
           email?: string | null
           language?: string
@@ -179,6 +231,7 @@ export type Database = {
           reputation?: number
           reservation_count?: number
           shared_count?: number
+          show_phone?: boolean
           theme?: string
           updated_at?: string
           user_id?: string
