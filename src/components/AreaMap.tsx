@@ -17,6 +17,8 @@ interface Props {
   activeId?: string | null;
   /** User's real GPS location marker — kept independent of the searched map center. */
   userLocation?: { lat: number; lng: number } | null;
+  /** Spot owned by the current user; rendered in blue so it stands out as "my car". */
+  ownSpotId?: string | null;
   className?: string;
 }
 
