@@ -150,6 +150,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         location_prefs: { radius_m: 800, share_location: true },
         app_prefs: DEFAULT_APP_PREFS,
         points: 100, reputation: 5.0, shared: 0, reservations: 0,
+        referral_code: null, referred_by: null,
       });
       return;
     }
