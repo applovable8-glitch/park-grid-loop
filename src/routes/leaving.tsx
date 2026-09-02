@@ -66,6 +66,11 @@ function Leaving() {
   );
 
   const confirm = async () => {
+    if (mySpot || spotId) {
+      toast.error("You already shared a spot. Stop that share before creating a new one.");
+      setSpotId(mySpot?.id ?? spotId);
+      return;
+    }
     const loc = pin ?? (position ? { lat: position.lat, lng: position.lng } : null);
     if (!loc) { toast.error("Pin your parking spot on the map first"); return; }
     if (Number.isNaN(leaveAt.getTime())) { toast.error("Pick a valid exit time"); return; }
