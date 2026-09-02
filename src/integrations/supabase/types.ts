@@ -53,10 +53,12 @@ export type Database = {
           cost: number
           created_at: string
           expires_at: string
+          extension_count: number
           id: string
           lat: number
           leave_at: string
           lng: number
+          planned_leave_at: string | null
           reserved_by: string | null
           reserved_until: string | null
           status: Database["public"]["Enums"]["spot_status"]
@@ -68,10 +70,12 @@ export type Database = {
           cost?: number
           created_at?: string
           expires_at?: string
+          extension_count?: number
           id?: string
           lat: number
           leave_at?: string
           lng: number
+          planned_leave_at?: string | null
           reserved_by?: string | null
           reserved_until?: string | null
           status?: Database["public"]["Enums"]["spot_status"]
@@ -83,10 +87,12 @@ export type Database = {
           cost?: number
           created_at?: string
           expires_at?: string
+          extension_count?: number
           id?: string
           lat?: number
           leave_at?: string
           lng?: number
+          planned_leave_at?: string | null
           reserved_by?: string | null
           reserved_until?: string | null
           status?: Database["public"]["Enums"]["spot_status"]
@@ -184,6 +190,10 @@ export type Database = {
           created_at: string
           expires_at: string
           id: string
+          owner_id: string | null
+          proposed_leave_at: string | null
+          request_status: string
+          responded_at: string | null
           spot_id: string
           status: Database["public"]["Enums"]["reservation_status"]
           updated_at: string
@@ -193,6 +203,10 @@ export type Database = {
           created_at?: string
           expires_at?: string
           id?: string
+          owner_id?: string | null
+          proposed_leave_at?: string | null
+          request_status?: string
+          responded_at?: string | null
           spot_id: string
           status?: Database["public"]["Enums"]["reservation_status"]
           updated_at?: string
@@ -202,6 +216,10 @@ export type Database = {
           created_at?: string
           expires_at?: string
           id?: string
+          owner_id?: string | null
+          proposed_leave_at?: string | null
+          request_status?: string
+          responded_at?: string | null
           spot_id?: string
           status?: Database["public"]["Enums"]["reservation_status"]
           updated_at?: string
@@ -222,7 +240,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      answer_extension: {
+        Args: { p_accept: boolean; p_reservation_id: string }
+        Returns: undefined
+      }
+      cancel_request: { Args: { p_reservation_id: string }; Returns: undefined }
+      push_notification: {
+        Args: {
+          _body: string
+          _icon: string
+          _meta?: Json
+          _title: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
+      request_spot: { Args: { p_spot_id: string }; Returns: string }
+      respond_to_request: {
+        Args: {
+          p_action: string
+          p_new_leave_at?: string
+          p_reservation_id: string
+        }
+        Returns: undefined
+      }
+      set_planned_leave: {
+        Args: { p_leave_at: string; p_spot_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       reservation_status: "active" | "completed" | "expired" | "cancelled"
