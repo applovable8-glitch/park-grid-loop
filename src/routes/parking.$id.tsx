@@ -3,6 +3,8 @@ import { useState } from "react";
 import { MapPin, Clock, Navigation2, Car, Shield, Star, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { Screen, Card, Badge, Button } from "@/components/kit";
+import { MessageCircle, Phone } from "lucide-react";
+import { carLabel, useDriverProfile } from "@/lib/chat";
 import { useApp } from "@/lib/parkout-store";
 import { cancelRequest, clockOf, minutesUntil, requestSpot, useMyRequest, useSpot } from "@/lib/parking-live";
 
@@ -14,6 +16,7 @@ function ParkingDetails() {
   const nav = useNavigate();
   const { spot, loading } = useSpot(id);
   const { request } = useMyRequest(user?.id);
+  const { profile } = useDriverProfile(spot?.user_id);
   const [busy, setBusy] = useState(false);
 
   if (loading) return <Screen title="Parking spot"><Card><p className="text-sm text-muted-foreground">Loading…</p></Card></Screen>;
@@ -63,13 +66,41 @@ function ParkingDetails() {
 
       <Card className="mt-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">S</div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold">Shared by community</p>
-            <p className="flex items-center gap-1 text-xs text-muted-foreground"><Star className="h-3 w-3 fill-yellow-400 text-yellow-400" /> 4.9 · verified driver</p>
+          {profile?.avatar_url ? (
+            <img src={profile.avatar_url} alt={profile.name} className="h-11 w-11 rounded-full object-cover" />
+          ) : (
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
+              {(profile?.name?.[0] ?? "D").toUpperCase()}
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold">{profile?.name || "ParkOut driver"}</p>
+            <p className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+              {profile ? Number(profile.reputation).toFixed(1) : "5.0"} · {profile?.shared_count ?? 0} spots shared
+            </p>
+            <p className="mt-0.5 truncate text-xs text-muted-foreground">
+              {carLabel(profile)}{profile?.plate ? ` · ${profile.plate}` : ""}
+            </p>
           </div>
           <Shield className="h-5 w-5 text-[color:var(--emerald)]" />
         </div>
+        {!isMine && (
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <a
+              href={profile?.show_phone && profile?.phone ? `tel:${profile.phone.replace(/\s/g, "")}` : undefined}
+              className={`flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-semibold ${
+                profile?.show_phone && profile?.phone ? "bg-primary text-primary-foreground" : "pointer-events-none bg-muted text-muted-foreground"
+              }`}
+            >
+              <Phone className="h-4 w-4" /> Call
+            </a>
+            <Link to="/chat/$id" params={{ id: spot.user_id }} search={{ spot: spot.id }}
+              className="flex items-center justify-center gap-2 rounded-2xl bg-muted py-3 text-sm font-semibold">
+              <MessageCircle className="h-4 w-4" /> Chat
+            </Link>
+          </div>
+        )}
       </Card>
 
       <div className="mt-4 space-y-2">

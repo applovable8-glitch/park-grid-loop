@@ -18,6 +18,11 @@ function EditProfile() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [plate, setPlate] = useState("");
+  const [carType, setCarType] = useState("Sedan");
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
+  const [color, setColor] = useState("White");
+  const [showPhone, setShowPhone] = useState(true);
   const [language, setLanguage] = useState("en");
   const [theme, setTheme] = useState("system");
   const [notif, setNotif] = useState<NotificationPrefs>({ push: true, nearby_spots: true, reservations: true, points: true });
@@ -30,6 +35,11 @@ function EditProfile() {
     setName(user.name ?? "");
     setPhone(user.phone ?? "");
     setPlate(user.plate ?? "");
+    setCarType(user.car_type ?? "Sedan");
+    setMake(user.car_make ?? "");
+    setModel(user.car_model ?? "");
+    setColor(user.car_color ?? "White");
+    setShowPhone(user.show_phone ?? true);
     setLanguage(user.language);
     setTheme(user.theme);
     setNotif(user.notification_prefs);
@@ -55,6 +65,8 @@ function EditProfile() {
     setBusy(true);
     const { error } = await updateProfile({
       name: name.trim(), phone: phone.trim() || null, plate: plate.trim().toUpperCase() || null,
+      car_type: carType, car_make: make.trim() || null, car_model: model.trim() || null,
+      car_color: color, show_phone: showPhone,
       language, theme, notification_prefs: notif, location_prefs: loc,
     });
     setBusy(false);
@@ -94,6 +106,27 @@ function EditProfile() {
         <Field label="Vehicle plate">
           <input value={plate} onChange={(e) => setPlate(e.target.value)} placeholder="DXB A 12345" maxLength={16} className={inputCls} />
         </Field>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Car type">
+            <select value={carType} onChange={(e) => setCarType(e.target.value)} className={inputCls}>
+              {["Sedan","SUV","Hatchback","Pickup","Van","Coupe","Electric"].map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </Field>
+          <Field label="Colour">
+            <select value={color} onChange={(e) => setColor(e.target.value)} className={inputCls}>
+              {["White","Black","Silver","Grey","Blue","Red","Green","Other"].map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </Field>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Make"><input value={make} onChange={(e) => setMake(e.target.value)} className={inputCls} placeholder="Toyota" /></Field>
+          <Field label="Model"><input value={model} onChange={(e) => setModel(e.target.value)} className={inputCls} placeholder="Camry" /></Field>
+        </div>
+        <label className="flex items-center gap-3 rounded-2xl bg-muted p-3 text-sm">
+          <input type="checkbox" checked={showPhone} onChange={(e) => setShowPhone(e.target.checked)} className="h-4 w-4 accent-[var(--emerald)]" />
+          Let other drivers call me on my number
+        </label>
 
         <div className="grid grid-cols-2 gap-3">
           <Field label="Language">

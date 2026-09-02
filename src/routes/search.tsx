@@ -4,6 +4,7 @@ import { Search as SearchIcon, MapPin, Clock, Navigation2, Zap, SlidersHorizonta
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
 import { AreaMap } from "@/components/AreaMap";
+import { SpotSheet } from "@/components/SpotSheet";
 import { useApp } from "@/lib/parkout-store";
 import { useGeolocation } from "@/lib/use-geolocation";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
@@ -51,6 +52,8 @@ function SearchPage() {
   const [customTime, setCustomTime] = useState("");
   const [place, setPlace] = useState<PickedPlace | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [forceList, setForceList] = useState(false);
   const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string }>>([]);
   const tokenRef = useRef<GAny | null>(null);
 
@@ -94,6 +97,7 @@ function SearchPage() {
       if (!loc) throw new Error("no location");
       const label = p.displayName ?? s.text;
       setPlace({ label, lat: loc.lat(), lng: loc.lng() });
+      setForceList(false);
       setQ(label);
       setNearMe(false);
       tokenRef.current = null; // end autocomplete session
@@ -152,12 +156,16 @@ function SearchPage() {
     nav({ to: "/reservation/$id", params: { id } });
   };
 
+  const mapMode = (!!place || nearMe) && !forceList;
+  const selected = selectedId ? spots.find((s) => s.id === selectedId) ?? null : null;
+
   const enableNearMe = () => {
     if (!position) {
       toast.error("Location unavailable — enable GPS to see spots near you.");
       return;
     }
     setNearMe(true);
+    setForceList(false);
     setPlace(null);
     setQ("");
   };
@@ -243,17 +251,38 @@ function SearchPage() {
         )}
       </header>
 
-      {(place || nearMe) && center && (
-        <div className="px-4 pt-3">
+      {mapMode && center && (
+        <div className="relative h-[calc(100vh-260px)] min-h-[380px] w-full">
           <AreaMap
+            variant="full"
             center={center}
             spots={list}
+            activeId={selected?.id ?? null}
             label={nearMe ? `Within ${NEAR_ME_KM} km of you` : place?.label}
             radius={nearMe ? NEAR_ME_KM * 1000 : 1500}
-            onSpotClick={(id) => nav({ to: "/parking/$id", params: { id } })}
+            onSpotClick={(id) => setSelectedId(id)}
           />
+          <button
+            onClick={() => setForceList(true)}
+            className="absolute inset-x-0 bottom-24 mx-auto w-fit rounded-full bg-card px-4 py-2 text-xs font-semibold shadow-[var(--shadow-card)]"
+          >
+            Show list · {list.length}
+          </button>
         </div>
       )}
+
+      {selected && (
+        <SpotSheet
+          spot={selected}
+          distance={center ? haversine(center, { lat: selected.lat, lng: selected.lng }) : null}
+          isMine={selected.user_id === user?.id}
+          requestDisabled={!!request || selected.status === "reserved"}
+          requestBusy={busy === selected.id}
+          onRequest={() => ask(selected.id)}
+          onClose={() => setSelectedId(null)}
+        />
+      )}
+
 
       {request && (
         <div className="mx-4 mt-3 rounded-2xl bg-emerald/10 p-3 text-xs text-[color:var(--emerald)]">
@@ -262,7 +291,17 @@ function SearchPage() {
         </div>
       )}
 
+      {mapMode && center ? null : (
       <div className="space-y-3 px-4 pt-3">
+        {(place || nearMe) && center && (
+          <button
+            onClick={() => setForceList(false)}
+            className="w-full rounded-2xl bg-muted py-2.5 text-xs font-semibold"
+          >
+            Show map view
+          </button>
+        )}
+
         {list.map((s) => (
           <SpotCard
             key={s.id}
@@ -280,6 +319,8 @@ function SearchPage() {
           </div>
         )}
       </div>
+      )}
+
 
       <BottomNav />
     </div>
