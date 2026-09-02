@@ -14,6 +14,7 @@ import {
   releaseSpot,
   shareSpot,
   useIncomingRequests,
+  useMySharedSpot,
   useSpot,
   minutesUntil,
 } from "@/lib/parking-live";
@@ -46,8 +47,13 @@ function Leaving() {
   const pinName = useAreaName(pin);
 
   const { spot } = useSpot(spotId ?? undefined);
+  const { spot: mySpot } = useMySharedSpot(user?.id);
   const { requests } = useIncomingRequests(user?.id);
   const mine = requests.filter((r) => !spotId || r.spot_id === spotId);
+
+  useEffect(() => {
+    if (!spotId && mySpot) setSpotId(mySpot.id);
+  }, [mySpot, spotId]);
 
   useEffect(() => {
     const t = setInterval(() => tick((n) => n + 1), 1000);
@@ -73,8 +79,8 @@ function Leaving() {
     });
     setBusy(false);
     if (error || !id) { toast.error(error ?? "Could not share the spot"); return; }
-    setSpotId(id);
     toast.success(`Your car is live on the map · exit at ${clockOf(leaveAt.toISOString())}`);
+    nav({ to: "/home" });
   };
 
   const cancelShare = async () => {
