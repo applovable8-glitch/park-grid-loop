@@ -176,6 +176,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       reputation: Number(data.reputation),
       shared: data.shared_count,
       reservations: data.reservation_count,
+      referral_code: data.referral_code ?? null,
+      referred_by: data.referred_by ?? null,
     });
   }, []);
 
