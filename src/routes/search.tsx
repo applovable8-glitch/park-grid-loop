@@ -188,6 +188,24 @@ function SearchPage() {
           </Link>
         </div>
 
+        {suggestions.length > 0 && (
+          <div className="mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
+            {suggestions.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => pickPlace(s)}
+                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60"
+              >
+                <MapPin className="h-4 w-4 shrink-0 text-[color:var(--emerald)]" />
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-semibold">{s.text}</span>
+                  {s.sub && <span className="block truncate text-[11px] text-muted-foreground">{s.sub}</span>}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-none pb-1">
           <button
             onClick={enableNearMe}
