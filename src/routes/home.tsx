@@ -70,6 +70,13 @@ function Home() {
   const [showList, setShowList] = useState(false);
   const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string }>>([]);
   const tokenRef = useRef<GAny | null>(null);
+  const [, setTick] = useState(0);
+
+  // keep the shared-spot countdown ticking
+  useEffect(() => {
+    const t = setInterval(() => setTick((n) => n + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   // Places autocomplete — debounced.
   useEffect(() => {
