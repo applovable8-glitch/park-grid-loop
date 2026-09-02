@@ -15,6 +15,9 @@ function Home() {
   const { t } = useI18n();
   const nav = useNavigate();
   const [selected, setSelected] = useState<ParkingSpot | null>(null);
+  const [traffic, setTraffic] = useState(false);
+  const [mapType, setMapType] = useState<"roadmap" | "satellite">("roadmap");
+  const [recenter, setRecenter] = useState(0);
   if (!ready) return null;
 
   const available = spots.filter((s) => s.status === "available").length;
