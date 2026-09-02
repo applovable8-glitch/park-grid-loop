@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Search as SearchIcon, MapPin, Clock, Navigation2, Zap, SlidersHorizontal, LocateFixed, X } from "lucide-react";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
+import { AreaMap } from "@/components/AreaMap";
 import { useApp } from "@/lib/parkout-store";
 import { useGeolocation } from "@/lib/use-geolocation";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
@@ -50,38 +51,57 @@ function SearchPage() {
   const [customTime, setCustomTime] = useState("");
   const [place, setPlace] = useState<PickedPlace | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string }>>([]);
+  const tokenRef = useRef<GAny | null>(null);
 
-  // Attach Google Places Autocomplete to the search input — pick any area.
+  // Places API (New) autocomplete — debounced suggestions for any area.
   useEffect(() => {
-    let ac: GAny;
-    let mounted = true;
-    loadGoogleMaps()
-      .then((google) => {
-        if (!mounted || !inputRef.current || !google?.maps?.places) return;
-        ac = new google.maps.places.Autocomplete(inputRef.current, {
-          fields: ["geometry", "name", "formatted_address"],
-          types: ["geocode", "establishment"],
+    if (!q.trim() || (place && q === place.label)) { setSuggestions([]); return; }
+    const handle = setTimeout(async () => {
+      try {
+        const google = await loadGoogleMaps();
+        const lib = (await google.maps.importLibrary("places")) as GAny;
+        if (!tokenRef.current) tokenRef.current = new lib.AutocompleteSessionToken();
+        const { suggestions: s } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+          input: q,
+          sessionToken: tokenRef.current,
         });
-        ac.addListener("place_changed", () => {
-          const p = ac.getPlace();
-          const loc = p?.geometry?.location;
-          if (!loc) return;
-          const label = p.name || p.formatted_address || "Selected area";
-          setPlace({ label, lat: loc.lat(), lng: loc.lng() });
-          setQ(label);
-          setNearMe(false);
-          toast.success(`Searching around ${label}`);
-        });
-      })
-      .catch(() => {
-        /* key missing — address text filter still works */
-      });
-    return () => {
-      mounted = false;
-      if (ac) ac.clearInstanceListeners?.();
-    };
-  }, []);
+        setSuggestions(
+          (s ?? [])
+            .filter((x: GAny) => x.placePrediction)
+            .map((x: GAny) => ({
+              id: x.placePrediction.placeId,
+              text: x.placePrediction.text?.text ?? "",
+              sub: x.placePrediction.secondaryText?.text ?? "",
+            }))
+            .slice(0, 5),
+        );
+      } catch {
+        setSuggestions([]); // key missing — address text filter still works
+      }
+    }, 350);
+    return () => clearTimeout(handle);
+  }, [q, place]);
+
+  const pickPlace = async (s: { id: string; text: string }) => {
+    setSuggestions([]);
+    try {
+      const google = await loadGoogleMaps();
+      const lib = (await google.maps.importLibrary("places")) as GAny;
+      const p = new lib.Place({ id: s.id });
+      await p.fetchFields({ fields: ["location", "displayName", "formattedAddress"] });
+      const loc = p.location;
+      if (!loc) throw new Error("no location");
+      const label = p.displayName ?? s.text;
+      setPlace({ label, lat: loc.lat(), lng: loc.lng() });
+      setQ(label);
+      setNearMe(false);
+      tokenRef.current = null; // end autocomplete session
+      toast.success(`Searching around ${label}`);
+    } catch {
+      toast.error("Could not locate that place.");
+    }
+  };
 
   // Center used for distance math: picked area > user location.
   const center = useMemo(() => {
@@ -152,7 +172,6 @@ function SearchPage() {
           <div className="flex flex-1 items-center gap-2 rounded-2xl border border-border bg-card px-3.5 py-3 shadow-[var(--shadow-card)]">
             <SearchIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
             <input
-              ref={inputRef}
               value={q}
               onChange={(e) => { setQ(e.target.value); if (place && e.target.value !== place.label) setPlace(null); }}
               placeholder="Search an area, mall, street…"
@@ -168,6 +187,24 @@ function SearchPage() {
             <SlidersHorizontal className="h-4 w-4" />
           </Link>
         </div>
+
+        {suggestions.length > 0 && (
+          <div className="mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
+            {suggestions.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => pickPlace(s)}
+                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60"
+              >
+                <MapPin className="h-4 w-4 shrink-0 text-[color:var(--emerald)]" />
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-semibold">{s.text}</span>
+                  {s.sub && <span className="block truncate text-[11px] text-muted-foreground">{s.sub}</span>}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-none pb-1">
           <button
@@ -205,6 +242,18 @@ function SearchPage() {
           </div>
         )}
       </header>
+
+      {(place || nearMe) && center && (
+        <div className="px-4 pt-3">
+          <AreaMap
+            center={center}
+            spots={list}
+            label={nearMe ? `Within ${NEAR_ME_KM} km of you` : place?.label}
+            radius={nearMe ? NEAR_ME_KM * 1000 : 1500}
+            onSpotClick={(id) => nav({ to: "/parking/$id", params: { id } })}
+          />
+        </div>
+      )}
 
       {request && (
         <div className="mx-4 mt-3 rounded-2xl bg-emerald/10 p-3 text-xs text-[color:var(--emerald)]">
