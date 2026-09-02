@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Screen, Field, inputCls, Button } from "@/components/kit";
 import { useApp } from "@/lib/parkout-store";
 import { isProfileComplete } from "@/lib/use-require-auth";
+import { redeemPendingReferral } from "@/lib/referrals";
 
 export const Route = createFileRoute("/create-profile")({ component: CreateProfile });
 
@@ -61,6 +62,8 @@ function CreateProfile() {
     });
     setBusy(false);
     if (error) return toast.error(error);
+    const ref = await redeemPendingReferral();
+    if (!ref.skipped && !ref.error) toast.success("Invite applied — +100 points!");
     nav({ to: "/auth/success" });
   };
 

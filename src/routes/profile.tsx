@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users } from "lucide-react";
+import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users, Gift } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
 import { BottomNav } from "@/components/BottomNav";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const Route = createFileRoute("/profile")({ component: Profile });
 
@@ -55,7 +56,12 @@ function Profile() {
           <Link to="/leaving/history"><MiniStat label={t("shared")} value={user.shared} /></Link>
           <Link to="/profile/reservations"><MiniStat label={t("reservations")} value={user.reservations} /></Link>
         </div>
+
+        <div className="relative mt-4">
+          <ThemeToggle variant="onHero" />
+        </div>
       </div>
+
 
       <div className="px-4 pt-5">
         <div className="rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">
@@ -64,7 +70,13 @@ function Profile() {
           <Link to="/messages"><Row icon={MessageCircle} label={lang === "ar" ? "الرسائل" : "Messages"} hint={lang === "ar" ? "محادثاتك مع السائقين" : "Your driver chats"} /></Link>
           <Link to="/profile/history"><Row icon={Clock} label={t("parking_history")} hint={t("all_shares")} /></Link>
           <Link to="/profile/stats"><Row icon={Award} label={t("statistics")} hint={t("stats_hint")} /></Link>
+          <Link to="/rewards/invite">
+            <Row icon={Gift}
+              label={lang === "ar" ? "الدعوات والإحالة" : "Invite & referrals"}
+              hint={user.referral_code ? `${lang === "ar" ? "رمزك" : "Your code"} · ${user.referral_code}` : lang === "ar" ? "امنح 100، واربح 100" : "Give 100, get 100"} />
+          </Link>
         </div>
+
 
         <h2 className="mt-6 px-1 font-[var(--font-display)] text-sm font-bold uppercase tracking-wider text-muted-foreground">{t("more")}</h2>
         <div className="mt-2 rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">

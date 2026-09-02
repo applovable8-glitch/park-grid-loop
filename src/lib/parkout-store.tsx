@@ -71,6 +71,8 @@ export interface AppUser {
   reputation: number;
   shared: number;
   reservations: number;
+  referral_code: string | null;
+  referred_by: string | null;
 }
 
 export interface NotificationItem {
@@ -148,6 +150,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         location_prefs: { radius_m: 800, share_location: true },
         app_prefs: DEFAULT_APP_PREFS,
         points: 100, reputation: 5.0, shared: 0, reservations: 0,
+        referral_code: null, referred_by: null,
       });
       return;
     }
@@ -173,6 +176,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       reputation: Number(data.reputation),
       shared: data.shared_count,
       reservations: data.reservation_count,
+      referral_code: data.referral_code ?? null,
+      referred_by: data.referred_by ?? null,
     });
   }, []);
 

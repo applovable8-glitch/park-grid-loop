@@ -186,6 +186,8 @@ export type Database = {
           phone: string | null
           plate: string | null
           points: number
+          referral_code: string | null
+          referred_by: string | null
           reputation: number
           reservation_count: number
           shared_count: number
@@ -210,6 +212,8 @@ export type Database = {
           phone?: string | null
           plate?: string | null
           points?: number
+          referral_code?: string | null
+          referred_by?: string | null
           reputation?: number
           reservation_count?: number
           shared_count?: number
@@ -234,6 +238,8 @@ export type Database = {
           phone?: string | null
           plate?: string | null
           points?: number
+          referral_code?: string | null
+          referred_by?: string | null
           reputation?: number
           reservation_count?: number
           shared_count?: number
@@ -241,6 +247,36 @@ export type Database = {
           theme?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          points_awarded: number
+          referee_id: string
+          referrer_id: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          referee_id: string
+          referrer_id: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          referee_id?: string
+          referrer_id?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -304,6 +340,7 @@ export type Database = {
         Returns: undefined
       }
       cancel_request: { Args: { p_reservation_id: string }; Returns: undefined }
+      gen_referral_code: { Args: never; Returns: string }
       push_notification: {
         Args: {
           _body: string
@@ -314,6 +351,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      redeem_referral: { Args: { p_code: string }; Returns: undefined }
       request_spot: { Args: { p_spot_id: string }; Returns: string }
       respond_to_request: {
         Args: {

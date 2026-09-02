@@ -1,39 +1,60 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Gift } from "lucide-react";
-import { Screen, Card, Badge } from "@/components/kit";
+import { ArrowDownLeft, ArrowUpRight, Gift } from "lucide-react";
+import { Screen, EmptyState, SkeletonList } from "@/components/kit";
+import { useApp } from "@/lib/parkout-store";
+import { useI18n } from "@/lib/i18n";
+import { usePointsHistory } from "@/lib/profile-data";
+import { reasonLabel, formatDateTime } from "@/lib/points-labels";
 
-export const Route = createFileRoute("/rewards/history")({ component: History });
+export const Route = createFileRoute("/rewards/history")({ component: PointsHistory });
 
-const items = [
-  { title: "Handoff bonus · Al Wasl Rd", pts: +25, time: "Today 14:22", type: "earn" },
-  { title: "Reserved · City Walk", pts: -10, time: "Today 12:04", type: "spend" },
-  { title: "Daily streak reward", pts: +5, time: "Yesterday", type: "earn" },
-  { title: "Purchased pack · 500 pts", pts: +500, time: "Aug 12", type: "purchase" },
-  { title: "Redeemed · Free coffee", pts: -200, time: "Aug 09", type: "redeem" },
-];
+function PointsHistory() {
+  const { user } = useApp();
+  const { lang } = useI18n();
+  const ar = lang === "ar";
+  const { items, loading } = usePointsHistory(user?.id, 100);
 
-function History() {
+  const earned = items.filter((i) => i.delta > 0).reduce((s, i) => s + i.delta, 0);
+  const spent = items.filter((i) => i.delta < 0).reduce((s, i) => s + Math.abs(i.delta), 0);
+
   return (
-    <Screen title="Points history" back="/rewards">
-      <div className="space-y-2">
-        {items.map((a, i) => (
-          <Card key={i}>
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-muted"><Gift className="h-4 w-4" /></div>
-                <div>
-                  <p className="text-sm font-semibold">{a.title}</p>
-                  <p className="text-xs text-muted-foreground">{a.time}</p>
-                </div>
-              </div>
-              <div className="flex flex-col items-end gap-1">
-                <p className={`font-[var(--font-display)] text-sm font-bold ${a.pts > 0 ? "text-[color:var(--emerald)]" : "text-foreground"}`}>{a.pts > 0 ? `+${a.pts}` : a.pts}</p>
-                <Badge tone={a.type === "earn" || a.type === "purchase" ? "emerald" : "muted"}>{a.type}</Badge>
-              </div>
+    <Screen title={ar ? "سجل النقاط" : "Points history"} back="/rewards">
+      <div className="grid grid-cols-3 gap-2">
+        <Stat label={ar ? "الرصيد" : "Balance"} value={user?.points ?? 0} />
+        <Stat label={ar ? "مكتسبة" : "Earned"} value={earned} tone="emerald" />
+        <Stat label={ar ? "مصروفة" : "Spent"} value={spent} />
+      </div>
+
+      <div className="mt-4 space-y-2">
+        {loading && <SkeletonList n={5} />}
+        {!loading && items.length === 0 && (
+          <EmptyState icon={Gift} title={ar ? "لا توجد حركات بعد" : "No transactions yet"}
+            description={ar ? "ستظهر هنا كل نقطة تكسبها أو تصرفها." : "Every point you earn or spend shows up here."} />
+        )}
+        {items.map((it) => (
+          <div key={it.id} className="flex animate-fade-in items-center gap-3 rounded-2xl bg-card p-3.5 shadow-[var(--shadow-card)]">
+            <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${it.delta > 0 ? "bg-emerald/15 text-[color:var(--emerald)]" : "bg-muted"}`}>
+              {it.delta > 0 ? <ArrowDownLeft className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
             </div>
-          </Card>
+            <div className="flex-1">
+              <p className="text-sm font-semibold">{reasonLabel(it.reason, ar)}</p>
+              <p className="text-xs text-muted-foreground">{formatDateTime(it.created_at, ar)}</p>
+            </div>
+            <p className={`font-[var(--font-display)] text-sm font-bold tabular-nums ${it.delta > 0 ? "text-[color:var(--emerald)]" : "text-foreground"}`}>
+              {it.delta > 0 ? `+${it.delta}` : it.delta}
+            </p>
+          </div>
         ))}
       </div>
     </Screen>
+  );
+}
+
+function Stat({ label, value, tone }: { label: string; value: number; tone?: "emerald" }) {
+  return (
+    <div className="rounded-2xl bg-card p-3 text-center shadow-[var(--shadow-card)]">
+      <p className={`font-[var(--font-display)] text-xl font-bold tabular-nums ${tone === "emerald" ? "text-[color:var(--emerald)]" : ""}`}>{value}</p>
+      <p className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">{label}</p>
+    </div>
   );
 }
