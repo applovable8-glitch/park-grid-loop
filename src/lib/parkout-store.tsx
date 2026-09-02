@@ -71,6 +71,8 @@ export interface AppUser {
   reputation: number;
   shared: number;
   reservations: number;
+  referral_code: string | null;
+  referred_by: string | null;
 }
 
 export interface NotificationItem {
