@@ -11,7 +11,7 @@ import { timeAgo } from "@/lib/points-labels";
 export const Route = createFileRoute("/rewards/invite")({ component: Invite });
 
 function Invite() {
-  const { user, refresh } = useApp();
+  const { user, refreshProfile } = useApp();
   const { lang } = useI18n();
   const ar = lang === "ar";
   const { code, link, friends, loading, refresh: reloadRefs } = useReferral(user?.id);
@@ -50,7 +50,7 @@ function Invite() {
     }
     setEntry("");
     toast.success(ar ? "تم! حصلت على 100 نقطة" : "Done! You earned 100 points");
-    await refresh?.();
+    await refreshProfile();
     await reloadRefs();
   };
 
