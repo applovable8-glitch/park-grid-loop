@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppProvider } from "../lib/parkout-store";
 import { I18nProvider, useI18n } from "../lib/i18n";
+import { captureReferralFromUrl } from "../lib/referrals";
 
 function NotFoundComponent() {
   return (
