@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Search as SearchIcon, MapPin, Clock, Navigation2, Zap, SlidersHorizontal } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Search as SearchIcon, MapPin, Clock, Navigation2, Zap, SlidersHorizontal, LocateFixed, X } from "lucide-react";
 import { toast } from "sonner";
 import { BottomNav } from "@/components/BottomNav";
 import { useApp } from "@/lib/parkout-store";
 import { useGeolocation } from "@/lib/use-geolocation";
+import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
 import {
   clockOf,
   haversine,
@@ -17,7 +18,24 @@ import {
 
 export const Route = createFileRoute("/search")({ component: SearchPage });
 
-const FILTERS = ["All", "Free now", "Within 30 min", "Within 1 hour"] as const;
+const TIME_FILTERS = [
+  { id: "any", label: "Any time", maxMins: Infinity },
+  { id: "now", label: "Free now", maxMins: 1 },
+  { id: "15", label: "Within 15 min", maxMins: 15 },
+  { id: "30", label: "Within 30 min", maxMins: 30 },
+  { id: "60", label: "Within 1 hour", maxMins: 60 },
+  { id: "custom", label: "Pick a time…", maxMins: Infinity },
+] as const;
+
+const NEAR_ME_KM = 3;
+
+type TimeFilter = (typeof TIME_FILTERS)[number]["id"];
+
+interface PickedPlace {
+  label: string;
+  lat: number;
+  lng: number;
+}
 
 function SearchPage() {
   const { user } = useApp();
@@ -25,27 +43,85 @@ function SearchPage() {
   const { position } = useGeolocation();
   const { spots, loading } = useLiveSpots();
   const { request } = useMyRequest(user?.id);
+
   const [q, setQ] = useState("");
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
+  const [nearMe, setNearMe] = useState(false);
+  const [timeFilter, setTimeFilter] = useState<TimeFilter>("any");
+  const [customTime, setCustomTime] = useState("");
+  const [place, setPlace] = useState<PickedPlace | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // Attach Google Places Autocomplete to the search input — pick any area.
+  useEffect(() => {
+    let ac: GAny;
+    let mounted = true;
+    loadGoogleMaps()
+      .then((google) => {
+        if (!mounted || !inputRef.current || !google?.maps?.places) return;
+        ac = new google.maps.places.Autocomplete(inputRef.current, {
+          fields: ["geometry", "name", "formatted_address"],
+          types: ["geocode", "establishment"],
+        });
+        ac.addListener("place_changed", () => {
+          const p = ac.getPlace();
+          const loc = p?.geometry?.location;
+          if (!loc) return;
+          const label = p.name || p.formatted_address || "Selected area";
+          setPlace({ label, lat: loc.lat(), lng: loc.lng() });
+          setQ(label);
+          setNearMe(false);
+          toast.success(`Searching around ${label}`);
+        });
+      })
+      .catch(() => {
+        /* key missing — address text filter still works */
+      });
+    return () => {
+      mounted = false;
+      if (ac) ac.clearInstanceListeners?.();
+    };
+  }, []);
+
+  // Center used for distance math: picked area > user location.
+  const center = useMemo(() => {
+    if (nearMe) return position ? { lat: position.lat, lng: position.lng } : null;
+    if (place) return { lat: place.lat, lng: place.lng };
+    return position ? { lat: position.lat, lng: position.lng } : null;
+  }, [nearMe, place, position]);
+
+  const customDeadline = useMemo(() => {
+    if (timeFilter !== "custom" || !customTime) return null;
+    const [h, m] = customTime.split(":").map(Number);
+    if (Number.isNaN(h) || Number.isNaN(m)) return null;
+    const d = new Date();
+    d.setHours(h, m, 0, 0);
+    if (d.getTime() < Date.now()) d.setDate(d.getDate() + 1);
+    return d.getTime();
+  }, [timeFilter, customTime]);
 
   const list = useMemo(() => {
+    const preset = TIME_FILTERS.find((f) => f.id === timeFilter) ?? TIME_FILTERS[0];
     return spots
       .filter((s) => s.user_id !== user?.id)
-      .filter((s) => (s.address ?? "").toLowerCase().includes(q.toLowerCase()))
+      .filter((s) => (s.address ?? "").toLowerCase().includes(q.toLowerCase()) || !!place)
       .map((s) => ({
         ...s,
-        distance: position ? haversine(position, { lat: s.lat, lng: s.lng }) : null,
+        distance: center ? haversine(center, { lat: s.lat, lng: s.lng }) : null,
         mins: minutesUntil(s.planned_leave_at ?? s.leave_at),
       }))
       .filter((s) => {
-        if (filter === "Free now") return s.mins <= 1;
-        if (filter === "Within 30 min") return s.mins <= 30;
-        if (filter === "Within 1 hour") return s.mins <= 60;
+        if (nearMe && (s.distance === null || s.distance > NEAR_ME_KM * 1000)) return false;
+        if (timeFilter === "custom") {
+          if (customDeadline === null) return true;
+          const t = new Date(s.planned_leave_at ?? s.leave_at).getTime();
+          return t <= customDeadline;
+        }
+        if (preset.maxMins !== Infinity) return s.mins <= preset.maxMins;
         return true;
       })
       .sort((a, b) => (a.distance ?? 1e9) - (b.distance ?? 1e9));
-  }, [spots, q, filter, position, user?.id]);
+  }, [spots, q, place, timeFilter, customDeadline, center, nearMe, user?.id]);
 
   const ask = async (spotId: string) => {
     setBusy(spotId);
@@ -56,16 +132,37 @@ function SearchPage() {
     nav({ to: "/reservation/$id", params: { id } });
   };
 
+  const enableNearMe = () => {
+    if (!position) {
+      toast.error("Location unavailable — enable GPS to see spots near you.");
+      return;
+    }
+    setNearMe(true);
+    setPlace(null);
+    setQ("");
+  };
+
   return (
     <div className="min-h-screen bg-background pb-28">
       <header className="sticky top-0 z-30 bg-background/90 px-4 pt-5 pb-3 backdrop-blur-xl">
         <h1 className="font-[var(--font-display)] text-2xl font-bold">Find parking</h1>
-        <p className="text-xs text-muted-foreground">Live spots with their expected exit time</p>
+        <p className="text-xs text-muted-foreground">Search any area, or spots near you within {NEAR_ME_KM} km</p>
 
         <div className="mt-3 flex items-center gap-2">
           <div className="flex flex-1 items-center gap-2 rounded-2xl border border-border bg-card px-3.5 py-3 shadow-[var(--shadow-card)]">
-            <SearchIcon className="h-4 w-4 text-muted-foreground" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Street, area, landmark…" className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
+            <SearchIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <input
+              ref={inputRef}
+              value={q}
+              onChange={(e) => { setQ(e.target.value); if (place && e.target.value !== place.label) setPlace(null); }}
+              placeholder="Search an area, mall, street…"
+              className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            />
+            {(q || place) && (
+              <button onClick={() => { setQ(""); setPlace(null); }} aria-label="Clear search">
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            )}
           </div>
           <Link to="/search/filters" className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[var(--shadow-card)]">
             <SlidersHorizontal className="h-4 w-4" />
@@ -73,10 +170,40 @@ function SearchPage() {
         </div>
 
         <div className="mt-3 flex gap-2 overflow-x-auto scrollbar-none pb-1">
-          {FILTERS.map((f) => (
-            <button key={f} onClick={() => setFilter(f)} className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold ${filter === f ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>{f}</button>
+          <button
+            onClick={enableNearMe}
+            className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ${nearMe ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+          >
+            <LocateFixed className="h-3.5 w-3.5" /> Near me · {NEAR_ME_KM} km
+          </button>
+          {place && !nearMe && (
+            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1.5 text-xs font-semibold text-primary">
+              <MapPin className="h-3.5 w-3.5" /> {place.label}
+            </span>
+          )}
+          {TIME_FILTERS.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => setTimeFilter(f.id)}
+              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold ${timeFilter === f.id ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+            >
+              {f.label}
+            </button>
           ))}
         </div>
+
+        {timeFilter === "custom" && (
+          <div className="mt-2 flex items-center gap-2 rounded-2xl border border-border bg-card px-3.5 py-2.5">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">I need a spot that frees up by</span>
+            <input
+              type="time"
+              value={customTime}
+              onChange={(e) => setCustomTime(e.target.value)}
+              className="rounded-lg bg-muted px-2 py-1 text-sm outline-none"
+            />
+          </div>
+        )}
       </header>
 
       {request && (
@@ -99,7 +226,9 @@ function SearchPage() {
           />
         ))}
         {!loading && list.length === 0 && (
-          <div className="mt-16 text-center text-sm text-muted-foreground">No live parking spots right now.</div>
+          <div className="mt-16 text-center text-sm text-muted-foreground">
+            {nearMe ? `No live spots within ${NEAR_ME_KM} km of you right now.` : "No live parking spots match your search."}
+          </div>
         )}
       </div>
 
@@ -113,6 +242,7 @@ function SpotCard({ spot, distance, mins, disabled, busy, onReserve }: {
 }) {
   const free = mins <= 1;
   const dot = spot.status === "reserved" ? "bg-red-500" : free ? "bg-[var(--emerald)]" : "bg-orange-500";
+  const distLabel = distance === null ? "—" : distance >= 1000 ? `${(distance / 1000).toFixed(1)} km` : `${distance}m`;
   return (
     <div className="rounded-3xl bg-card p-4 shadow-[var(--shadow-card)] animate-fade-up">
       <div className="flex items-start justify-between gap-3">
@@ -127,7 +257,7 @@ function SpotCard({ spot, distance, mins, disabled, busy, onReserve }: {
             <h3 className="mt-1 font-[var(--font-display)] text-base font-bold leading-tight">{spot.address ?? "Shared parking spot"}</h3>
           </Link>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {distance === null ? "—" : `${distance}m away`}</span>
+            <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {distLabel} away</span>
             <span className="flex items-center gap-1"><Navigation2 className="h-3.5 w-3.5" /> {distance === null ? "—" : `${Math.max(1, Math.round(distance / 400))} min drive`}</span>
             <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {free ? "now" : `in ${mins}m`}</span>
           </div>
