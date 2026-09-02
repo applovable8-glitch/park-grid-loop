@@ -291,7 +291,17 @@ function SearchPage() {
         </div>
       )}
 
+      {mapMode && center ? null : (
       <div className="space-y-3 px-4 pt-3">
+        {(place || nearMe) && center && (
+          <button
+            onClick={() => setForceList(false)}
+            className="w-full rounded-2xl bg-muted py-2.5 text-xs font-semibold"
+          >
+            Show map view
+          </button>
+        )}
+
         {list.map((s) => (
           <SpotCard
             key={s.id}
