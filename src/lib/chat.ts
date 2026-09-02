@@ -22,6 +22,7 @@ export interface ChatMessage {
   sender_id: string;
   recipient_id: string;
   body: string;
+  image_url: string | null;
   created_at: string;
 }
 
@@ -68,7 +69,7 @@ export function useThread(meId: string | undefined, otherId: string | undefined,
     if (!meId || !otherId) { setMessages([]); setLoading(false); return; }
     const { data } = await supabase
       .from("messages")
-      .select("id,spot_id,sender_id,recipient_id,body,created_at")
+      .select("id,spot_id,sender_id,recipient_id,body,image_url,created_at")
       .or(`and(sender_id.eq.${meId},recipient_id.eq.${otherId}),and(sender_id.eq.${otherId},recipient_id.eq.${meId})`)
       .order("created_at", { ascending: true })
       .limit(200);
@@ -101,7 +102,33 @@ export function useThread(meId: string | undefined, otherId: string | undefined,
     [meId, otherId, spotId, load],
   );
 
-  return { messages, loading, send, reload: load };
+  const sendImage = useCallback(
+    async (file: File) => {
+      if (!meId || !otherId) return { error: "Not signed in" };
+      if (!file.type.startsWith("image/")) return { error: "Only images are allowed" };
+      if (file.size > 10 * 1024 * 1024) return { error: "Image is too large (max 10MB)" };
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const path = `${meId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("chat-images").upload(path, file, { upsert: false });
+      if (upErr) return { error: upErr.message };
+      const { data: signed } = await supabase.storage
+        .from("chat-images")
+        .createSignedUrl(path, 60 * 60 * 24 * 365);
+      if (!signed?.signedUrl) return { error: "Could not prepare the image" };
+      const { error } = await supabase.from("messages").insert({
+        sender_id: meId,
+        recipient_id: otherId,
+        spot_id: spotId ?? null,
+        body: "",
+        image_url: signed.signedUrl,
+      });
+      if (!error) load();
+      return { error: error?.message };
+    },
+    [meId, otherId, spotId, load],
+  );
+
+  return { messages, loading, send, sendImage, reload: load };
 }
 
 export interface ThreadSummary {
@@ -122,7 +149,7 @@ export function useThreads(meId: string | undefined) {
     if (!meId) { setThreads([]); setLoading(false); return; }
     const { data } = await supabase
       .from("messages")
-      .select("id,spot_id,sender_id,recipient_id,body,created_at,read")
+      .select("id,spot_id,sender_id,recipient_id,body,image_url,created_at,read")
       .or(`sender_id.eq.${meId},recipient_id.eq.${meId}`)
       .order("created_at", { ascending: false })
       .limit(300);
@@ -137,7 +164,7 @@ export function useThreads(meId: string | undefined) {
         map.set(other, {
           otherId: other,
           spotId: m.spot_id,
-          lastBody: m.body,
+          lastBody: m.body || (m.image_url ? "📷 Photo" : ""),
           lastAt: m.created_at,
           unread: unreadInc,
           profile: null,
