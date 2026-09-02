@@ -55,7 +55,12 @@ function Profile() {
           <Link to="/leaving/history"><MiniStat label={t("shared")} value={user.shared} /></Link>
           <Link to="/profile/reservations"><MiniStat label={t("reservations")} value={user.reservations} /></Link>
         </div>
+
+        <div className="relative mt-4">
+          <ThemeToggle variant="onHero" />
+        </div>
       </div>
+
 
       <div className="px-4 pt-5">
         <div className="rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">
