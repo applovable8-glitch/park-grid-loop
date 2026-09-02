@@ -14,7 +14,7 @@ import { useGeolocation } from "@/lib/use-geolocation";
 import { useAreaName } from "@/lib/use-area-name";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
 import {
-  clockOf, haversine, minutesUntil, requestSpot, useLiveSpots, useMyRequest, type LiveSpot,
+  clockOf, haversine, minutesUntil, requestSpot, useLiveSpots, useMyRequest, useMySharedSpot, type LiveSpot,
 } from "@/lib/parking-live";
 
 export const Route = createFileRoute("/home")({ component: Home });
@@ -47,6 +47,7 @@ function Home() {
   const areaName = useAreaName(position);
   const { spots, loading } = useLiveSpots();
   const { request } = useMyRequest(user?.id);
+  const { spot: mySpot } = useMySharedSpot(user?.id);
 
   const [q, setQ] = useState("");
   const [nearMe, setNearMe] = useState(false);
