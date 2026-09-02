@@ -50,7 +50,7 @@ export function Row({ icon: Icon, label, hint, to, right, danger, onClick }: {
   icon?: LucideIcon; label: string; hint?: string; to?: string; right?: ReactNode; danger?: boolean; onClick?: () => void;
 }) {
   const body = (
-    <div className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left hover:bg-muted ${danger ? "text-[color:var(--danger)]" : ""}`}>
+    <div className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-start hover:bg-muted ${danger ? "text-[color:var(--danger)]" : ""}`}>
       {Icon && (
         <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${danger ? "bg-red-100 text-[color:var(--danger)]" : "bg-muted"}`}>
           <Icon className="h-4 w-4" />
@@ -123,13 +123,13 @@ export function Field({ label, children }: { label: string; children: ReactNode 
 /* -------------------- Toggle -------------------- */
 export function Toggle({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
-    <button type="button" onClick={() => onChange(!checked)} className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left hover:bg-muted">
+    <button type="button" onClick={() => onChange(!checked)} className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-start hover:bg-muted">
       <div className="flex-1 min-w-0">
         <span className="block text-sm font-medium truncate">{label}</span>
         {hint && <span className="block text-xs text-muted-foreground truncate">{hint}</span>}
       </div>
       <span className={`relative flex h-6 w-11 items-center rounded-full transition-colors ${checked ? "bg-[var(--emerald)]" : "bg-border"}`}>
-        <span className={`absolute h-5 w-5 rounded-full bg-white shadow transition-transform ${checked ? "translate-x-5" : "translate-x-0.5"}`} />
+        <span className={`absolute h-5 w-5 rounded-full bg-white shadow transition-transform ${checked ? "translate-x-5 rtl:-translate-x-5" : "translate-x-0.5 rtl:-translate-x-0.5"}`} />
       </span>
     </button>
   );

@@ -1,42 +1,56 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Screen, Field, inputCls, Button, Toggle, Row, RowGroup } from "@/components/kit";
-import { Smartphone, Fingerprint, LogOut } from "lucide-react";
-import { useApp } from "@/lib/parkout-store";
+import { Smartphone, LogOut } from "lucide-react";
+import { useApp, DEFAULT_APP_PREFS, type AppPrefs } from "@/lib/parkout-store";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/settings/security")({ component: Security });
 
 function Security() {
-  const { updatePassword, signOut } = useApp();
+  const { user, updatePassword, updateProfile, signOut } = useApp();
+  const { t } = useI18n();
   const nav = useNavigate();
-  const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
-  const [twoFa, setTwoFa] = useState(false);
-  const [biometric, setBiometric] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [p, setP] = useState<AppPrefs>(user?.app_prefs ?? DEFAULT_APP_PREFS);
+  useEffect(() => { if (user) setP(user.app_prefs); }, [user]);
+
+  const patch = async (v: Partial<AppPrefs>) => {
+    const nextPrefs = { ...p, ...v };
+    setP(nextPrefs);
+    const { error } = await updateProfile({ app_prefs: nextPrefs });
+    if (error) toast.error(error); else toast.success(t("saved"));
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (next.length < 6) return toast.error("Password must be 6+ characters");
+    if (next.length < 6) return toast.error(t("password_short"));
+    setBusy(true);
     const { error } = await updatePassword(next);
-    if (error) toast.error(error); else { toast.success("Password updated"); nav({ to: "/settings" }); }
+    setBusy(false);
+    if (error) toast.error(error);
+    else { toast.success(t("password_updated")); setNext(""); nav({ to: "/settings" }); }
   };
+
   return (
-    <Screen title="Security" back="/settings">
+    <Screen title={t("security")} back="/settings">
       <form onSubmit={submit} className="space-y-3">
-        <Field label="Current password"><input type="password" value={current} onChange={(e) => setCurrent(e.target.value)} className={inputCls} /></Field>
-        <Field label="New password"><input type="password" value={next} onChange={(e) => setNext(e.target.value)} className={inputCls} /></Field>
-        <Button type="submit">Change password</Button>
+        <Field label={t("new_password")}>
+          <input type="password" value={next} onChange={(e) => setNext(e.target.value)} className={inputCls} autoComplete="new-password" />
+        </Field>
+        <Button type="submit" disabled={busy}>{busy ? t("saving") : t("change_password")}</Button>
       </form>
-      <RowGroup title="Two-factor">
-        <div className="rounded-2xl">
-          <Toggle label="Two-factor authentication" hint="SMS code on login" checked={twoFa} onChange={setTwoFa} />
-          <Toggle label="Biometric unlock" hint="Face ID / fingerprint" checked={biometric} onChange={setBiometric} />
+      <RowGroup title={t("security")}>
+        <div>
+          <Toggle label={t("two_factor")} hint={t("two_factor_hint")} checked={p.two_factor} onChange={(v) => patch({ two_factor: v })} />
+          <Toggle label={t("biometric")} hint={t("biometric_hint")} checked={p.biometric} onChange={(v) => patch({ biometric: v })} />
         </div>
       </RowGroup>
-      <RowGroup title="Sessions">
-        <Row icon={Smartphone} label="This device" hint="Signed in now" />
-        <Row icon={Fingerprint} label="Manage sessions" hint="See all devices" onClick={() => toast.info("No other active sessions")} />
-        <Row icon={LogOut} label="Sign out of all devices" danger onClick={async () => { await signOut(); nav({ to: "/auth" }); }} />
+      <RowGroup>
+        <Row icon={Smartphone} label={user?.email ?? ""} hint={t("connected")} />
+        <Row icon={LogOut} label={t("sign_out_all")} danger onClick={async () => { await signOut(); nav({ to: "/auth" }); }} />
       </RowGroup>
     </Screen>
   );

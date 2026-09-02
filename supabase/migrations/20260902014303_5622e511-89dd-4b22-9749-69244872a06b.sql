@@ -1,0 +1,2 @@
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS app_prefs jsonb NOT NULL DEFAULT '{"units":"metric","currency":"AED","public_profile":true,"show_plate":false,"analytics":true,"sound":true,"haptics":true,"map_type":"roadmap","traffic":true,"two_factor":false,"biometric":false}'::jsonb;
