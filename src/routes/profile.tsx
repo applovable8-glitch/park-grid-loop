@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
 import { BottomNav } from "@/components/BottomNav";
@@ -60,6 +61,7 @@ function Profile() {
         <div className="rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">
           <Link to="/profile/edit"><Row icon={Pencil} label={t("edit_profile")} hint={t("edit_profile_hint")} /></Link>
           <Link to="/profile/vehicles"><Row icon={Car} label={t("my_vehicles")} hint={user.plate ?? t("add_plate")} /></Link>
+          <Link to="/messages"><Row icon={MessageCircle} label={lang === "ar" ? "الرسائل" : "Messages"} hint={lang === "ar" ? "محادثاتك مع السائقين" : "Your driver chats"} /></Link>
           <Link to="/profile/history"><Row icon={Clock} label={t("parking_history")} hint={t("all_shares")} /></Link>
           <Link to="/profile/stats"><Row icon={Award} label={t("statistics")} hint={t("stats_hint")} /></Link>
         </div>

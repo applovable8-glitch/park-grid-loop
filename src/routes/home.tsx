@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Search as SearchIcon, MapPin, Clock, Navigation2, Zap, LocateFixed, X, List,
+  Search as SearchIcon, MapPin, Clock, Navigation2, Zap, LocateFixed, X, List, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
@@ -12,6 +12,7 @@ import { useRequireProfile } from "@/lib/use-require-auth";
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/use-geolocation";
 import { useAreaName } from "@/lib/use-area-name";
+import { useThreads } from "@/lib/chat";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
 import {
   clockOf, haversine, minutesUntil, requestSpot, useLiveSpots, useMyRequest, useMySharedSpot, type LiveSpot,
@@ -57,6 +58,7 @@ function Home() {
   const nav = useNavigate();
   const { position } = useGeolocation();
   const areaName = useAreaName(position);
+  const { totalUnread } = useThreads(user?.id);
   const { spots, loading } = useLiveSpots();
   const { request } = useMyRequest(user?.id);
   const { spot: mySpot } = useMySharedSpot(user?.id);
@@ -222,6 +224,18 @@ function Home() {
               {place ? place.label : (areaName ?? (position ? "Locating…" : "Enable location"))}
             </p>
           </div>
+          <Link
+            to="/messages"
+            aria-label="Messages"
+            className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted"
+          >
+            <MessageCircle className="h-4 w-4" />
+            {totalUnread > 0 && (
+              <span className="absolute -top-1 -end-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--emerald)] px-1 text-[9px] font-bold text-white">
+                {totalUnread}
+              </span>
+            )}
+          </Link>
           <Link to="/profile" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald text-emerald-foreground font-bold text-sm">
             {user?.name?.[0] ?? "U"}
           </Link>
