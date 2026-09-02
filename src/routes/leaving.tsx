@@ -177,11 +177,6 @@ function Leaving() {
               )}
             </div>
 
-            <div className="mt-6 flex w-full max-w-sm items-center gap-2 rounded-2xl bg-white/10 p-3 text-xs text-white/80 ring-1 ring-white/10 backdrop-blur-md">
-              <MapPin className="h-4 w-4 text-[var(--emerald)]" />
-              {status === "granted" ? "GPS location shared only as an open parking opportunity." : "Enable location to share your spot."}
-            </div>
-
             <button
               onClick={confirm}
               disabled={busy}
