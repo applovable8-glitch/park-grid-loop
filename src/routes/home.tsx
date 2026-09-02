@@ -171,6 +171,7 @@ function Home() {
         <AreaMap
           variant="full"
           center={center}
+          userLocation={position}
           spots={list}
           activeId={selected?.id ?? null}
           radius={nearMe ? NEAR_ME_KM * 1000 : 1800}
