@@ -176,8 +176,8 @@ export function useMySharedSpot(userId: string | undefined) {
       .eq("user_id", userId)
       .in("status", ["available", "leaving", "reserved"])
       .order("created_at", { ascending: false })
-      .maybeSingle();
-    setSpot((data as LiveSpot) ?? null);
+      .limit(1);
+    setSpot(((data as LiveSpot[] | null)?.[0]) ?? null);
     setLoading(false);
   }, [userId]);
 
