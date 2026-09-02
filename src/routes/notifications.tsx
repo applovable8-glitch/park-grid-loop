@@ -106,7 +106,7 @@ function Notifs() {
                   </div>
                 </div>
                 {n.metadata?.reservation_id && (
-                  <RequestActions reservationId={n.metadata.reservation_id} />
+                  <RequestActions reservationId={n.metadata.reservation_id} notifId={n.id} />
                 )}
               </div>
             );
@@ -120,7 +120,7 @@ function Notifs() {
 }
 
 /** Inline approve / decline / extend (owner) or accept-extension (seeker). */
-function RequestActions({ reservationId }: { reservationId: string }) {
+function RequestActions({ reservationId, notifId }: { reservationId: string; notifId: string }) {
   const { user } = useApp();
   const nav = useNavigate();
   const [req, setReq] = useState<LiveRequest | null>(null);
