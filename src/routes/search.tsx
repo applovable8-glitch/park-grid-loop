@@ -319,6 +319,8 @@ function SearchPage() {
           </div>
         )}
       </div>
+      )}
+
 
       <BottomNav />
     </div>
