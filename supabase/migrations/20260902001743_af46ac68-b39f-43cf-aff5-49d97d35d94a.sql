@@ -1,0 +1,11 @@
+REVOKE ALL ON FUNCTION public.push_notification(uuid, text, text, text, jsonb) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.request_spot(uuid) FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.respond_to_request(uuid, text, timestamptz) FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.answer_extension(uuid, boolean) FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.cancel_request(uuid) FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION public.set_planned_leave(uuid, timestamptz) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.request_spot(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.respond_to_request(uuid, text, timestamptz) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.answer_extension(uuid, boolean) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.cancel_request(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.set_planned_leave(uuid, timestamptz) TO authenticated;
