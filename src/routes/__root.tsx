@@ -94,6 +94,7 @@ function RootComponent() {
 
 function LocalizedShell() {
   const { dir } = useI18n();
+  useEffect(() => { captureReferralFromUrl(); }, []);
   return (
     <>
       <div dir={dir} className="min-h-screen w-full bg-[oklch(0.94_0.01_240)]">
