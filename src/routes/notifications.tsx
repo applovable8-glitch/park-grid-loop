@@ -149,11 +149,11 @@ function RequestActions({ reservationId, notifId }: { reservationId: string; not
   useEffect(() => {
     load();
     const ch = supabase
-      .channel(`notif-res:${reservationId}`)
+      .channel(`notif-res:${reservationId}:${notifId}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "reservations", filter: `id=eq.${reservationId}` }, () => load())
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [load, reservationId]);
+  }, [load, reservationId, notifId]);
 
   if (!req || !user) return null;
   const isOwner = req.owner_id === user.id;
