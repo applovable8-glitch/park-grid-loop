@@ -158,16 +158,16 @@ export function AreaMap({
     spots.forEach((s) => {
       seen.add(s.id);
       const pos = { lat: s.lat, lng: s.lng };
-      const icon = carIcon(colorFor(s), timeText(s), activeId === s.id);
+      const icon = carIcon(colorFor(s, ownSpotId), timeText(s), activeId === s.id);
       let m = markersRef.current[s.id];
       if (!m) {
-        m = new google.maps.Marker({ map, position: pos, title: s.address ?? "Parking spot", icon, zIndex: 10 });
+        m = new google.maps.Marker({ map, position: pos, title: s.address ?? "Parking spot", icon, zIndex: s.id === ownSpotId ? 20 : 10 });
         m.addListener("click", () => clickRef.current?.(s.id));
         markersRef.current[s.id] = m;
       } else {
         m.setPosition(pos);
         m.setIcon(icon);
-        m.setZIndex(activeId === s.id ? 50 : 10);
+        m.setZIndex(activeId === s.id ? 50 : s.id === ownSpotId ? 20 : 10);
       }
     });
     Object.keys(markersRef.current).forEach((id) => {
@@ -176,7 +176,7 @@ export function AreaMap({
         delete markersRef.current[id];
       }
     });
-  }, [ready, spots, activeId, tick]);
+  }, [ready, spots, activeId, ownSpotId, tick]);
 
   const shell =
     variant === "full"
