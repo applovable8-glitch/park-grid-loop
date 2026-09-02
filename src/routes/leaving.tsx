@@ -9,6 +9,7 @@ import { PinPicker } from "@/components/PinPicker";
 import { useRequireProfile } from "@/lib/use-require-auth";
 import {
   approveRequest,
+  declineRequest,
   cancelRequest,
   clockOf,
   proposeExtension,
