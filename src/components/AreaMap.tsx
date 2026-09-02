@@ -22,7 +22,8 @@ interface Props {
   className?: string;
 }
 
-function colorFor(s: LiveSpot) {
+function colorFor(s: LiveSpot, ownSpotId?: string | null) {
+  if (s.id === ownSpotId) return "#2563EB";
   if (s.status === "reserved") return "#EF4444";
   return minutesUntil(s.planned_leave_at ?? s.leave_at) <= 1 ? "#10B981" : "#F59E0B";
 }
@@ -67,6 +68,7 @@ export function AreaMap({
   variant = "compact",
   activeId = null,
   userLocation = null,
+  ownSpotId = null,
   className,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
