@@ -32,6 +32,18 @@ const FALLBACK_CENTER = { lat: 25.2048, lng: 55.2708 }; // Dubai
 
 type TimeFilter = (typeof TIME_FILTERS)[number]["id"];
 
+/** "01:24" style countdown to an ISO timestamp. */
+function countdown(iso: string | null | undefined) {
+  if (!iso) return "--:--";
+  const s = Math.max(0, Math.round((new Date(iso).getTime() - Date.now()) / 1000));
+  if (s === 0) return "Leaving now";
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const p = (n: number) => String(n).padStart(2, "0");
+  return h > 0 ? `${h}:${p(m)}:${p(sec)}` : `${p(m)}:${p(sec)}`;
+}
+
 interface PickedPlace {
   label: string;
   lat: number;
