@@ -280,3 +280,25 @@ export async function releaseSpot(spotId: string) {
   const { error } = await supabase.from("parking_spots").update({ status: "completed" }).eq("id", spotId);
   return { error: error?.message };
 }
+
+export async function completeHandoff(reservationId: string, taken: boolean) {
+  const { error } = await supabase.rpc("complete_handoff", { p_reservation_id: reservationId, p_taken: taken });
+  return { error: error ? msg(error) : undefined };
+}
+
+export async function rateUser(reservationId: string, stars: number, comment?: string) {
+  const { error } = await supabase.rpc("rate_user", {
+    p_reservation_id: reservationId,
+    p_stars: stars,
+    p_comment: comment?.trim() ? comment.trim() : undefined,
+  });
+  return { error: error ? msg(error) : undefined };
+}
+
+export async function takeoverSpot(reservationId: string, leaveAt: Date) {
+  const { data, error } = await supabase.rpc("takeover_spot", {
+    p_reservation_id: reservationId,
+    p_leave_at: leaveAt.toISOString(),
+  });
+  return { id: data as string | undefined, error: error ? msg(error) : undefined };
+}

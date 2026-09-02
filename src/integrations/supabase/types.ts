@@ -250,6 +250,47 @@ export type Database = {
         }
         Relationships: []
       }
+      ratings: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          ratee_id: string
+          rater_id: string
+          reservation_id: string
+          stars: number
+          updated_at: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          ratee_id: string
+          rater_id: string
+          reservation_id: string
+          stars: number
+          updated_at?: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          ratee_id?: string
+          rater_id?: string
+          reservation_id?: string
+          stars?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referrals: {
         Row: {
           code: string
@@ -340,6 +381,10 @@ export type Database = {
         Returns: undefined
       }
       cancel_request: { Args: { p_reservation_id: string }; Returns: undefined }
+      complete_handoff: {
+        Args: { p_reservation_id: string; p_taken: boolean }
+        Returns: undefined
+      }
       gen_referral_code: { Args: never; Returns: string }
       push_notification: {
         Args: {
@@ -349,6 +394,10 @@ export type Database = {
           _title: string
           _user_id: string
         }
+        Returns: undefined
+      }
+      rate_user: {
+        Args: { p_comment?: string; p_reservation_id: string; p_stars: number }
         Returns: undefined
       }
       redeem_referral: { Args: { p_code: string }; Returns: undefined }
@@ -364,6 +413,10 @@ export type Database = {
       set_planned_leave: {
         Args: { p_leave_at: string; p_spot_id: string }
         Returns: undefined
+      }
+      takeover_spot: {
+        Args: { p_leave_at: string; p_reservation_id: string }
+        Returns: string
       }
     }
     Enums: {

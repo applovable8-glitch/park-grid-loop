@@ -113,7 +113,12 @@ function Reservation() {
           </>
         )}
         {state === "confirmed" && spot && (
-          <Button variant="emerald" onClick={() => nav({ to: "/navigate/$id", params: { id: spot.id } })}>Start navigation</Button>
+          <>
+            <Button variant="emerald" onClick={() => nav({ to: "/handoff/$id", params: { id: req.id } })}>
+              <Check className="h-4 w-4" /> Did you take the parking spot?
+            </Button>
+            <Button variant="secondary" onClick={() => nav({ to: "/navigate/$id", params: { id: spot.id } })}>Start navigation</Button>
+          </>
         )}
         {["pending", "extension_proposed", "confirmed"].includes(state) && state !== "extension_proposed" && (
           <Button variant="danger" disabled={busy} onClick={cancel}>Cancel request</Button>
