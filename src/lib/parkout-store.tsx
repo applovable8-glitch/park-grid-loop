@@ -29,6 +29,26 @@ export interface LocationPrefs {
   share_location: boolean;
 }
 
+export interface AppPrefs {
+  units: "metric" | "imperial";
+  currency: string;
+  public_profile: boolean;
+  show_plate: boolean;
+  analytics: boolean;
+  sound: boolean;
+  haptics: boolean;
+  map_type: "roadmap" | "satellite" | "hybrid" | "terrain";
+  traffic: boolean;
+  two_factor: boolean;
+  biometric: boolean;
+}
+
+export const DEFAULT_APP_PREFS: AppPrefs = {
+  units: "metric", currency: "AED", public_profile: true, show_plate: false,
+  analytics: true, sound: true, haptics: true, map_type: "roadmap",
+  traffic: true, two_factor: false, biometric: false,
+};
+
 export interface AppUser {
   id: string;
   name: string;
@@ -46,6 +66,7 @@ export interface AppUser {
   theme: string;
   notification_prefs: NotificationPrefs;
   location_prefs: LocationPrefs;
+  app_prefs: AppPrefs;
   points: number;
   reputation: number;
   shared: number;
@@ -125,6 +146,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         car_color: null, car_type: null, show_phone: true, language: "en", theme: "system",
         notification_prefs: { push: true, nearby_spots: true, reservations: true, points: true },
         location_prefs: { radius_m: 800, share_location: true },
+        app_prefs: DEFAULT_APP_PREFS,
         points: 100, reputation: 5.0, shared: 0, reservations: 0,
       });
       return;
@@ -146,6 +168,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       theme: data.theme,
       notification_prefs: data.notification_prefs as unknown as NotificationPrefs,
       location_prefs: data.location_prefs as unknown as LocationPrefs,
+      app_prefs: { ...DEFAULT_APP_PREFS, ...((data as { app_prefs?: Partial<AppPrefs> }).app_prefs ?? {}) },
       points: data.points,
       reputation: Number(data.reputation),
       shared: data.shared_count,
@@ -203,6 +226,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
       .subscribe();
     return () => { ignore = true; supabase.removeChannel(channel); };
   }, [session?.user]);
+
+  // Apply theme (light / dark / system) to the document
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const theme = user?.theme ?? "system";
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => {
+      const dark = theme === "dark" || (theme === "system" && mq.matches);
+      document.documentElement.classList.toggle("dark", dark);
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, [user?.theme]);
 
   // Mock spots countdown (unchanged — replaced in a later slice with realtime DB)
   useEffect(() => {
@@ -266,6 +303,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         ...(patch.avatar_url !== undefined && { avatar_url: patch.avatar_url }),
         ...(patch.notification_prefs !== undefined && { notification_prefs: patch.notification_prefs as unknown as never }),
         ...(patch.location_prefs !== undefined && { location_prefs: patch.location_prefs as unknown as never }),
+        ...(patch.app_prefs !== undefined && { app_prefs: patch.app_prefs as unknown as never }),
       };
       const { error } = await supabase.from("profiles").update(dbPatch).eq("user_id", session.user.id);
       if (error) return { error: error.message };
