@@ -17,10 +17,13 @@ interface Props {
   activeId?: string | null;
   /** User's real GPS location marker — kept independent of the searched map center. */
   userLocation?: { lat: number; lng: number } | null;
+  /** Spot owned by the current user; rendered in blue so it stands out as "my car". */
+  ownSpotId?: string | null;
   className?: string;
 }
 
-function colorFor(s: LiveSpot) {
+function colorFor(s: LiveSpot, ownSpotId?: string | null) {
+  if (s.id === ownSpotId) return "#2563EB";
   if (s.status === "reserved") return "#EF4444";
   return minutesUntil(s.planned_leave_at ?? s.leave_at) <= 1 ? "#10B981" : "#F59E0B";
 }
@@ -65,6 +68,7 @@ export function AreaMap({
   variant = "compact",
   activeId = null,
   userLocation = null,
+  ownSpotId = null,
   className,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -154,16 +158,16 @@ export function AreaMap({
     spots.forEach((s) => {
       seen.add(s.id);
       const pos = { lat: s.lat, lng: s.lng };
-      const icon = carIcon(colorFor(s), timeText(s), activeId === s.id);
+      const icon = carIcon(colorFor(s, ownSpotId), timeText(s), activeId === s.id);
       let m = markersRef.current[s.id];
       if (!m) {
-        m = new google.maps.Marker({ map, position: pos, title: s.address ?? "Parking spot", icon, zIndex: 10 });
+        m = new google.maps.Marker({ map, position: pos, title: s.address ?? "Parking spot", icon, zIndex: s.id === ownSpotId ? 20 : 10 });
         m.addListener("click", () => clickRef.current?.(s.id));
         markersRef.current[s.id] = m;
       } else {
         m.setPosition(pos);
         m.setIcon(icon);
-        m.setZIndex(activeId === s.id ? 50 : 10);
+        m.setZIndex(activeId === s.id ? 50 : s.id === ownSpotId ? 20 : 10);
       }
     });
     Object.keys(markersRef.current).forEach((id) => {
@@ -172,7 +176,7 @@ export function AreaMap({
         delete markersRef.current[id];
       }
     });
-  }, [ready, spots, activeId, tick]);
+  }, [ready, spots, activeId, ownSpotId, tick]);
 
   const shell =
     variant === "full"
