@@ -229,7 +229,11 @@ export async function shareSpot(params: { lat: number; lng: number; leaveAt: Dat
     })
     .select("id")
     .maybeSingle();
-  if (error) return { error: error.message };
+  if (error) {
+    if (error.message.includes("parking_spots_one_active_per_user"))
+      return { error: "You already shared a spot. Stop that share before creating a new one." };
+    return { error: error.message };
+  }
   return { id: data?.id as string };
 }
 
