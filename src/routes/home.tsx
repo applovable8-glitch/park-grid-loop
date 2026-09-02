@@ -6,6 +6,8 @@ import { MapCanvas } from "@/components/MapCanvas";
 import { BottomNav } from "@/components/BottomNav";
 import { useRequireAuth } from "@/lib/use-require-auth";
 import { useI18n } from "@/lib/i18n";
+import { useGeolocation } from "@/lib/use-geolocation";
+import { useAreaName } from "@/lib/use-area-name";
 
 export const Route = createFileRoute("/home")({ component: Home });
 
@@ -18,6 +20,8 @@ function Home() {
   const [traffic, setTraffic] = useState(false);
   const [mapType, setMapType] = useState<"roadmap" | "satellite">("roadmap");
   const [recenter, setRecenter] = useState(0);
+  const { position } = useGeolocation();
+  const areaName = useAreaName(position);
   if (!ready) return null;
 
   const available = spots.filter((s) => s.status === "available").length;
@@ -38,7 +42,7 @@ function Home() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">{t("current_area")}</p>
-            <p className="truncate text-sm font-semibold">Downtown Dubai · UAE</p>
+            <p className="truncate text-sm font-semibold">{areaName ?? (position ? "Locating…" : "Enable location")}</p>
           </div>
           <Link to="/profile" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald text-emerald-foreground font-bold text-sm">
             {user?.name?.[0] ?? "U"}
