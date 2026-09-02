@@ -51,38 +51,57 @@ function SearchPage() {
   const [customTime, setCustomTime] = useState("");
   const [place, setPlace] = useState<PickedPlace | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string }>>([]);
+  const tokenRef = useRef<GAny | null>(null);
 
-  // Attach Google Places Autocomplete to the search input — pick any area.
+  // Places API (New) autocomplete — debounced suggestions for any area.
   useEffect(() => {
-    let ac: GAny;
-    let mounted = true;
-    loadGoogleMaps()
-      .then((google) => {
-        if (!mounted || !inputRef.current || !google?.maps?.places) return;
-        ac = new google.maps.places.Autocomplete(inputRef.current, {
-          fields: ["geometry", "name", "formatted_address"],
-          types: ["geocode", "establishment"],
+    if (!q.trim() || (place && q === place.label)) { setSuggestions([]); return; }
+    const handle = setTimeout(async () => {
+      try {
+        const google = await loadGoogleMaps();
+        const lib = (await google.maps.importLibrary("places")) as GAny;
+        if (!tokenRef.current) tokenRef.current = new lib.AutocompleteSessionToken();
+        const { suggestions: s } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+          input: q,
+          sessionToken: tokenRef.current,
         });
-        ac.addListener("place_changed", () => {
-          const p = ac.getPlace();
-          const loc = p?.geometry?.location;
-          if (!loc) return;
-          const label = p.name || p.formatted_address || "Selected area";
-          setPlace({ label, lat: loc.lat(), lng: loc.lng() });
-          setQ(label);
-          setNearMe(false);
-          toast.success(`Searching around ${label}`);
-        });
-      })
-      .catch(() => {
-        /* key missing — address text filter still works */
-      });
-    return () => {
-      mounted = false;
-      if (ac) ac.clearInstanceListeners?.();
-    };
-  }, []);
+        setSuggestions(
+          (s ?? [])
+            .filter((x: GAny) => x.placePrediction)
+            .map((x: GAny) => ({
+              id: x.placePrediction.placeId,
+              text: x.placePrediction.text?.text ?? "",
+              sub: x.placePrediction.secondaryText?.text ?? "",
+            }))
+            .slice(0, 5),
+        );
+      } catch {
+        setSuggestions([]); // key missing — address text filter still works
+      }
+    }, 350);
+    return () => clearTimeout(handle);
+  }, [q, place]);
+
+  const pickPlace = async (s: { id: string; text: string }) => {
+    setSuggestions([]);
+    try {
+      const google = await loadGoogleMaps();
+      const lib = (await google.maps.importLibrary("places")) as GAny;
+      const p = new lib.Place({ id: s.id });
+      await p.fetchFields({ fields: ["location", "displayName", "formattedAddress"] });
+      const loc = p.location;
+      if (!loc) throw new Error("no location");
+      const label = p.displayName ?? s.text;
+      setPlace({ label, lat: loc.lat(), lng: loc.lng() });
+      setQ(label);
+      setNearMe(false);
+      tokenRef.current = null; // end autocomplete session
+      toast.success(`Searching around ${label}`);
+    } catch {
+      toast.error("Could not locate that place.");
+    }
+  };
 
   // Center used for distance math: picked area > user location.
   const center = useMemo(() => {
