@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ParkingSpot } from "@/lib/parkout-store";
 import { Navigation, MapPin, Loader2 } from "lucide-react";
-import { loadGoogleMaps, MAPS_KEY } from "@/lib/google-maps";
+import { loadGoogleMaps, MAPS_KEY, type GAny } from "@/lib/google-maps";
 import { useGeolocation } from "@/lib/use-geolocation";
 
 interface Props {
@@ -30,7 +30,7 @@ export function spotLatLng(s: ParkingSpot, center: { lat: number; lng: number })
   };
 }
 
-const pinIcon = (color: string): google.maps.Symbol => ({
+const pinIcon = (color: string): GAny => ({
   path: google.maps.SymbolPath.CIRCLE,
   fillColor: color,
   fillOpacity: 1,
@@ -41,11 +41,11 @@ const pinIcon = (color: string): google.maps.Symbol => ({
 
 export function MapCanvas({ spots, onSpotClick, traffic = false, mapType = "roadmap", recenterSignal = 0 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<google.maps.Map | null>(null);
-  const markersRef = useRef<Record<string, google.maps.Marker>>({});
-  const meRef = useRef<google.maps.Marker | null>(null);
-  const accuracyRef = useRef<google.maps.Circle | null>(null);
-  const trafficRef = useRef<google.maps.TrafficLayer | null>(null);
+  const mapRef = useRef<GAny | null>(null);
+  const markersRef = useRef<Record<string, GAny>>({});
+  const meRef = useRef<GAny | null>(null);
+  const accuracyRef = useRef<GAny | null>(null);
+  const trafficRef = useRef<GAny | null>(null);
   const clickRef = useRef(onSpotClick);
   clickRef.current = onSpotClick;
 
