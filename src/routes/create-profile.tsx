@@ -65,7 +65,7 @@ function CreateProfile() {
   };
 
   return (
-    <Screen title="Create your profile" back="/auth">
+    <Screen title="Create your profile" back={false}>
       <p className="text-sm text-muted-foreground">
         Drivers see your car and contact details when you share or request a spot.
       </p>
