@@ -103,3 +103,83 @@ export function useThread(meId: string | undefined, otherId: string | undefined,
 
   return { messages, loading, send, reload: load };
 }
+
+export interface ThreadSummary {
+  otherId: string;
+  spotId: string | null;
+  lastBody: string;
+  lastAt: string;
+  unread: number;
+  profile: DriverProfile | null;
+}
+
+/** All conversations of the current user, newest first, live-updating. */
+export function useThreads(meId: string | undefined) {
+  const [threads, setThreads] = useState<ThreadSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    if (!meId) { setThreads([]); setLoading(false); return; }
+    const { data } = await supabase
+      .from("messages")
+      .select("id,spot_id,sender_id,recipient_id,body,created_at,read")
+      .or(`sender_id.eq.${meId},recipient_id.eq.${meId}`)
+      .order("created_at", { ascending: false })
+      .limit(300);
+
+    const rows = (data ?? []) as (ChatMessage & { read: boolean })[];
+    const map = new Map<string, ThreadSummary>();
+    for (const m of rows) {
+      const other = m.sender_id === meId ? m.recipient_id : m.sender_id;
+      const existing = map.get(other);
+      const unreadInc = m.recipient_id === meId && !m.read ? 1 : 0;
+      if (!existing) {
+        map.set(other, {
+          otherId: other,
+          spotId: m.spot_id,
+          lastBody: m.body,
+          lastAt: m.created_at,
+          unread: unreadInc,
+          profile: null,
+        });
+      } else {
+        existing.unread += unreadInc;
+      }
+    }
+    const list = [...map.values()];
+    if (list.length) {
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select(COLS)
+        .in("user_id", list.map((t) => t.otherId));
+      const byId = new Map((profs ?? []).map((p) => [(p as unknown as DriverProfile).user_id, p as unknown as DriverProfile]));
+      for (const t of list) t.profile = byId.get(t.otherId) ?? null;
+    }
+    setThreads(list);
+    setLoading(false);
+  }, [meId]);
+
+  useEffect(() => {
+    load();
+    if (!meId) return;
+    const ch = supabase
+      .channel(`threads:${meId}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [load, meId]);
+
+  const totalUnread = threads.reduce((s, t) => s + t.unread, 0);
+  return { threads, loading, totalUnread, reload: load };
+}
+
+/** Mark all messages from `otherId` to me as read. */
+export async function markThreadRead(meId: string | undefined, otherId: string | undefined) {
+  if (!meId || !otherId) return;
+  await supabase
+    .from("messages")
+    .update({ read: true })
+    .eq("recipient_id", meId)
+    .eq("sender_id", otherId)
+    .eq("read", false);
+}
