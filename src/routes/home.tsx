@@ -321,8 +321,17 @@ function Home() {
       {/* My open request banner */}
       {request && (
         <div className="absolute inset-x-4 bottom-[262px] z-20 rounded-2xl bg-emerald/10 p-3 text-xs text-[color:var(--emerald)] backdrop-blur">
-          You already hold a spot request.{" "}
-          <Link to="/reservation/$id" params={{ id: request.id }} className="font-bold underline">Open it</Link> — release it before choosing another.
+          {request.request_status === "confirmed" ? (
+            <>
+              Your spot is reserved.{" "}
+              <Link to="/handoff/$id" params={{ id: request.id }} className="font-bold underline">Did you take it?</Link>
+            </>
+          ) : (
+            <>
+              You already hold a spot request.{" "}
+              <Link to="/reservation/$id" params={{ id: request.id }} className="font-bold underline">Open it</Link> — release it before choosing another.
+            </>
+          )}
         </div>
       )}
 
