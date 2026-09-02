@@ -243,17 +243,38 @@ function SearchPage() {
         )}
       </header>
 
-      {(place || nearMe) && center && (
-        <div className="px-4 pt-3">
+      {mapMode && center && (
+        <div className="relative h-[calc(100vh-260px)] min-h-[380px] w-full">
           <AreaMap
+            variant="full"
             center={center}
             spots={list}
+            activeId={selected?.id ?? null}
             label={nearMe ? `Within ${NEAR_ME_KM} km of you` : place?.label}
             radius={nearMe ? NEAR_ME_KM * 1000 : 1500}
-            onSpotClick={(id) => nav({ to: "/parking/$id", params: { id } })}
+            onSpotClick={(id) => setSelectedId(id)}
           />
+          <button
+            onClick={() => setForceList(true)}
+            className="absolute inset-x-0 bottom-24 mx-auto w-fit rounded-full bg-card px-4 py-2 text-xs font-semibold shadow-[var(--shadow-card)]"
+          >
+            Show list · {list.length}
+          </button>
         </div>
       )}
+
+      {selected && (
+        <SpotSheet
+          spot={selected}
+          distance={center ? haversine(center, { lat: selected.lat, lng: selected.lng }) : null}
+          isMine={selected.user_id === user?.id}
+          requestDisabled={!!request || selected.status === "reserved"}
+          requestBusy={busy === selected.id}
+          onRequest={() => ask(selected.id)}
+          onClose={() => setSelectedId(null)}
+        />
+      )}
+
 
       {request && (
         <div className="mx-4 mt-3 rounded-2xl bg-emerald/10 p-3 text-xs text-[color:var(--emerald)]">
