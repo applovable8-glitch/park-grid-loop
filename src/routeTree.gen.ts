@@ -24,6 +24,7 @@ import { Route as ParkingReleasedRouteImport } from './routes/parking-released'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as LoadingRouteImport } from './routes/loading'
 import { Route as LeavingRouteImport } from './routes/leaving'
 import { Route as HomeRouteImport } from './routes/home'
@@ -182,6 +183,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoadingRoute = LoadingRouteImport.update({
@@ -616,6 +622,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
   '/loading': typeof LoadingRoute
+  '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
@@ -717,6 +724,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
   '/loading': typeof LoadingRoute
+  '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
@@ -819,6 +827,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/leaving': typeof LeavingRouteWithChildren
   '/loading': typeof LoadingRoute
+  '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
@@ -922,6 +931,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/leaving'
     | '/loading'
+    | '/messages'
     | '/notifications'
     | '/onboarding'
     | '/otp'
@@ -1023,6 +1033,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/leaving'
     | '/loading'
+    | '/messages'
     | '/notifications'
     | '/onboarding'
     | '/otp'
@@ -1124,6 +1135,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/leaving'
     | '/loading'
+    | '/messages'
     | '/notifications'
     | '/onboarding'
     | '/otp'
@@ -1226,6 +1238,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   LeavingRoute: typeof LeavingRouteWithChildren
   LoadingRoute: typeof LoadingRoute
+  MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRouteWithChildren
   OnboardingRoute: typeof OnboardingRoute
   OtpRoute: typeof OtpRoute
@@ -1365,6 +1378,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/loading': {
@@ -2194,6 +2214,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   LeavingRoute: LeavingRouteWithChildren,
   LoadingRoute: LoadingRoute,
+  MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRouteWithChildren,
   OnboardingRoute: OnboardingRoute,
   OtpRoute: OtpRoute,
