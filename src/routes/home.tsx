@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Search, Layers, LocateFixed, Zap, Clock, MapPin } from "lucide-react";
+import { Search, Layers, LocateFixed, Zap, Clock, MapPin, TrafficCone } from "lucide-react";
 import { useApp, type ParkingSpot } from "@/lib/parkout-store";
 import { MapCanvas } from "@/components/MapCanvas";
 import { BottomNav } from "@/components/BottomNav";
@@ -15,6 +15,9 @@ function Home() {
   const { t } = useI18n();
   const nav = useNavigate();
   const [selected, setSelected] = useState<ParkingSpot | null>(null);
+  const [traffic, setTraffic] = useState(false);
+  const [mapType, setMapType] = useState<"roadmap" | "satellite">("roadmap");
+  const [recenter, setRecenter] = useState(0);
   if (!ready) return null;
 
   const available = spots.filter((s) => s.status === "available").length;
@@ -24,7 +27,7 @@ function Home() {
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Map */}
       <div className="absolute inset-0">
-        <MapCanvas spots={spots} onSpotClick={setSelected} />
+        <MapCanvas spots={spots} onSpotClick={setSelected} traffic={traffic} mapType={mapType} recenterSignal={recenter} />
       </div>
 
       {/* Top bar */}
@@ -52,10 +55,25 @@ function Home() {
 
       {/* Floating map controls */}
       <div className="absolute right-4 top-[190px] z-20 flex flex-col gap-2">
-        <button className="flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]">
-          <Layers className="h-4 w-4" />
+        <button
+          onClick={() => setMapType((m) => (m === "roadmap" ? "satellite" : "roadmap"))}
+          aria-label="Map type"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
+        >
+          <Layers className={`h-4 w-4 ${mapType === "satellite" ? "text-[color:var(--emerald)]" : ""}`} />
         </button>
-        <button className="flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]">
+        <button
+          onClick={() => setTraffic((v) => !v)}
+          aria-label="Traffic layer"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
+        >
+          <TrafficCone className={`h-4 w-4 ${traffic ? "text-[color:var(--emerald)]" : ""}`} />
+        </button>
+        <button
+          onClick={() => setRecenter((n) => n + 1)}
+          aria-label="My location"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
+        >
           <LocateFixed className="h-4 w-4 text-[color:var(--emerald)]" />
         </button>
       </div>
