@@ -163,6 +163,37 @@ export function useSpot(spotId: string | undefined) {
   return { spot, loading, reload: load };
 }
 
+/** The current user's own active shared spot (if any). */
+export function useMySharedSpot(userId: string | undefined) {
+  const [spot, setSpot] = useState<LiveSpot | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    if (!userId) { setSpot(null); setLoading(false); return; }
+    const { data } = await supabase
+      .from("parking_spots")
+      .select("id,user_id,lat,lng,address,cost,status,leave_at,planned_leave_at,reserved_by,reserved_until")
+      .eq("user_id", userId)
+      .in("status", ["available", "leaving", "reserved"])
+      .order("created_at", { ascending: false })
+      .maybeSingle();
+    setSpot((data as LiveSpot) ?? null);
+    setLoading(false);
+  }, [userId]);
+
+  useEffect(() => {
+    load();
+    if (!userId) return;
+    const ch = supabase
+      .channel(`my-spot:${userId}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "parking_spots", filter: `user_id=eq.${userId}` }, () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [load, userId]);
+
+  return { spot, loading, reload: load };
+}
+
 // ---------------- Actions ----------------
 
 function msg(e: unknown) {
