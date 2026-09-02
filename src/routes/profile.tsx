@@ -70,7 +70,13 @@ function Profile() {
           <Link to="/messages"><Row icon={MessageCircle} label={lang === "ar" ? "الرسائل" : "Messages"} hint={lang === "ar" ? "محادثاتك مع السائقين" : "Your driver chats"} /></Link>
           <Link to="/profile/history"><Row icon={Clock} label={t("parking_history")} hint={t("all_shares")} /></Link>
           <Link to="/profile/stats"><Row icon={Award} label={t("statistics")} hint={t("stats_hint")} /></Link>
+          <Link to="/rewards/invite">
+            <Row icon={Gift}
+              label={lang === "ar" ? "الدعوات والإحالة" : "Invite & referrals"}
+              hint={user.referral_code ? `${lang === "ar" ? "رمزك" : "Your code"} · ${user.referral_code}` : lang === "ar" ? "امنح 100، واربح 100" : "Give 100, get 100"} />
+          </Link>
         </div>
+
 
         <h2 className="mt-6 px-1 font-[var(--font-display)] text-sm font-bold uppercase tracking-wider text-muted-foreground">{t("more")}</h2>
         <div className="mt-2 rounded-3xl bg-card p-2 shadow-[var(--shadow-card)]">
