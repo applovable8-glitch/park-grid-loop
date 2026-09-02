@@ -106,7 +106,7 @@ function Notifs() {
                   </div>
                 </div>
                 {n.metadata?.reservation_id && (
-                  <RequestActions reservationId={n.metadata.reservation_id} />
+                  <RequestActions reservationId={n.metadata.reservation_id} notifId={n.id} />
                 )}
               </div>
             );
@@ -120,7 +120,7 @@ function Notifs() {
 }
 
 /** Inline approve / decline / extend (owner) or accept-extension (seeker). */
-function RequestActions({ reservationId }: { reservationId: string }) {
+function RequestActions({ reservationId, notifId }: { reservationId: string; notifId: string }) {
   const { user } = useApp();
   const nav = useNavigate();
   const [req, setReq] = useState<LiveRequest | null>(null);
@@ -149,11 +149,11 @@ function RequestActions({ reservationId }: { reservationId: string }) {
   useEffect(() => {
     load();
     const ch = supabase
-      .channel(`notif-res:${reservationId}`)
+      .channel(`notif-res:${reservationId}:${notifId}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "reservations", filter: `id=eq.${reservationId}` }, () => load())
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [load, reservationId]);
+  }, [load, reservationId, notifId]);
 
   if (!req || !user) return null;
   const isOwner = req.owner_id === user.id;
