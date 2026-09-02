@@ -15,6 +15,8 @@ interface Props {
   variant?: "compact" | "full";
   /** Highlight the marker of this spot */
   activeId?: string | null;
+  /** User's real GPS location marker — kept independent of the searched map center. */
+  userLocation?: { lat: number; lng: number } | null;
   className?: string;
 }
 
@@ -62,6 +64,7 @@ export function AreaMap({
   radius = 1500,
   variant = "compact",
   activeId = null,
+  userLocation = null,
   className,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -113,10 +116,17 @@ export function AreaMap({
     mapRef.current.setZoom(zoom);
   }, [ready, center.lat, center.lng, radius]);
 
-  // center pin (searched area / me)
+  // User's current location marker — never tied to the searched map center.
   useEffect(() => {
     if (!ready || !mapRef.current || variant !== "full") return;
-    const pos = { lat: center.lat, lng: center.lng };
+    if (!userLocation) {
+      if (meRef.current) {
+        meRef.current.setMap(null);
+        meRef.current = null;
+      }
+      return;
+    }
+    const pos = { lat: userLocation.lat, lng: userLocation.lng };
     if (!meRef.current) {
       meRef.current = new google.maps.Marker({
         map: mapRef.current,
@@ -134,7 +144,7 @@ export function AreaMap({
     } else {
       meRef.current.setPosition(pos);
     }
-  }, [ready, variant, center.lat, center.lng]);
+  }, [ready, variant, userLocation?.lat, userLocation?.lng]);
 
   // markers
   useEffect(() => {
