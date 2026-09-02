@@ -61,6 +61,8 @@ function CreateProfile() {
     });
     setBusy(false);
     if (error) return toast.error(error);
+    const ref = await redeemPendingReferral();
+    if (!ref.skipped && !ref.error) toast.success("Invite applied — +100 points!");
     nav({ to: "/auth/success" });
   };
 
