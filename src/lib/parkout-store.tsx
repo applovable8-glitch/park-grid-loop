@@ -37,6 +37,11 @@ export interface AppUser {
   avatar_url: string | null;
   phone: string | null;
   plate: string | null;
+  car_make: string | null;
+  car_model: string | null;
+  car_color: string | null;
+  car_type: string | null;
+  show_phone: boolean;
   language: string;
   theme: string;
   notification_prefs: NotificationPrefs;
@@ -116,7 +121,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!data) {
       setUser({
         id: uid, name: email.split("@")[0], email, avatar: email[0]?.toUpperCase() ?? "U",
-        avatar_url: null, phone: null, plate: null, language: "en", theme: "system",
+        avatar_url: null, phone: null, plate: null, car_make: null, car_model: null,
+        car_color: null, car_type: null, show_phone: true, language: "en", theme: "system",
         notification_prefs: { push: true, nearby_spots: true, reservations: true, points: true },
         location_prefs: { radius_m: 800, share_location: true },
         points: 100, reputation: 5.0, shared: 0, reservations: 0,
@@ -131,6 +137,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       avatar_url: data.avatar_url,
       phone: data.phone,
       plate: data.plate,
+      car_make: data.car_make ?? null,
+      car_model: data.car_model ?? null,
+      car_color: data.car_color ?? null,
+      car_type: data.car_type ?? null,
+      show_phone: data.show_phone ?? true,
       language: data.language,
       theme: data.theme,
       notification_prefs: data.notification_prefs as unknown as NotificationPrefs,
@@ -245,6 +256,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         ...(patch.name !== undefined && { name: patch.name }),
         ...(patch.phone !== undefined && { phone: patch.phone }),
         ...(patch.plate !== undefined && { plate: patch.plate }),
+        ...(patch.car_make !== undefined && { car_make: patch.car_make }),
+        ...(patch.car_model !== undefined && { car_model: patch.car_model }),
+        ...(patch.car_color !== undefined && { car_color: patch.car_color }),
+        ...(patch.car_type !== undefined && { car_type: patch.car_type }),
+        ...(patch.show_phone !== undefined && { show_phone: patch.show_phone }),
         ...(patch.language !== undefined && { language: patch.language }),
         ...(patch.theme !== undefined && { theme: patch.theme }),
         ...(patch.avatar_url !== undefined && { avatar_url: patch.avatar_url }),
