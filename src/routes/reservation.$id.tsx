@@ -61,11 +61,11 @@ function Reservation() {
     setBusy(false);
     if (error) { toast.error(error); return; }
     if (accept) toast.success("Reserved with the new exit time");
-    else { toast.message("Request withdrawn — pick another spot"); nav({ to: "/search" }); }
+    else { toast.message("Request withdrawn — pick another spot"); nav({ to: "/home" }); }
   };
 
   return (
-    <Screen title="Reservation" back="/search">
+    <Screen title="Reservation" back="/home">
       <Card className="text-center">
         {state === "pending" && (
           <>
@@ -119,7 +119,7 @@ function Reservation() {
           <Button variant="danger" disabled={busy} onClick={cancel}>Cancel request</Button>
         )}
         {["declined", "cancelled", "expired", "completed"].includes(state) && (
-          <Button onClick={() => nav({ to: "/search" })}>Find another spot</Button>
+          <Button onClick={() => nav({ to: "/home" })}>Find another spot</Button>
         )}
       </div>
 

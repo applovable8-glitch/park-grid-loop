@@ -37,7 +37,7 @@ function ChatScreen() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-xl">
-        <Link to="/search" className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
+        <Link to="/home" className="flex h-9 w-9 items-center justify-center rounded-full bg-muted">
           <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
         </Link>
         {profile?.avatar_url ? (

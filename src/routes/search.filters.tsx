@@ -14,7 +14,7 @@ function Filters() {
   const [sort, setSort] = useState("distance");
 
   return (
-    <Screen title="Filters" back="/search">
+    <Screen title="Filters" back="/home">
       <Field label={`Search radius · ${radius}m`}>
         <input type="range" min={200} max={3000} step={100} value={radius} onChange={(e) => setRadius(+e.target.value)} className="w-full accent-[var(--emerald)]" />
       </Field>
@@ -37,7 +37,7 @@ function Filters() {
         </div>
       </Field>
 
-      <div className="mt-6"><Button onClick={() => nav({ to: "/search" })}>Apply filters</Button></div>
+      <div className="mt-6"><Button onClick={() => nav({ to: "/home" })}>Apply filters</Button></div>
     </Screen>
   );
 }
