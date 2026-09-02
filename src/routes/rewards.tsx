@@ -1,93 +1,101 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Gift, TrendingUp, Share2, CheckCircle2, Sparkles, CreditCard } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Gift, TrendingUp, Share2, CheckCircle2, Sparkles, CreditCard, Trophy, History as HistoryIcon, ChevronRight } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
+import { useI18n } from "@/lib/i18n";
 import { BottomNav } from "@/components/BottomNav";
+import { usePointsHistory } from "@/lib/profile-data";
+import { reasonLabel, timeAgo } from "@/lib/points-labels";
 
 export const Route = createFileRoute("/rewards")({ component: Rewards });
 
 function Rewards() {
   const { user } = useApp();
+  const { lang } = useI18n();
+  const ar = lang === "ar";
   const points = user?.points ?? 0;
+  const { items } = usePointsHistory(user?.id, 5);
 
   return (
     <div className="min-h-screen pb-28">
-      {/* Hero */}
       <div className="relative overflow-hidden px-5 pb-8 pt-8 text-white" style={{ background: "var(--gradient-hero)" }}>
-        <div className="absolute -right-10 -top-10 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
+        <div className="absolute -right-10 -top-10 h-56 w-56 animate-pulse rounded-full bg-emerald/25 blur-3xl" />
         <div className="relative">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/60">Your balance</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{ar ? "رصيدك" : "Your balance"}</p>
           <div className="mt-1 flex items-end gap-2">
             <span className="font-[var(--font-display)] text-5xl font-bold tabular-nums">{points}</span>
-            <span className="mb-1 text-sm text-white/70">points</span>
+            <span className="mb-1 text-sm text-white/70">{ar ? "نقطة" : "points"}</span>
           </div>
-          <p className="mt-1 text-xs text-white/60">Reputation {user?.reputation ?? 5.0} · Top 8% in Dubai</p>
+          <p className="mt-1 text-xs text-white/60">
+            {ar ? "التقييم" : "Reputation"} {(user?.reputation ?? 5).toFixed(1)} · {user?.shared ?? 0} {ar ? "مشاركة" : "shares"}
+          </p>
 
           <div className="mt-5 flex gap-2">
-            <button className="flex-1 rounded-2xl bg-white py-3 text-sm font-semibold text-foreground">
-              <span className="inline-flex items-center gap-2"><CreditCard className="h-4 w-4" /> Buy points</span>
-            </button>
-            <button className="flex-1 rounded-2xl bg-white/10 py-3 text-sm font-semibold text-white ring-1 ring-white/15 backdrop-blur-md">
-              <span className="inline-flex items-center gap-2"><Share2 className="h-4 w-4" /> Invite friends</span>
-            </button>
+            <Link to="/rewards/buy" className="flex-1 rounded-2xl bg-white py-3 text-center text-sm font-semibold text-foreground transition active:scale-95">
+              <span className="inline-flex items-center gap-2"><CreditCard className="h-4 w-4" /> {ar ? "شراء نقاط" : "Buy points"}</span>
+            </Link>
+            <Link to="/rewards/invite" className="flex-1 rounded-2xl bg-white/10 py-3 text-center text-sm font-semibold text-white ring-1 ring-white/15 backdrop-blur-md transition active:scale-95">
+              <span className="inline-flex items-center gap-2"><Share2 className="h-4 w-4" /> {ar ? "دعوة أصدقاء" : "Invite friends"}</span>
+            </Link>
           </div>
         </div>
       </div>
 
       <div className="px-5 pt-6">
-        <h2 className="font-[var(--font-display)] text-lg font-bold">Earn more points</h2>
-        <div className="mt-3 space-y-2">
-          {[
-            { icon: Share2, title: "Share your parking", sub: "+15 to +25 points per share", cta: "Share now" },
-            { icon: CheckCircle2, title: "Successful handoff", sub: "+10 bonus when a driver takes your spot", cta: "Learn" },
-            { icon: TrendingUp, title: "Daily activity streak", sub: "+5 every day you're active", cta: "Streak: 4d" },
-          ].map((it) => (
-            <div key={it.title} className="flex items-center gap-3 rounded-2xl bg-card p-3.5 shadow-[var(--shadow-card)]">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald/15 text-[color:var(--emerald)]">
-                <it.icon className="h-5 w-5" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold">{it.title}</p>
-                <p className="text-xs text-muted-foreground">{it.sub}</p>
-              </div>
-              <button className="rounded-full bg-muted px-3 py-1.5 text-xs font-semibold">{it.cta}</button>
-            </div>
-          ))}
+        <div className="grid grid-cols-3 gap-2">
+          <QuickLink to="/rewards/redeem" icon={Gift} label={ar ? "استبدال" : "Redeem"} />
+          <QuickLink to="/rewards/leaderboard" icon={Trophy} label={ar ? "المتصدرون" : "Leaders"} />
+          <QuickLink to="/rewards/daily" icon={TrendingUp} label={ar ? "يومي" : "Daily"} />
         </div>
 
-        <h2 className="mt-6 font-[var(--font-display)] text-lg font-bold">Point packages</h2>
+        <h2 className="mt-6 font-[var(--font-display)] text-lg font-bold">{ar ? "اكسب المزيد" : "Earn more points"}</h2>
+        <div className="mt-3 space-y-2">
+          <EarnRow icon={Share2} title={ar ? "شارك مكانك" : "Share your parking"} sub={ar ? "‎+15 إلى +25 نقطة لكل مشاركة" : "+15 to +25 points per share"} cta={ar ? "شارك الآن" : "Share now"} to="/leaving" />
+          <EarnRow icon={CheckCircle2} title={ar ? "تسليم ناجح" : "Successful handoff"} sub={ar ? "مكافأة عند استلام سائق لمكانك" : "+10 bonus when a driver takes your spot"} cta={ar ? "التفاصيل" : "Learn"} to="/rewards/achievements" />
+          <EarnRow icon={Gift} title={ar ? "ادعُ صديقاً" : "Invite a friend"} sub={ar ? "‎+100 نقطة لك ولصديقك" : "+100 points for you and your friend"} cta={ar ? "ادعُ" : "Invite"} to="/rewards/invite" />
+        </div>
+
+        <h2 className="mt-6 font-[var(--font-display)] text-lg font-bold">{ar ? "باقات النقاط" : "Point packages"}</h2>
         <div className="mt-3 grid grid-cols-2 gap-3">
           {[
             { pts: 100, price: "AED 9", tag: null },
-            { pts: 500, price: "AED 39", tag: "Popular" },
-            { pts: 1200, price: "AED 79", tag: "Best value" },
+            { pts: 500, price: "AED 39", tag: ar ? "الأكثر طلباً" : "Popular" },
+            { pts: 1200, price: "AED 79", tag: ar ? "أفضل قيمة" : "Best value" },
             { pts: 3000, price: "AED 179", tag: null },
           ].map((p) => (
-            <button key={p.pts} className="relative rounded-3xl bg-card p-4 text-left shadow-[var(--shadow-card)] ring-1 ring-transparent hover:ring-[var(--emerald)]">
-              {p.tag && <span className="absolute -top-2 right-3 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">{p.tag}</span>}
+            <Link key={p.pts} to="/rewards/buy" className="relative rounded-3xl bg-card p-4 text-start shadow-[var(--shadow-card)] ring-1 ring-transparent transition hover:ring-[var(--emerald)] active:scale-95">
+              {p.tag && <span className="absolute -top-2 end-3 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">{p.tag}</span>}
               <Sparkles className="h-4 w-4 text-[color:var(--emerald)]" />
               <p className="mt-2 font-[var(--font-display)] text-2xl font-bold">{p.pts}</p>
-              <p className="text-xs text-muted-foreground">points</p>
+              <p className="text-xs text-muted-foreground">{ar ? "نقطة" : "points"}</p>
               <p className="mt-2 text-sm font-semibold">{p.price}</p>
-            </button>
+            </Link>
           ))}
         </div>
 
-        <h2 className="mt-6 font-[var(--font-display)] text-lg font-bold">Recent activity</h2>
+        <div className="mt-6 flex items-center justify-between">
+          <h2 className="font-[var(--font-display)] text-lg font-bold">{ar ? "آخر النشاطات" : "Recent activity"}</h2>
+          <Link to="/rewards/history" className="inline-flex items-center gap-1 text-xs font-semibold text-[color:var(--emerald)]">
+            <HistoryIcon className="h-3.5 w-3.5" /> {ar ? "الكل" : "All"}
+          </Link>
+        </div>
         <div className="mt-3 space-y-2">
-          {[
-            { title: "Handoff bonus · Al Wasl Rd", pts: +25, time: "2h ago" },
-            { title: "Reserved · City Walk", pts: -10, time: "yesterday" },
-            { title: "Daily streak reward", pts: +5, time: "yesterday" },
-          ].map((a, i) => (
-            <div key={i} className="flex items-center justify-between rounded-2xl bg-card p-3.5 shadow-[var(--shadow-card)]">
+          {items.length === 0 && (
+            <p className="rounded-2xl bg-card p-4 text-center text-xs text-muted-foreground shadow-[var(--shadow-card)]">
+              {ar ? "لا يوجد نشاط بعد — شارك مكانك لتكسب نقاطك الأولى." : "No activity yet — share a spot to earn your first points."}
+            </p>
+          )}
+          {items.map((a) => (
+            <div key={a.id} className="flex animate-fade-in items-center justify-between rounded-2xl bg-card p-3.5 shadow-[var(--shadow-card)]">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-muted"><Gift className="h-4 w-4" /></div>
                 <div>
-                  <p className="text-sm font-semibold">{a.title}</p>
-                  <p className="text-xs text-muted-foreground">{a.time}</p>
+                  <p className="text-sm font-semibold">{reasonLabel(a.reason, ar)}</p>
+                  <p className="text-xs text-muted-foreground">{timeAgo(a.created_at, ar)}</p>
                 </div>
               </div>
-              <p className={`font-[var(--font-display)] text-sm font-bold ${a.pts > 0 ? "text-[color:var(--emerald)]" : "text-foreground"}`}>{a.pts > 0 ? `+${a.pts}` : a.pts}</p>
+              <p className={`font-[var(--font-display)] text-sm font-bold tabular-nums ${a.delta > 0 ? "text-[color:var(--emerald)]" : "text-foreground"}`}>
+                {a.delta > 0 ? `+${a.delta}` : a.delta}
+              </p>
             </div>
           ))}
         </div>
@@ -95,5 +103,29 @@ function Rewards() {
 
       <BottomNav />
     </div>
+  );
+}
+
+function QuickLink({ to, icon: Icon, label }: { to: string; icon: React.ComponentType<{ className?: string }>; label: string }) {
+  return (
+    <Link to={to} className="flex flex-col items-center gap-1.5 rounded-2xl bg-card p-3 shadow-[var(--shadow-card)] transition active:scale-95">
+      <Icon className="h-5 w-5 text-[color:var(--emerald)]" />
+      <span className="text-[11px] font-semibold">{label}</span>
+    </Link>
+  );
+}
+
+function EarnRow({ icon: Icon, title, sub, cta, to }: { icon: React.ComponentType<{ className?: string }>; title: string; sub: string; cta: string; to: string }) {
+  return (
+    <Link to={to} className="flex items-center gap-3 rounded-2xl bg-card p-3.5 shadow-[var(--shadow-card)] transition active:scale-[0.98]">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald/15 text-[color:var(--emerald)]"><Icon className="h-5 w-5" /></div>
+      <div className="flex-1">
+        <p className="text-sm font-semibold">{title}</p>
+        <p className="text-xs text-muted-foreground">{sub}</p>
+      </div>
+      <span className="inline-flex items-center gap-0.5 rounded-full bg-muted px-3 py-1.5 text-xs font-semibold">
+        {cta} <ChevronRight className="h-3 w-3 rtl:rotate-180" />
+      </span>
+    </Link>
   );
 }
