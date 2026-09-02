@@ -246,6 +246,12 @@ function RequestCard({ id, state, exitIso }: { id: string; state: string; exitIs
     setBusy(false);
     if (error) toast.error(error); else toast.success("Spot reserved for the driver");
   };
+  const decline = async () => {
+    setBusy(true);
+    const { error } = await declineRequest(id);
+    setBusy(false);
+    if (error) toast.error(error); else toast.message("Request declined");
+  };
   const extend = async (extraMin: number) => {
     const base = exitIso ? new Date(exitIso).getTime() : Date.now();
     setBusy(true);
