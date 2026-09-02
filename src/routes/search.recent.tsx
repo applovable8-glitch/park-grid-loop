@@ -8,9 +8,9 @@ const recent = ["Sheikh Zayed Rd", "DIFC", "Marina Walk", "Downtown Blvd", "Al W
 
 function Recent() {
   return (
-    <Screen title="Recent searches" back="/search">
+    <Screen title="Recent searches" back="/home">
       <RowGroup>
-        {recent.map((r) => <Row key={r} icon={Clock} label={r} to="/search" />)}
+        {recent.map((r) => <Row key={r} icon={Clock} label={r} to="/home" />)}
       </RowGroup>
     </Screen>
   );

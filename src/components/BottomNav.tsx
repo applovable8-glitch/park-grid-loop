@@ -1,10 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Search, Gift, Bell, User } from "lucide-react";
+import { Home, Gift, Bell, User } from "lucide-react";
 import { useI18n, type TKey } from "@/lib/i18n";
 
 const tabs = [
   { to: "/home", icon: Home, key: "nav_home" as TKey },
-  { to: "/search", icon: Search, key: "nav_search" as TKey },
   { to: "/rewards", icon: Gift, key: "nav_rewards" as TKey },
   { to: "/notifications", icon: Bell, key: "nav_alerts" as TKey },
   { to: "/profile", icon: User, key: "nav_profile" as TKey },

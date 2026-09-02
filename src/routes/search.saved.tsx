@@ -13,7 +13,7 @@ const saved = [
 function Saved() {
   if (saved.length === 0) return <div className="min-h-screen bg-background"><EmptyState icon={Bookmark} title="No saved searches" description="Save a favorite area to check it in one tap." /></div>;
   return (
-    <Screen title="Saved searches" back="/search">
+    <Screen title="Saved searches" back="/home">
       <div className="space-y-2">
         {saved.map((s) => (
           <Card key={s.name}>
