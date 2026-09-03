@@ -81,6 +81,7 @@ export function AreaMap({
   const mapRef = useRef<GAny | null>(null);
   const markersRef = useRef<Record<string, GAny>>({});
   const meRef = useRef<GAny | null>(null);
+  const driverRef = useRef<GAny | null>(null);
   const clickRef = useRef(onSpotClick);
   clickRef.current = onSpotClick;
   const [ready, setReady] = useState(false);
