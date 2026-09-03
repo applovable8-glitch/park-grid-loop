@@ -89,7 +89,7 @@ function EditProfile() {
             ) : (
               <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-emerald text-emerald-foreground font-[var(--font-display)] text-4xl font-bold">{user.avatar}</div>
             )}
-            <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
+            <div className="absolute -bottom-1 -end-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
               {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
             </div>
           </button>
@@ -194,7 +194,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
-    <button type="button" onClick={() => onChange(!checked)} className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left hover:bg-muted">
+    <button type="button" onClick={() => onChange(!checked)} className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-start hover:bg-muted">
       <span className="text-sm font-medium">{label}</span>
       <span className={`relative flex h-6 w-11 items-center rounded-full transition-colors ${checked ? "bg-[var(--emerald)]" : "bg-border"}`}>
         <span className={`absolute h-5 w-5 rounded-full bg-white shadow transition-transform ${checked ? "translate-x-5" : "translate-x-0.5"}`} />

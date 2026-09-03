@@ -15,7 +15,8 @@ import { useAreaName } from "@/lib/use-area-name";
 import { useThreads } from "@/lib/chat";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
 import {
-  clockOf, haversine, minutesUntil, requestSpot, useLiveSpots, useMyRequest, useMySharedSpot, type LiveSpot,
+  clockOf, haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
+  useMyRequest, useMySharedSpot, type LiveSpot,
 } from "@/lib/parking-live";
 
 export const Route = createFileRoute("/home")({ component: Home });
@@ -62,6 +63,7 @@ function Home() {
   const { spots, loading } = useLiveSpots();
   const { request } = useMyRequest(user?.id);
   const { spot: mySpot } = useMySharedSpot(user?.id);
+  const { ping: driverPing } = useIncomingConfirmed(user?.id, mySpot?.id);
 
   const [q, setQ] = useState("");
   const [nearMe, setNearMe] = useState(false);
@@ -79,6 +81,12 @@ function Home() {
     const t = setInterval(() => setTick((n) => n + 1), 1000);
     return () => clearInterval(t);
   }, []);
+
+  // While my reservation is confirmed, share my position so the spot owner can follow me.
+  useEffect(() => {
+    if (!request || request.request_status !== "confirmed" || !position) return;
+    void publishSeekerLocation(request.id, position.lat, position.lng);
+  }, [request?.id, request?.request_status, position?.lat, position?.lng]);
 
   // Places autocomplete — debounced.
   useEffect(() => {
@@ -191,6 +199,13 @@ function Home() {
     setNearMe(false);
   };
 
+  const driverDistance = driverPing && mySpot
+    ? haversine({ lat: mySpot.lat, lng: mySpot.lng }, { lat: driverPing.lat, lng: driverPing.lng })
+    : null;
+  const driverLabel = driverDistance == null
+    ? "arriving"
+    : driverDistance >= 1000 ? `${(driverDistance / 1000).toFixed(1)}km` : `${driverDistance}m`;
+
   const selected = selectedId ? spots.find((s) => s.id === selectedId) ?? null : null;
   const available = list.filter((s) => s.status !== "reserved").length;
 
@@ -205,6 +220,8 @@ function Home() {
           center={center}
           userLocation={position}
           ownSpotId={mySpot?.id ?? null}
+          driverLocation={driverPing ? { lat: driverPing.lat, lng: driverPing.lng } : null}
+          driverLabel={driverLabel}
           spots={mapSpots}
           activeId={selected?.id ?? null}
           radius={nearMe ? NEAR_ME_KM * 1000 : 1800}
@@ -267,7 +284,7 @@ function Home() {
               <button
                 key={s.id}
                 onClick={() => pickPlace(s)}
-                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60"
+                className="flex w-full items-center gap-3 px-4 py-3 text-start transition-colors hover:bg-muted/60"
               >
                 <MapPin className="h-4 w-4 shrink-0 text-[color:var(--emerald)]" />
                 <span className="min-w-0">
@@ -303,7 +320,7 @@ function Home() {
       <button
         onClick={recenter}
         aria-label="My location"
-        className="absolute right-4 top-[210px] z-20 flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
+        className="absolute end-4 top-[210px] z-20 flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
       >
         <LocateFixed className="h-4 w-4 text-[color:var(--emerald)]" />
       </button>
@@ -332,6 +349,14 @@ function Home() {
               <Link to="/reservation/$id" params={{ id: request.id }} className="font-bold underline">Open it</Link> — release it before choosing another.
             </>
           )}
+        </div>
+      )}
+
+      {/* Driver on the way to take my spot */}
+      {driverPing && mySpot && (
+        <div className="absolute inset-x-4 bottom-[306px] z-20 flex items-center gap-2 rounded-2xl bg-[#7C3AED]/12 p-3 text-xs font-semibold text-[#7C3AED] backdrop-blur">
+          <Navigation2 className="h-3.5 w-3.5" />
+          {t("driver_on_the_way")} · {driverLabel}
         </div>
       )}
 
@@ -369,11 +394,11 @@ function Home() {
         ) : null}
       </div>
 
-      {/* I'm Leaving FAB — becomes a live countdown once a spot is shared */}
-      {mySpot ? (
+      {/* I'm Leaving FAB — hidden while a car sheet is open */}
+      {selected ? null : mySpot ? (
         <Link
           to="/leaving"
-          className="absolute bottom-[170px] right-5 z-30 flex items-center gap-2 rounded-2xl px-4 py-3 text-left shadow-[var(--shadow-elevated)] text-white"
+          className="absolute bottom-[170px] end-5 z-30 flex items-center gap-2 rounded-2xl px-4 py-3 text-start shadow-[var(--shadow-elevated)] text-white"
           style={{ background: "var(--gradient-emerald)" }}
         >
           <Clock className="h-4 w-4" />
@@ -389,7 +414,7 @@ function Home() {
       ) : (
         <Link
           to="/leaving"
-          className="absolute bottom-[170px] right-5 z-30 flex items-center gap-2 rounded-full px-5 py-3.5 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-elevated)] pulse-emerald"
+          className="absolute bottom-[170px] end-5 z-30 flex items-center gap-2 rounded-full px-5 py-3.5 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-elevated)] pulse-emerald"
           style={{ background: "var(--gradient-emerald)" }}
         >
           <Zap className="h-4 w-4 fill-white" />
@@ -409,7 +434,7 @@ function SpotCard({ spot, distance, mins, disabled, busy, onSelect }: {
   const dot = spot.status === "reserved" ? "bg-red-500" : free ? "bg-[var(--emerald)]" : "bg-orange-500";
   const distLabel = distance >= 1000 ? `${(distance / 1000).toFixed(1)} km` : `${distance}m`;
   return (
-    <button onClick={onSelect} className="w-full rounded-3xl bg-card p-4 text-left shadow-[var(--shadow-card)]">
+    <button onClick={onSelect} className="w-full rounded-3xl bg-card p-4 text-start shadow-[var(--shadow-card)]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">

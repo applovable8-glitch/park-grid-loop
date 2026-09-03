@@ -20,7 +20,7 @@ function FAQ() {
       <div className="space-y-2">
         {faqs.map((f, i) => (
           <Card key={i}>
-            <button onClick={() => setOpen(open === i ? null : i)} className="flex w-full items-center justify-between text-left">
+            <button onClick={() => setOpen(open === i ? null : i)} className="flex w-full items-center justify-between text-start">
               <span className="text-sm font-semibold">{f.q}</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${open === i ? "rotate-180" : ""}`} />
             </button>

@@ -23,7 +23,7 @@ function PaymentMethods() {
                 <p className="text-xs text-muted-foreground">Exp {c.exp}</p>
               </div>
               {c.primary && <Badge tone="emerald">Primary</Badge>}
-              <button onClick={() => toast.success("Card removed")} className="ml-2 text-muted-foreground"><Trash2 className="h-4 w-4" /></button>
+              <button onClick={() => toast.success("Card removed")} className="ms-2 text-muted-foreground"><Trash2 className="h-4 w-4" /></button>
             </div>
           </Card>
         ))}

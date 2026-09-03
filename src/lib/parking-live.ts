@@ -302,3 +302,59 @@ export async function takeoverSpot(reservationId: string, leaveAt: Date) {
   });
   return { id: data as string | undefined, error: error ? msg(error) : undefined };
 }
+
+// ---------------- Live driver tracking (owner follows the arriving driver) ----------------
+
+export interface SeekerPing {
+  reservation_id: string;
+  lat: number;
+  lng: number;
+  at: string;
+}
+
+/** Publish my current position on my confirmed reservation so the spot owner can follow me. */
+export async function publishSeekerLocation(reservationId: string, lat: number, lng: number) {
+  const { error } = await supabase
+    .from("reservations")
+    .update({ seeker_lat: lat, seeker_lng: lng, seeker_loc_at: new Date().toISOString() })
+    .eq("id", reservationId);
+  return { error: error?.message };
+}
+
+/** As the spot owner: the confirmed reservation on my spot plus the driver's live position. */
+export function useIncomingConfirmed(ownerId: string | undefined, spotId: string | undefined) {
+  const [reservationId, setReservationId] = useState<string | null>(null);
+  const [ping, setPing] = useState<SeekerPing | null>(null);
+
+  const load = useCallback(async () => {
+    if (!ownerId || !spotId) { setReservationId(null); setPing(null); return; }
+    const { data } = await supabase
+      .from("reservations")
+      .select("id,seeker_lat,seeker_lng,seeker_loc_at")
+      .eq("owner_id", ownerId)
+      .eq("spot_id", spotId)
+      .eq("request_status", "confirmed")
+      .order("created_at", { ascending: false })
+      .limit(1);
+    const row = (data as Array<{ id: string; seeker_lat: number | null; seeker_lng: number | null; seeker_loc_at: string | null }> | null)?.[0];
+    if (!row) { setReservationId(null); setPing(null); return; }
+    setReservationId(row.id);
+    setPing(
+      row.seeker_lat != null && row.seeker_lng != null
+        ? { reservation_id: row.id, lat: row.seeker_lat, lng: row.seeker_lng, at: row.seeker_loc_at ?? new Date().toISOString() }
+        : null,
+    );
+  }, [ownerId, spotId]);
+
+  useEffect(() => {
+    load();
+    if (!ownerId) return;
+    const ch = supabase
+      .channel(`track-owner:${ownerId}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "reservations", filter: `owner_id=eq.${ownerId}` }, () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [load, ownerId]);
+
+  return { reservationId, ping, reload: load };
+}

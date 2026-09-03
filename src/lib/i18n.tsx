@@ -16,6 +16,7 @@ const dict = {
     available_now: "Available now", leaving_in: "Leaving in",
     distance: "Distance", eta: "ETA", cost: "Cost", pts: "pts",
     reserve_lock: "Reserve · 90s lock", im_leaving: "I'm Leaving",
+    driver_on_the_way: "Driver on the way to your spot",
     // Auth
     welcome_back: "Welcome back.", join_movement: "Join the movement.",
     auth_tagline: "Find parking. Share parking. Earn points.",
@@ -102,6 +103,7 @@ const dict = {
     available_now: "متاح الآن", leaving_in: "يغادر خلال",
     distance: "المسافة", eta: "الوصول", cost: "التكلفة", pts: "نقطة",
     reserve_lock: "احجز · قفل ٩٠ ثانية", im_leaving: "أنا مغادر",
+    driver_on_the_way: "السائق في طريقه إلى موقفك",
     welcome_back: "مرحبًا بعودتك.", join_movement: "انضم إلينا.",
     auth_tagline: "اعثر على موقف. شارك موقفك. اكسب نقاطًا.",
     log_in: "تسجيل الدخول", sign_up: "إنشاء حساب", create_account: "إنشاء حساب",

@@ -101,8 +101,8 @@ function Leaving() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col text-white" style={{ background: "var(--gradient-hero)" }}>
-      <div className="absolute -right-16 top-10 h-72 w-72 rounded-full bg-emerald/25 blur-3xl" />
-      <div className="absolute -left-16 bottom-20 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
+      <div className="absolute -end-16 top-10 h-72 w-72 rounded-full bg-emerald/25 blur-3xl" />
+      <div className="absolute -start-16 bottom-20 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
 
       <header className="relative z-10 flex items-center justify-between px-4 pt-5">
         <button onClick={() => nav({ to: "/home" })} className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md ring-1 ring-white/15">
@@ -147,7 +147,7 @@ function Leaving() {
                   <button
                     key={o.m}
                     onClick={() => setMinutes(o.m)}
-                    className={`flex w-full items-center gap-3 rounded-3xl p-4 text-left transition-all ${
+                    className={`flex w-full items-center gap-3 rounded-3xl p-4 text-start transition-all ${
                       active ? "bg-white text-foreground shadow-[var(--shadow-elevated)]" : "bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-md"
                     }`}
                   >
@@ -167,7 +167,7 @@ function Leaving() {
 
               <button
                 onClick={() => setMinutes("custom")}
-                className={`flex w-full items-center gap-3 rounded-3xl p-4 text-left transition-all ${
+                className={`flex w-full items-center gap-3 rounded-3xl p-4 text-start transition-all ${
                   minutes === "custom" ? "bg-white text-foreground shadow-[var(--shadow-elevated)]" : "bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-md"
                 }`}
               >
@@ -263,7 +263,7 @@ function RequestCard({ id, state, exitIso }: { id: string; state: string; exitIs
 
   if (state === "confirmed") {
     return (
-      <div className="rounded-2xl bg-white/10 p-4 text-left ring-1 ring-white/15 backdrop-blur-md">
+      <div className="rounded-2xl bg-white/10 p-4 text-start ring-1 ring-white/15 backdrop-blur-md">
         <p className="text-sm font-bold text-[var(--emerald)]">Reserved for a driver</p>
         <p className="mt-1 text-xs text-white/70">They are on the way for your {clockOf(exitIso)} exit.</p>
         <button onClick={() => cancelRequest(id)} className="mt-3 rounded-xl bg-white/10 px-3 py-2 text-xs font-semibold ring-1 ring-white/15">Cancel handoff</button>
@@ -273,7 +273,7 @@ function RequestCard({ id, state, exitIso }: { id: string; state: string; exitIs
 
   if (state === "extension_proposed") {
     return (
-      <div className="rounded-2xl bg-white/10 p-4 text-left ring-1 ring-white/15 backdrop-blur-md">
+      <div className="rounded-2xl bg-white/10 p-4 text-start ring-1 ring-white/15 backdrop-blur-md">
         <p className="text-sm font-bold">Waiting for the driver</p>
         <p className="mt-1 text-xs text-white/70">You asked for more time — they&apos;re deciding whether to wait.</p>
       </div>
@@ -281,7 +281,7 @@ function RequestCard({ id, state, exitIso }: { id: string; state: string; exitIs
   }
 
   return (
-    <div className="rounded-2xl bg-white p-4 text-left text-foreground shadow-[var(--shadow-elevated)]">
+    <div className="rounded-2xl bg-white p-4 text-start text-foreground shadow-[var(--shadow-elevated)]">
       <p className="font-[var(--font-display)] text-base font-bold">A driver wants your spot</p>
       <p className="mt-1 text-xs text-muted-foreground">They plan to take it at your {clockOf(exitIso)} exit time.</p>
       {!showExtend ? (

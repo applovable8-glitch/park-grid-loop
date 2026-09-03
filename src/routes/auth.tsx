@@ -58,7 +58,7 @@ function Auth() {
   return (
     <div className="relative flex min-h-screen w-full flex-col">
       <div className="relative h-56 overflow-hidden text-white" style={{ background: "var(--gradient-hero)" }}>
-        <div className="absolute -right-10 -top-10 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
+        <div className="absolute -end-10 -top-10 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
         <div className="relative flex h-full flex-col justify-end p-6">
           <div className="flex items-center gap-2 text-white/80">
             <MapPin className="h-5 w-5" fill="var(--emerald)" strokeWidth={2} />
@@ -93,23 +93,23 @@ function Auth() {
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("email")}</span>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Mail className="absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" required
-                className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+                className="w-full rounded-2xl border border-border bg-card py-3 ps-11 pe-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
             </div>
           </label>
           <label className="block">
             <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("password")}</span>
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Lock className="absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"
                 autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={6}
-                className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+                className="w-full rounded-2xl border border-border bg-card py-3 ps-11 pe-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
             </div>
           </label>
 
           {mode === "login" && (
-            <button type="button" onClick={forgot} className="ml-1 text-xs font-medium text-muted-foreground underline">
+            <button type="button" onClick={forgot} className="ms-1 text-xs font-medium text-muted-foreground underline">
               {t("forgot_password")}
             </button>
           )}

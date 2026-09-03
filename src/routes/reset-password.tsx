@@ -36,17 +36,17 @@ function ResetPassword() {
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-muted-foreground">New password</span>
           <div className="relative">
-            <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Lock className="absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required minLength={6}
-              className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+              className="w-full rounded-2xl border border-border bg-card py-3 ps-11 pe-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
           </div>
         </label>
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-muted-foreground">Confirm password</span>
           <div className="relative">
-            <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Lock className="absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input value={confirm} onChange={(e) => setConfirm(e.target.value)} type="password" required minLength={6}
-              className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+              className="w-full rounded-2xl border border-border bg-card py-3 ps-11 pe-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
           </div>
         </label>
         <button type="submit" disabled={busy}

@@ -215,7 +215,7 @@ function FallbackMap({ spots, onSpotClick }: Props) {
           </span>
         </button>
       ))}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 ring-4 ring-white">
           <Navigation className="h-3 w-3 fill-white text-white" />
         </span>

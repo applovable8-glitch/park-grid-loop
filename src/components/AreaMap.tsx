@@ -19,6 +19,10 @@ interface Props {
   userLocation?: { lat: number; lng: number } | null;
   /** Spot owned by the current user; rendered in blue so it stands out as "my car". */
   ownSpotId?: string | null;
+  /** Live position of the driver on their way to take my spot. */
+  driverLocation?: { lat: number; lng: number } | null;
+  /** Label shown on the incoming-driver marker (e.g. "3 min"). */
+  driverLabel?: string;
   className?: string;
 }
 
@@ -69,12 +73,15 @@ export function AreaMap({
   activeId = null,
   userLocation = null,
   ownSpotId = null,
+  driverLocation = null,
+  driverLabel = "arriving",
   className,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<GAny | null>(null);
   const markersRef = useRef<Record<string, GAny>>({});
   const meRef = useRef<GAny | null>(null);
+  const driverRef = useRef<GAny | null>(null);
   const clickRef = useRef(onSpotClick);
   clickRef.current = onSpotClick;
   const [ready, setReady] = useState(false);
@@ -149,6 +156,29 @@ export function AreaMap({
       meRef.current.setPosition(pos);
     }
   }, [ready, variant, userLocation?.lat, userLocation?.lng]);
+
+  // Incoming driver on their way to take my spot — purple car marker, live updated.
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    if (!driverLocation) {
+      if (driverRef.current) { driverRef.current.setMap(null); driverRef.current = null; }
+      return;
+    }
+    const pos = { lat: driverLocation.lat, lng: driverLocation.lng };
+    const icon = carIcon("#7C3AED", driverLabel, true);
+    if (!driverRef.current) {
+      driverRef.current = new google.maps.Marker({
+        map: mapRef.current,
+        position: pos,
+        icon,
+        zIndex: 60,
+        title: "Driver on the way",
+      });
+    } else {
+      driverRef.current.setPosition(pos);
+      driverRef.current.setIcon(icon);
+    }
+  }, [ready, driverLocation?.lat, driverLocation?.lng, driverLabel]);
 
   // markers
   useEffect(() => {

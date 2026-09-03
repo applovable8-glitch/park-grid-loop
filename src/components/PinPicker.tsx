@@ -78,7 +78,7 @@ export function PinPicker({ initial, onChange, className }: Props) {
         <button
           onClick={useMyLocation}
           aria-label="Use my current location"
-          className="absolute bottom-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-2xl bg-card text-foreground shadow-[var(--shadow-card)]"
+          className="absolute bottom-3 end-3 z-10 flex h-10 w-10 items-center justify-center rounded-2xl bg-card text-foreground shadow-[var(--shadow-card)]"
         >
           <LocateFixed className="h-4 w-4 text-[color:var(--emerald)]" />
         </button>
