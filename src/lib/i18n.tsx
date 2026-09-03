@@ -103,6 +103,7 @@ const dict = {
     available_now: "متاح الآن", leaving_in: "يغادر خلال",
     distance: "المسافة", eta: "الوصول", cost: "التكلفة", pts: "نقطة",
     reserve_lock: "احجز · قفل ٩٠ ثانية", im_leaving: "أنا مغادر",
+    driver_on_the_way: "السائق في طريقه إلى موقفك",
     welcome_back: "مرحبًا بعودتك.", join_movement: "انضم إلينا.",
     auth_tagline: "اعثر على موقف. شارك موقفك. اكسب نقاطًا.",
     log_in: "تسجيل الدخول", sign_up: "إنشاء حساب", create_account: "إنشاء حساب",
