@@ -19,6 +19,10 @@ interface Props {
   userLocation?: { lat: number; lng: number } | null;
   /** Spot owned by the current user; rendered in blue so it stands out as "my car". */
   ownSpotId?: string | null;
+  /** Live position of the driver on their way to take my spot. */
+  driverLocation?: { lat: number; lng: number } | null;
+  /** Label shown on the incoming-driver marker (e.g. "3 min"). */
+  driverLabel?: string;
   className?: string;
 }
 
