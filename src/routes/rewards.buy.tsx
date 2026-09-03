@@ -20,8 +20,8 @@ function BuyPoints() {
       <p className="text-sm text-muted-foreground">Reserve without waiting — top up your point balance.</p>
       <div className="mt-4 grid grid-cols-2 gap-3">
         {packs.map((p, i) => (
-          <button key={p.pts} onClick={() => setSel(i)} className={`relative rounded-3xl p-4 text-left shadow-[var(--shadow-card)] ring-1 transition ${sel === i ? "bg-primary text-primary-foreground ring-primary" : "bg-card ring-transparent"}`}>
-            {p.tag && <span className="absolute -top-2 right-3 rounded-full bg-[var(--emerald)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">{p.tag}</span>}
+          <button key={p.pts} onClick={() => setSel(i)} className={`relative rounded-3xl p-4 text-start shadow-[var(--shadow-card)] ring-1 transition ${sel === i ? "bg-primary text-primary-foreground ring-primary" : "bg-card ring-transparent"}`}>
+            {p.tag && <span className="absolute -top-2 end-3 rounded-full bg-[var(--emerald)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">{p.tag}</span>}
             <Sparkles className={`h-4 w-4 ${sel === i ? "text-white" : "text-[color:var(--emerald)]"}`} />
             <p className="mt-2 font-[var(--font-display)] text-2xl font-bold">{p.pts}</p>
             <p className={`text-xs ${sel === i ? "text-white/70" : "text-muted-foreground"}`}>points</p>

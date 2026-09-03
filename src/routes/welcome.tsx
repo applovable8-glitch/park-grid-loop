@@ -6,8 +6,8 @@ export const Route = createFileRoute("/welcome")({ component: Welcome });
 function Welcome() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden text-white" style={{ background: "var(--gradient-hero)" }}>
-      <div className="absolute -left-20 top-20 h-64 w-64 rounded-full bg-emerald/30 blur-3xl" />
-      <div className="absolute -right-16 bottom-24 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
+      <div className="absolute -start-20 top-20 h-64 w-64 rounded-full bg-emerald/30 blur-3xl" />
+      <div className="absolute -end-16 bottom-24 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
 
       <div className="relative flex-1 px-6 pt-16">
         <div className="flex h-20 w-20 items-center justify-center rounded-[24px] bg-white/10 ring-1 ring-white/20 backdrop-blur-xl">

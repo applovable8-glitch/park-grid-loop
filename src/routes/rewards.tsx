@@ -18,7 +18,7 @@ function Rewards() {
   return (
     <div className="min-h-screen pb-28">
       <div className="relative overflow-hidden px-5 pb-8 pt-8 text-white" style={{ background: "var(--gradient-hero)" }}>
-        <div className="absolute -right-10 -top-10 h-56 w-56 animate-pulse rounded-full bg-emerald/25 blur-3xl" />
+        <div className="absolute -end-10 -top-10 h-56 w-56 animate-pulse rounded-full bg-emerald/25 blur-3xl" />
         <div className="relative">
           <p className="text-xs font-semibold uppercase tracking-widest text-white/60">{ar ? "رصيدك" : "Your balance"}</p>
           <div className="mt-1 flex items-end gap-2">

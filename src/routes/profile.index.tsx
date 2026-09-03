@@ -25,7 +25,7 @@ function Profile() {
   return (
     <div className="min-h-screen pb-28">
       <div className="relative overflow-hidden px-5 pb-10 pt-8 text-white" style={{ background: "var(--gradient-hero)" }}>
-        <div className="absolute -right-16 top-0 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
+        <div className="absolute -end-16 top-0 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
         <div className="relative flex items-center gap-4">
           <div className="relative">
             {user.avatar_url ? (
@@ -36,7 +36,7 @@ function Profile() {
               </div>
             )}
             <Link to="/profile/edit" aria-label="Edit profile"
-              className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-primary shadow-md">
+              className="absolute -bottom-1 -end-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-primary shadow-md">
               <Pencil className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -133,7 +133,7 @@ function MiniStat({ label, value }: { label: string; value: number }) {
 
 function Row({ icon: Icon, label, hint }: { icon: React.ComponentType<{ className?: string }>; label: string; hint: string }) {
   return (
-    <div className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left hover:bg-muted">
+    <div className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-start hover:bg-muted">
       <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-muted"><Icon className="h-4 w-4" /></div>
       <div className="flex-1">
         <p className="text-sm font-semibold">{label}</p>

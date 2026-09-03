@@ -16,8 +16,8 @@ function Splash() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden text-white" style={{ background: "var(--gradient-hero)" }}>
-      <div className="absolute -left-20 top-20 h-64 w-64 rounded-full bg-emerald/30 blur-3xl" />
-      <div className="absolute -right-16 bottom-24 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
+      <div className="absolute -start-20 top-20 h-64 w-64 rounded-full bg-emerald/30 blur-3xl" />
+      <div className="absolute -end-16 bottom-24 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl" />
 
       <div className="relative flex flex-col items-center gap-5">
         <div className="relative flex h-24 w-24 items-center justify-center rounded-[28px] bg-white/10 ring-1 ring-white/20 backdrop-blur-xl">

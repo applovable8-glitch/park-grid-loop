@@ -30,7 +30,7 @@ export function Screen({
 export function Hero({ title, subtitle, back = "/home", children }: { title: string; subtitle?: string; back?: string | false; children?: ReactNode }) {
   return (
     <div className="relative overflow-hidden px-5 pb-8 pt-6 text-white" style={{ background: "var(--gradient-hero)" }}>
-      <div className="absolute -right-10 -top-10 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
+      <div className="absolute -end-10 -top-10 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
       <div className="relative">
         {back !== false && (
           <Link to={back as string} className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur-md">

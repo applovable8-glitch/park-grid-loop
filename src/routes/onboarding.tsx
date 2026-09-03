@@ -18,7 +18,7 @@ function Onboarding() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden text-white" style={{ background: "var(--gradient-hero)" }}>
-      <div className="absolute -right-16 top-20 h-72 w-72 rounded-full bg-emerald/30 blur-3xl" />
+      <div className="absolute -end-16 top-20 h-72 w-72 rounded-full bg-emerald/30 blur-3xl" />
       <div className="flex justify-end px-6 pt-6">
         <Link to="/auth" className="text-sm text-white/70">Skip</Link>
       </div>
