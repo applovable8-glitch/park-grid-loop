@@ -15,7 +15,8 @@ import { useAreaName } from "@/lib/use-area-name";
 import { useThreads } from "@/lib/chat";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
 import {
-  clockOf, haversine, minutesUntil, requestSpot, useLiveSpots, useMyRequest, useMySharedSpot, type LiveSpot,
+  clockOf, haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
+  useMyRequest, useMySharedSpot, type LiveSpot,
 } from "@/lib/parking-live";
 
 export const Route = createFileRoute("/home")({ component: Home });
@@ -62,6 +63,7 @@ function Home() {
   const { spots, loading } = useLiveSpots();
   const { request } = useMyRequest(user?.id);
   const { spot: mySpot } = useMySharedSpot(user?.id);
+  const { ping: driverPing } = useIncomingConfirmed(user?.id, mySpot?.id);
 
   const [q, setQ] = useState("");
   const [nearMe, setNearMe] = useState(false);
@@ -79,6 +81,12 @@ function Home() {
     const t = setInterval(() => setTick((n) => n + 1), 1000);
     return () => clearInterval(t);
   }, []);
+
+  // While my reservation is confirmed, share my position so the spot owner can follow me.
+  useEffect(() => {
+    if (!request || request.request_status !== "confirmed" || !position) return;
+    void publishSeekerLocation(request.id, position.lat, position.lng);
+  }, [request?.id, request?.request_status, position?.lat, position?.lng]);
 
   // Places autocomplete — debounced.
   useEffect(() => {
@@ -191,6 +199,13 @@ function Home() {
     setNearMe(false);
   };
 
+  const driverDistance = driverPing && mySpot
+    ? haversine({ lat: mySpot.lat, lng: mySpot.lng }, { lat: driverPing.lat, lng: driverPing.lng })
+    : null;
+  const driverLabel = driverDistance == null
+    ? "arriving"
+    : driverDistance >= 1000 ? `${(driverDistance / 1000).toFixed(1)}km` : `${driverDistance}m`;
+
   const selected = selectedId ? spots.find((s) => s.id === selectedId) ?? null : null;
   const available = list.filter((s) => s.status !== "reserved").length;
 
@@ -205,6 +220,8 @@ function Home() {
           center={center}
           userLocation={position}
           ownSpotId={mySpot?.id ?? null}
+          driverLocation={driverPing ? { lat: driverPing.lat, lng: driverPing.lng } : null}
+          driverLabel={driverLabel}
           spots={mapSpots}
           activeId={selected?.id ?? null}
           radius={nearMe ? NEAR_ME_KM * 1000 : 1800}
@@ -335,6 +352,14 @@ function Home() {
         </div>
       )}
 
+      {/* Driver on the way to take my spot */}
+      {driverPing && mySpot && (
+        <div className="absolute inset-x-4 bottom-[306px] z-20 flex items-center gap-2 rounded-2xl bg-[#7C3AED]/12 p-3 text-xs font-semibold text-[#7C3AED] backdrop-blur">
+          <Navigation2 className="h-3.5 w-3.5" />
+          {t("driver_on_the_way")} · {driverLabel}
+        </div>
+      )}
+
       {/* Bottom panel: selected spot or list */}
       <div className="absolute inset-x-0 bottom-24 z-20 px-4">
         {selected ? (
@@ -369,8 +394,8 @@ function Home() {
         ) : null}
       </div>
 
-      {/* I'm Leaving FAB — becomes a live countdown once a spot is shared */}
-      {mySpot ? (
+      {/* I'm Leaving FAB — hidden while a car sheet is open */}
+      {selected ? null : mySpot ? (
         <Link
           to="/leaving"
           className="absolute bottom-[170px] end-5 z-30 flex items-center gap-2 rounded-2xl px-4 py-3 text-start shadow-[var(--shadow-elevated)] text-white"
