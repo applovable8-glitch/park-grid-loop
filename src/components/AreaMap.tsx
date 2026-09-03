@@ -157,6 +157,29 @@ export function AreaMap({
     }
   }, [ready, variant, userLocation?.lat, userLocation?.lng]);
 
+  // Incoming driver on their way to take my spot — purple car marker, live updated.
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    if (!driverLocation) {
+      if (driverRef.current) { driverRef.current.setMap(null); driverRef.current = null; }
+      return;
+    }
+    const pos = { lat: driverLocation.lat, lng: driverLocation.lng };
+    const icon = carIcon("#7C3AED", driverLabel, true);
+    if (!driverRef.current) {
+      driverRef.current = new google.maps.Marker({
+        map: mapRef.current,
+        position: pos,
+        icon,
+        zIndex: 60,
+        title: "Driver on the way",
+      });
+    } else {
+      driverRef.current.setPosition(pos);
+      driverRef.current.setIcon(icon);
+    }
+  }, [ready, driverLocation?.lat, driverLocation?.lng, driverLabel]);
+
   // markers
   useEffect(() => {
     if (!ready || !mapRef.current) return;
