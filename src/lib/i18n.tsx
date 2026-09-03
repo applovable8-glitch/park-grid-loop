@@ -16,6 +16,7 @@ const dict = {
     available_now: "Available now", leaving_in: "Leaving in",
     distance: "Distance", eta: "ETA", cost: "Cost", pts: "pts",
     reserve_lock: "Reserve · 90s lock", im_leaving: "I'm Leaving",
+    driver_on_the_way: "Driver on the way to your spot",
     // Auth
     welcome_back: "Welcome back.", join_movement: "Join the movement.",
     auth_tagline: "Find parking. Share parking. Earn points.",
