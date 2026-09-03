@@ -330,6 +330,9 @@ export type Database = {
           proposed_leave_at: string | null
           request_status: string
           responded_at: string | null
+          seeker_lat: number | null
+          seeker_lng: number | null
+          seeker_loc_at: string | null
           spot_id: string
           status: Database["public"]["Enums"]["reservation_status"]
           updated_at: string
@@ -343,6 +346,9 @@ export type Database = {
           proposed_leave_at?: string | null
           request_status?: string
           responded_at?: string | null
+          seeker_lat?: number | null
+          seeker_lng?: number | null
+          seeker_loc_at?: string | null
           spot_id: string
           status?: Database["public"]["Enums"]["reservation_status"]
           updated_at?: string
@@ -356,6 +362,9 @@ export type Database = {
           proposed_leave_at?: string | null
           request_status?: string
           responded_at?: string | null
+          seeker_lat?: number | null
+          seeker_lng?: number | null
+          seeker_loc_at?: string | null
           spot_id?: string
           status?: Database["public"]["Enums"]["reservation_status"]
           updated_at?: string
