@@ -73,6 +73,8 @@ export function AreaMap({
   activeId = null,
   userLocation = null,
   ownSpotId = null,
+  driverLocation = null,
+  driverLabel = "arriving",
   className,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
