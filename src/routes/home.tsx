@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
+import { supabase } from "@/integrations/supabase/client";
 import { BottomNav } from "@/components/BottomNav";
 import { AreaMap } from "@/components/AreaMap";
 import { SpotSheet } from "@/components/SpotSheet";
@@ -75,6 +76,21 @@ function Home() {
     if (!request || request.request_status !== "confirmed" || !position) return;
     void publishSeekerLocation(request.id, position.lat, position.lng);
   }, [request?.id, request?.request_status, position?.lat, position?.lng]);
+
+  // Tell the spot owner (once) that the approved driver started moving — in Notifications, not on the map.
+  useEffect(() => {
+    if (!driverPing || !user?.id) return;
+    const key = `parkout.otw.${driverPing.reservation_id}`;
+    if (typeof window === "undefined" || window.localStorage.getItem(key)) return;
+    window.localStorage.setItem(key, "1");
+    void supabase.from("notifications").insert({
+      user_id: user.id,
+      title: "Driver on the way",
+      body: "The driver you approved is heading to your spot now.",
+      icon: "reserve",
+      metadata: { kind: "on_the_way", reservation_id: driverPing.reservation_id },
+    });
+  }, [driverPing?.reservation_id, user?.id]);
 
   // Places autocomplete — debounced.
   useEffect(() => {

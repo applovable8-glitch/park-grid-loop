@@ -2,7 +2,7 @@ import type { Lang } from "./i18n";
 
 type Kind =
   | "request" | "confirmed" | "declined" | "extension" | "cancelled"
-  | "handoff_done" | "handoff_missed" | "rating" | "referral";
+  | "handoff_done" | "handoff_missed" | "rating" | "referral" | "on_the_way";
 
 const AR: Record<Kind, { title: string; body: string }> = {
   request: {
@@ -36,6 +36,10 @@ const AR: Record<Kind, { title: string; body: string }> = {
   rating: {
     title: "وصلك تقييم جديد",
     body: "قام سائق ركن معك بتقييمك.",
+  },
+  on_the_way: {
+    title: "السائق في طريقه إليك",
+    body: "السائق الذي وافقت على طلبه في طريقه الآن إلى موقفك.",
   },
   referral: {
     title: "ربحت نقاطًا",
