@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { MapPin, Gift, Clock, UserCheck, Check, X, TimerReset, Bell } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
+import { useI18n } from "@/lib/i18n";
+import { localizeNotification } from "@/lib/notif-i18n";
 import { BottomNav } from "@/components/BottomNav";
 import { EmptyState, SkeletonList } from "@/components/kit";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,6 +46,7 @@ function timeAgo(iso: string) {
 
 function Notifs() {
   const { user } = useApp();
+  const { t, lang } = useI18n();
   const [items, setItems] = useState<DbNotification[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -79,18 +82,19 @@ function Notifs() {
   return (
     <div className="min-h-screen bg-background pb-28">
       <header className="px-5 pt-6">
-        <h1 className="font-[var(--font-display)] text-2xl font-bold">Notifications</h1>
-        <p className="text-xs text-muted-foreground">Real-time updates from your parking network</p>
+        <h1 className="font-[var(--font-display)] text-2xl font-bold">{t("notifications")}</h1>
+        <p className="text-xs text-muted-foreground">{t("notifs_sub")}</p>
       </header>
 
       <div className="mt-4 space-y-2 px-4">
         {loading ? (
           <SkeletonList n={3} />
         ) : items.length === 0 ? (
-          <EmptyState icon={Bell} title="No notifications yet" description="Requests, approvals and points will show up here." />
+          <EmptyState icon={Bell} title={t("no_notifs")} description={t("no_notifs_hint")} />
         ) : (
           items.map((n) => {
             const { Icon, color } = iconMap[n.icon] ?? iconMap["spot"]!;
+            const copy = localizeNotification(lang, n.metadata?.kind, n.title, n.body);
             return (
               <div key={n.id} className={`rounded-2xl bg-card p-3.5 shadow-[var(--shadow-card)] animate-fade-up ${n.read ? "" : "ring-1 ring-[var(--emerald)]/30"}`}>
                 <div className="flex items-start gap-3">
@@ -99,10 +103,10 @@ function Notifs() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline justify-between gap-2">
-                      <p className="truncate text-sm font-semibold">{n.title}</p>
+                      <p className="truncate text-sm font-semibold">{copy.title}</p>
                       <span className="text-[10px] text-muted-foreground">{timeAgo(n.created_at)}</span>
                     </div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{n.body}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{copy.body}</p>
                   </div>
                 </div>
                 {n.metadata?.reservation_id && (
@@ -122,6 +126,7 @@ function Notifs() {
 /** Inline approve / decline / extend (owner) or accept-extension (seeker). */
 function RequestActions({ reservationId, notifId }: { reservationId: string; notifId: string }) {
   const { user } = useApp();
+  const { t } = useI18n();
   const nav = useNavigate();
   const [req, setReq] = useState<LiveRequest | null>(null);
   const [exitIso, setExitIso] = useState<string | null>(null);
@@ -175,21 +180,21 @@ function RequestActions({ reservationId, notifId }: { reservationId: string; not
             <div className="grid grid-cols-2 gap-2">
               <button disabled={busy} onClick={() => run(() => approveRequest(req.id), "Spot reserved for the driver")}
                 className="flex items-center justify-center gap-1 rounded-xl py-2.5 text-sm font-bold text-white disabled:opacity-60" style={{ background: "var(--gradient-emerald)" }}>
-                <Check className="h-4 w-4" /> Approve
+                <Check className="h-4 w-4" /> {t("approve")}
               </button>
               <button disabled={busy} onClick={() => setShowExtend(true)}
                 className="flex items-center justify-center gap-1 rounded-xl bg-muted py-2.5 text-sm font-bold disabled:opacity-60">
-                <TimerReset className="h-4 w-4" /> More time
+                <TimerReset className="h-4 w-4" /> {t("more_time")}
               </button>
             </div>
             <button disabled={busy} onClick={() => run(() => declineRequest(req.id), "Request declined")}
               className="flex w-full items-center justify-center gap-1 rounded-xl bg-red-50 py-2.5 text-sm font-bold text-[color:var(--danger)] ring-1 ring-red-200 disabled:opacity-60">
-              <X className="h-4 w-4" /> Decline
+              <X className="h-4 w-4" /> {t("decline")}
             </button>
           </>
         ) : (
           <div>
-            <p className="text-xs text-muted-foreground">Extend my stay by:</p>
+            <p className="text-xs text-muted-foreground">{t("extend_by")}</p>
             <div className="mt-2 grid grid-cols-3 gap-2">
               {[10, 20, 30].map((m) => (
                 <button key={m} disabled={busy}
@@ -200,7 +205,7 @@ function RequestActions({ reservationId, notifId }: { reservationId: string; not
                   className="rounded-xl bg-muted py-2.5 text-sm font-bold disabled:opacity-60">+{m}m</button>
               ))}
             </div>
-            <button onClick={() => setShowExtend(false)} className="mt-2 w-full rounded-xl py-2 text-xs font-semibold text-muted-foreground">Back</button>
+            <button onClick={() => setShowExtend(false)} className="mt-2 w-full rounded-xl py-2 text-xs font-semibold text-muted-foreground">{t("back")}</button>
           </div>
         )}
       </div>
@@ -210,15 +215,15 @@ function RequestActions({ reservationId, notifId }: { reservationId: string; not
   if (!isOwner && state === "extension_proposed") {
     return (
       <div className="mt-3 space-y-2">
-        <p className="text-xs text-muted-foreground">New exit time: <span className="font-semibold text-foreground">{clockOf(req.proposed_leave_at)}</span></p>
+        <p className="text-xs text-muted-foreground">{t("new_exit_time")} <span className="font-semibold text-foreground">{clockOf(req.proposed_leave_at)}</span></p>
         <div className="grid grid-cols-2 gap-2">
           <button disabled={busy} onClick={() => run(() => answerExtension(req.id, true), "Reserved with the new exit time")}
             className="flex items-center justify-center gap-1 rounded-xl py-2.5 text-sm font-bold text-white disabled:opacity-60" style={{ background: "var(--gradient-emerald)" }}>
-            <Check className="h-4 w-4" /> I&apos;ll wait
+            <Check className="h-4 w-4" /> {t("ill_wait")}
           </button>
           <button disabled={busy} onClick={() => run(() => answerExtension(req.id, false), "Request withdrawn")}
             className="flex items-center justify-center gap-1 rounded-xl bg-red-50 py-2.5 text-sm font-bold text-[color:var(--danger)] ring-1 ring-red-200 disabled:opacity-60">
-            <X className="h-4 w-4" /> No thanks
+            <X className="h-4 w-4" /> {t("no_thanks")}
           </button>
         </div>
       </div>
@@ -226,9 +231,17 @@ function RequestActions({ reservationId, notifId }: { reservationId: string; not
   }
 
   if (state === "confirmed") {
+    // The seeker confirms the handoff right here instead of on the map.
+    if (!isOwner) {
+      return (
+        <button onClick={() => nav({ to: "/handoff/$id", params: { id: req.id } })}
+          className="mt-3 w-full rounded-xl py-2.5 text-sm font-bold text-white"
+          style={{ background: "var(--gradient-emerald)" }}>{t("took_the_spot_q")}</button>
+      );
+    }
     return (
       <button onClick={() => nav({ to: "/reservation/$id", params: { id: req.id } })}
-        className="mt-3 w-full rounded-xl bg-muted py-2.5 text-sm font-semibold">View reservation</button>
+        className="mt-3 w-full rounded-xl bg-muted py-2.5 text-sm font-semibold">{t("view_reservation")}</button>
     );
   }
 
