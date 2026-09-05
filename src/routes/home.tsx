@@ -372,33 +372,8 @@ function Home() {
         ) : null}
       </div>
 
-      {/* I'm Leaving FAB — hidden while a car sheet is open */}
-      {selected ? null : mySpot ? (
-        <Link
-          to="/leaving"
-          className="absolute bottom-[170px] end-5 z-30 flex items-center gap-2 rounded-2xl px-4 py-3 text-start shadow-[var(--shadow-elevated)] text-white"
-          style={{ background: "var(--gradient-emerald)" }}
-        >
-          <Clock className="h-4 w-4" />
-          <span>
-            <span className="block text-[10px] font-semibold uppercase tracking-wider text-white/80">
-              Exit set · {clockOf(mySpot.planned_leave_at ?? mySpot.leave_at)}
-            </span>
-            <span className="block font-[var(--font-display)] text-sm font-bold">
-              {countdown(mySpot.planned_leave_at ?? mySpot.leave_at)}
-            </span>
-          </span>
-        </Link>
-      ) : (
-        <Link
-          to="/leaving"
-          className="absolute bottom-[170px] end-5 z-30 flex items-center gap-2 rounded-full px-5 py-3.5 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-elevated)] pulse-emerald"
-          style={{ background: "var(--gradient-emerald)" }}
-        >
-          <Zap className="h-4 w-4 fill-white" />
-          {t("im_leaving")}
-        </Link>
-      )}
+      {/* "I'm Leaving" now lives in the center of the bottom bar. */}
+
 
       <BottomNav />
     </div>
