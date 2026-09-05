@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Search as SearchIcon, MapPin, Clock, Navigation2, Zap, LocateFixed, X, List, MessageCircle,
+  Search as SearchIcon, MapPin, LocateFixed, X, List, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
@@ -15,7 +15,7 @@ import { useAreaName } from "@/lib/use-area-name";
 import { useThreads } from "@/lib/chat";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
 import {
-  clockOf, haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
+  haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
   useMyRequest, useMySharedSpot, type LiveSpot,
 } from "@/lib/parking-live";
 
@@ -33,18 +33,6 @@ const NEAR_ME_KM = 3;
 const FALLBACK_CENTER = { lat: 25.2048, lng: 55.2708 }; // Dubai
 
 type TimeFilter = (typeof TIME_FILTERS)[number]["id"];
-
-/** "01:24" style countdown to an ISO timestamp. */
-function countdown(iso: string | null | undefined) {
-  if (!iso) return "--:--";
-  const s = Math.max(0, Math.round((new Date(iso).getTime() - Date.now()) / 1000));
-  if (s === 0) return "Leaving now";
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const sec = s % 60;
-  const p = (n: number) => String(n).padStart(2, "0");
-  return h > 0 ? `${h}:${p(m)}:${p(sec)}` : `${p(m)}:${p(sec)}`;
-}
 
 interface PickedPlace {
   label: string;
