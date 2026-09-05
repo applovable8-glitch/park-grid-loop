@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Search as SearchIcon, MapPin, LocateFixed, X, List, MessageCircle,
+  Search as SearchIcon, MapPin, Clock, Navigation2, LocateFixed, X, List, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
@@ -15,7 +15,7 @@ import { useAreaName } from "@/lib/use-area-name";
 import { useThreads } from "@/lib/chat";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
 import {
-  haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
+  clockOf, haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
   useMyRequest, useMySharedSpot, type LiveSpot,
 } from "@/lib/parking-live";
 
