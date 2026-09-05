@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Search as SearchIcon, MapPin, Clock, Navigation2, Zap, LocateFixed, X, List, MessageCircle,
+  Search as SearchIcon, MapPin, Clock, Navigation2, LocateFixed, X, List, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/parkout-store";
+import { supabase } from "@/integrations/supabase/client";
 import { BottomNav } from "@/components/BottomNav";
 import { AreaMap } from "@/components/AreaMap";
 import { SpotSheet } from "@/components/SpotSheet";
@@ -33,18 +34,6 @@ const NEAR_ME_KM = 3;
 const FALLBACK_CENTER = { lat: 25.2048, lng: 55.2708 }; // Dubai
 
 type TimeFilter = (typeof TIME_FILTERS)[number]["id"];
-
-/** "01:24" style countdown to an ISO timestamp. */
-function countdown(iso: string | null | undefined) {
-  if (!iso) return "--:--";
-  const s = Math.max(0, Math.round((new Date(iso).getTime() - Date.now()) / 1000));
-  if (s === 0) return "Leaving now";
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const sec = s % 60;
-  const p = (n: number) => String(n).padStart(2, "0");
-  return h > 0 ? `${h}:${p(m)}:${p(sec)}` : `${p(m)}:${p(sec)}`;
-}
 
 interface PickedPlace {
   label: string;
@@ -87,6 +76,21 @@ function Home() {
     if (!request || request.request_status !== "confirmed" || !position) return;
     void publishSeekerLocation(request.id, position.lat, position.lng);
   }, [request?.id, request?.request_status, position?.lat, position?.lng]);
+
+  // Tell the spot owner (once) that the approved driver started moving — in Notifications, not on the map.
+  useEffect(() => {
+    if (!driverPing || !user?.id) return;
+    const key = `parkout.otw.${driverPing.reservation_id}`;
+    if (typeof window === "undefined" || window.localStorage.getItem(key)) return;
+    window.localStorage.setItem(key, "1");
+    void supabase.from("notifications").insert({
+      user_id: user.id,
+      title: "Driver on the way",
+      body: "The driver you approved is heading to your spot now.",
+      icon: "reserve",
+      metadata: { kind: "on_the_way", reservation_id: driverPing.reservation_id },
+    });
+  }, [driverPing?.reservation_id, user?.id]);
 
   // Places autocomplete — debounced.
   useEffect(() => {
@@ -335,30 +339,8 @@ function Home() {
         </button>
       )}
 
-      {/* My open request banner */}
-      {request && (
-        <div className="absolute inset-x-4 bottom-[262px] z-20 rounded-2xl bg-emerald/10 p-3 text-xs text-[color:var(--emerald)] backdrop-blur">
-          {request.request_status === "confirmed" ? (
-            <>
-              Your spot is reserved.{" "}
-              <Link to="/handoff/$id" params={{ id: request.id }} className="font-bold underline">Did you take it?</Link>
-            </>
-          ) : (
-            <>
-              You already hold a spot request.{" "}
-              <Link to="/reservation/$id" params={{ id: request.id }} className="font-bold underline">Open it</Link> — release it before choosing another.
-            </>
-          )}
-        </div>
-      )}
+      {/* Reservation and handoff prompts live in Notifications — the map stays clean. */}
 
-      {/* Driver on the way to take my spot */}
-      {driverPing && mySpot && (
-        <div className="absolute inset-x-4 bottom-[306px] z-20 flex items-center gap-2 rounded-2xl bg-[#7C3AED]/12 p-3 text-xs font-semibold text-[#7C3AED] backdrop-blur">
-          <Navigation2 className="h-3.5 w-3.5" />
-          {t("driver_on_the_way")} · {driverLabel}
-        </div>
-      )}
 
       {/* Bottom panel: selected spot or list */}
       <div className="absolute inset-x-0 bottom-24 z-20 px-4">
@@ -394,33 +376,8 @@ function Home() {
         ) : null}
       </div>
 
-      {/* I'm Leaving FAB — hidden while a car sheet is open */}
-      {selected ? null : mySpot ? (
-        <Link
-          to="/leaving"
-          className="absolute bottom-[170px] end-5 z-30 flex items-center gap-2 rounded-2xl px-4 py-3 text-start shadow-[var(--shadow-elevated)] text-white"
-          style={{ background: "var(--gradient-emerald)" }}
-        >
-          <Clock className="h-4 w-4" />
-          <span>
-            <span className="block text-[10px] font-semibold uppercase tracking-wider text-white/80">
-              Exit set · {clockOf(mySpot.planned_leave_at ?? mySpot.leave_at)}
-            </span>
-            <span className="block font-[var(--font-display)] text-sm font-bold">
-              {countdown(mySpot.planned_leave_at ?? mySpot.leave_at)}
-            </span>
-          </span>
-        </Link>
-      ) : (
-        <Link
-          to="/leaving"
-          className="absolute bottom-[170px] end-5 z-30 flex items-center gap-2 rounded-full px-5 py-3.5 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-elevated)] pulse-emerald"
-          style={{ background: "var(--gradient-emerald)" }}
-        >
-          <Zap className="h-4 w-4 fill-white" />
-          {t("im_leaving")}
-        </Link>
-      )}
+      {/* "I'm Leaving" now lives in the center of the bottom bar. */}
+
 
       <BottomNav />
     </div>

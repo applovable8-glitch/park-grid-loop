@@ -93,6 +93,14 @@ const dict = {
     share_and_earn: "Share and earn", not_now: "Not now",
     confirm_handoff_cta: "Confirm handoff",
     spot_released: "The spot was released for other drivers.",
+    // Notifications
+    notifs_sub: "Real-time updates from your parking network",
+    no_notifs: "No notifications yet",
+    no_notifs_hint: "Requests, approvals and points will show up here.",
+    approve: "Approve", decline: "Decline", more_time: "More time",
+    extend_by: "Extend my stay by:", ill_wait: "I'll wait", no_thanks: "No thanks",
+    new_exit_time: "New exit time:", view_reservation: "View reservation",
+    took_the_spot_q: "Did you take the parking spot?",
   },
   ar: {
     nav_home: "الرئيسية", nav_search: "بحث", nav_rewards: "المكافآت", nav_alerts: "التنبيهات", nav_profile: "حسابي",
@@ -175,6 +183,13 @@ const dict = {
     share_and_earn: "شارك واربح", not_now: "ليس الآن",
     confirm_handoff_cta: "تأكيد الاستلام",
     spot_released: "تم تحرير الموقف للسائقين الآخرين.",
+    notifs_sub: "تحديثات لحظية من شبكة المواقف",
+    no_notifs: "لا توجد إشعارات بعد",
+    no_notifs_hint: "ستظهر هنا الطلبات والموافقات والنقاط.",
+    approve: "موافقة", decline: "رفض", more_time: "وقت إضافي",
+    extend_by: "تمديد بقائي لمدة:", ill_wait: "سأنتظر", no_thanks: "لا شكرًا",
+    new_exit_time: "وقت الخروج الجديد:", view_reservation: "عرض الحجز",
+    took_the_spot_q: "هل أخذت الباركينج؟",
   },
 } as const;
 

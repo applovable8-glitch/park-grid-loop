@@ -108,9 +108,17 @@ export function AreaMap({
           gestureHandling: "greedy",
           clickableIcons: false,
           styles: [
-            { featureType: "poi.business", stylers: [{ visibility: "off" }] },
-            { featureType: "transit", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+            { featureType: "poi", stylers: [{ visibility: "off" }] },
+            { featureType: "transit", stylers: [{ visibility: "off" }] },
+            { featureType: "landscape.man_made", elementType: "labels", stylers: [{ visibility: "off" }] },
+            { featureType: "administrative.neighborhood", stylers: [{ visibility: "off" }] },
+            { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
+            { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+            { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "off" }] },
+            { featureType: "road.arterial", elementType: "labels", stylers: [{ visibility: "simplified" }] },
+            { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
           ],
+
         });
         setReady(true);
       })
