@@ -22,7 +22,7 @@ export function BottomNav() {
   const unread = useUnreadNotifs(user?.id);
   const { spot: mySpot } = useMySharedSpot(user?.id);
 
-  const Tab = ({ to, icon: Icon, key: k }: { to: string; icon: typeof Home; key: TKey }) => {
+  const Tab = ({ to, icon: Icon, tkey: k }: { to: string; icon: typeof Home; tkey: TKey }) => {
     const active = pathname === to || (to === "/home" && pathname === "/");
     const badge = to === "/notifications" ? unread : 0;
     return (
@@ -50,7 +50,7 @@ export function BottomNav() {
   return (
     <nav className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center pb-3">
       <div className="pointer-events-auto glass mx-4 flex w-full max-w-[420px] items-center justify-between rounded-3xl px-2 py-2 shadow-[var(--shadow-elevated)]">
-        {left.map((tab) => <Tab key={tab.to} {...tab} />)}
+        {left.map((tab) => <Tab key={tab.to} to={tab.to} icon={tab.icon} tkey={tab.key} />)}
 
         {/* Centered "I'm Leaving" action */}
         <div className="relative flex w-[86px] shrink-0 justify-center">
@@ -78,7 +78,7 @@ export function BottomNav() {
           </Link>
         </div>
 
-        {right.map((tab) => <Tab key={tab.to} {...tab} />)}
+        {right.map((tab) => <Tab key={tab.to} to={tab.to} icon={tab.icon} tkey={tab.key} />)}
       </div>
     </nav>
   );
