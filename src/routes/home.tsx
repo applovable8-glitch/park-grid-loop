@@ -335,30 +335,8 @@ function Home() {
         </button>
       )}
 
-      {/* My open request banner */}
-      {request && (
-        <div className="absolute inset-x-4 bottom-[262px] z-20 rounded-2xl bg-emerald/10 p-3 text-xs text-[color:var(--emerald)] backdrop-blur">
-          {request.request_status === "confirmed" ? (
-            <>
-              Your spot is reserved.{" "}
-              <Link to="/handoff/$id" params={{ id: request.id }} className="font-bold underline">Did you take it?</Link>
-            </>
-          ) : (
-            <>
-              You already hold a spot request.{" "}
-              <Link to="/reservation/$id" params={{ id: request.id }} className="font-bold underline">Open it</Link> — release it before choosing another.
-            </>
-          )}
-        </div>
-      )}
+      {/* Reservation and handoff prompts live in Notifications — the map stays clean. */}
 
-      {/* Driver on the way to take my spot */}
-      {driverPing && mySpot && (
-        <div className="absolute inset-x-4 bottom-[306px] z-20 flex items-center gap-2 rounded-2xl bg-[#7C3AED]/12 p-3 text-xs font-semibold text-[#7C3AED] backdrop-blur">
-          <Navigation2 className="h-3.5 w-3.5" />
-          {t("driver_on_the_way")} · {driverLabel}
-        </div>
-      )}
 
       {/* Bottom panel: selected spot or list */}
       <div className="absolute inset-x-0 bottom-24 z-20 px-4">
