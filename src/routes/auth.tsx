@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
+import { captureReferralFromUrl, pendingReferralCode } from "@/lib/referrals";
+import { Gift } from "lucide-react";
 import howFind from "@/assets/how-find.png";
 import howShare from "@/assets/how-share.png";
 import howEarn from "@/assets/how-earn.png";
@@ -19,6 +21,12 @@ function Auth() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState<null | "email" | "google" | "apple" | "reset">(null);
+  const [inviteCode, setInviteCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    captureReferralFromUrl();
+    setInviteCode(pendingReferralCode());
+  }, []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,6 +92,18 @@ function Auth() {
             </button>
           ))}
         </div>
+
+        {inviteCode && (
+          <div className="animate-scale-in mt-4 flex items-center gap-3 rounded-2xl bg-emerald/10 p-3 ring-1 ring-emerald/30">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald/15 text-[color:var(--emerald)]">
+              <Gift className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold">{t("invite_applied_title")}</p>
+              <p className="text-xs text-muted-foreground">{t("invite_applied_desc")} <span className="font-bold tracking-widest">{inviteCode}</span></p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={submit} className="animate-fade-up mt-5 space-y-3">
           {mode === "register" && (
