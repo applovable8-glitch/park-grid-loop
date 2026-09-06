@@ -143,7 +143,30 @@ function Auth() {
           </button>
         </div>
 
-        <p className="mt-5 text-center text-xs text-muted-foreground">
+        <div className="mt-8">
+          <h2 className="text-center font-[var(--font-display)] text-base font-bold">{t("how_it_works")}</h2>
+          <div className="mt-4 space-y-3">
+            {[
+              { img: howFind, t: t("how1_t"), d: t("how1_d") },
+              { img: howShare, t: t("how2_t"), d: t("how2_d") },
+              { img: howEarn, t: t("how3_t"), d: t("how3_d") },
+            ].map((s, i) => (
+              <div
+                key={s.t}
+                className="animate-fade-up hover-scale flex items-center gap-3 rounded-3xl bg-card p-3 shadow-[var(--shadow-card)]"
+                style={{ animationDelay: `${i * 90}ms` }}
+              >
+                <img src={s.img} alt={s.t} loading="lazy" width={640} height={640} className="h-16 w-16 shrink-0 rounded-2xl bg-muted object-contain p-1" />
+                <div className="min-w-0">
+                  <p className="text-sm font-bold">{s.t}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{s.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
           {t("terms_agree")}
         </p>
       </div>
