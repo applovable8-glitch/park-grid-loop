@@ -4,6 +4,9 @@ import { toast } from "sonner";
 import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
+import howFind from "@/assets/how-find.png";
+import howShare from "@/assets/how-share.png";
+import howEarn from "@/assets/how-earn.png";
 
 export const Route = createFileRoute("/auth")({ component: Auth });
 
@@ -71,7 +74,7 @@ function Auth() {
         </div>
       </div>
 
-      <div className="-mt-8 flex-1 rounded-t-[28px] bg-background px-6 pb-10 pt-6 shadow-[var(--shadow-elevated)]">
+      <div className="animate-scale-in -mt-8 flex-1 rounded-t-[28px] bg-background px-6 pb-10 pt-6 shadow-[var(--shadow-elevated)]">
         <div className="flex rounded-full bg-muted p-1">
           {(["login", "register"] as const).map((m) => (
             <button key={m} type="button" onClick={() => setMode(m)}
@@ -82,7 +85,7 @@ function Auth() {
           ))}
         </div>
 
-        <form onSubmit={submit} className="mt-5 space-y-3">
+        <form onSubmit={submit} className="animate-fade-up mt-5 space-y-3">
           {mode === "register" && (
             <label className="block">
               <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("name")}</span>
@@ -115,7 +118,7 @@ function Auth() {
           )}
 
           <button type="submit" disabled={busy !== null}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60">
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary transition-transform hover:scale-[1.01] py-3.5 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60">
             {busy === "email" ? <Loader2 className="h-4 w-4 animate-spin" /> : <>
               {mode === "login" ? t("log_in") : t("create_account")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </>}
@@ -126,7 +129,7 @@ function Auth() {
           <div className="h-px flex-1 bg-border" /> {t("or_continue_with")} <div className="h-px flex-1 bg-border" />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="animate-fade-up grid grid-cols-2 gap-3">
           <button onClick={() => oauth("google")} disabled={busy !== null}
             className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card py-3 text-sm font-semibold hover:bg-muted disabled:opacity-60">
             {busy === "google" ? <Loader2 className="h-4 w-4 animate-spin" /> : (
@@ -143,7 +146,30 @@ function Auth() {
           </button>
         </div>
 
-        <p className="mt-5 text-center text-xs text-muted-foreground">
+        <div className="mt-8">
+          <h2 className="text-center font-[var(--font-display)] text-base font-bold">{t("how_it_works")}</h2>
+          <div className="mt-4 space-y-3">
+            {[
+              { img: howFind, t: t("how1_t"), d: t("how1_d") },
+              { img: howShare, t: t("how2_t"), d: t("how2_d") },
+              { img: howEarn, t: t("how3_t"), d: t("how3_d") },
+            ].map((s, i) => (
+              <div
+                key={s.t}
+                className="animate-fade-up hover-scale flex items-center gap-3 rounded-3xl bg-card p-3 shadow-[var(--shadow-card)]"
+                style={{ animationDelay: `${i * 90}ms` }}
+              >
+                <img src={s.img} alt={s.t} loading="lazy" width={640} height={640} className="h-16 w-16 shrink-0 rounded-2xl bg-muted object-contain p-1" />
+                <div className="min-w-0">
+                  <p className="text-sm font-bold">{s.t}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{s.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
           {t("terms_agree")}
         </p>
       </div>
