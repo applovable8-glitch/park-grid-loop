@@ -74,7 +74,7 @@ function Auth() {
         </div>
       </div>
 
-      <div className="-mt-8 flex-1 rounded-t-[28px] bg-background px-6 pb-10 pt-6 shadow-[var(--shadow-elevated)]">
+      <div className="animate-scale-in -mt-8 flex-1 rounded-t-[28px] bg-background px-6 pb-10 pt-6 shadow-[var(--shadow-elevated)]">
         <div className="flex rounded-full bg-muted p-1">
           {(["login", "register"] as const).map((m) => (
             <button key={m} type="button" onClick={() => setMode(m)}
@@ -85,7 +85,7 @@ function Auth() {
           ))}
         </div>
 
-        <form onSubmit={submit} className="mt-5 space-y-3">
+        <form onSubmit={submit} className="animate-fade-up mt-5 space-y-3">
           {mode === "register" && (
             <label className="block">
               <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("name")}</span>
@@ -118,7 +118,7 @@ function Auth() {
           )}
 
           <button type="submit" disabled={busy !== null}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60">
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary transition-transform hover:scale-[1.01] py-3.5 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60">
             {busy === "email" ? <Loader2 className="h-4 w-4 animate-spin" /> : <>
               {mode === "login" ? t("log_in") : t("create_account")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </>}
@@ -129,7 +129,7 @@ function Auth() {
           <div className="h-px flex-1 bg-border" /> {t("or_continue_with")} <div className="h-px flex-1 bg-border" />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="animate-fade-up grid grid-cols-2 gap-3">
           <button onClick={() => oauth("google")} disabled={busy !== null}
             className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card py-3 text-sm font-semibold hover:bg-muted disabled:opacity-60">
             {busy === "google" ? <Loader2 className="h-4 w-4 animate-spin" /> : (
