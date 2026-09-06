@@ -21,6 +21,12 @@ function Auth() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState<null | "email" | "google" | "apple" | "reset">(null);
+  const [inviteCode, setInviteCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    captureReferralFromUrl();
+    setInviteCode(pendingReferralCode());
+  }, []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
