@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface LiveSpot {
@@ -190,7 +190,7 @@ export function useMySharedSpot(userId: string | undefined) {
       .on("postgres_changes", { event: "*", schema: "public", table: "parking_spots", filter: `user_id=eq.${userId}` }, () => load())
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [load, userId]);
+  }, [load, userId, uid]);
 
   return { spot, loading, reload: load };
 }
