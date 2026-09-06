@@ -93,6 +93,18 @@ function Auth() {
           ))}
         </div>
 
+        {inviteCode && (
+          <div className="animate-scale-in mt-4 flex items-center gap-3 rounded-2xl bg-emerald/10 p-3 ring-1 ring-emerald/30">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald/15 text-[color:var(--emerald)]">
+              <Gift className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold">{t("invite_applied_title")}</p>
+              <p className="text-xs text-muted-foreground">{t("invite_applied_desc")} <span className="font-bold tracking-widest">{inviteCode}</span></p>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={submit} className="animate-fade-up mt-5 space-y-3">
           {mode === "register" && (
             <label className="block">
