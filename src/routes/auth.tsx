@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
+import { captureReferralFromUrl, pendingReferralCode } from "@/lib/referrals";
+import { Gift } from "lucide-react";
 import howFind from "@/assets/how-find.png";
 import howShare from "@/assets/how-share.png";
 import howEarn from "@/assets/how-earn.png";
