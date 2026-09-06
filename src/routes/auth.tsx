@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
