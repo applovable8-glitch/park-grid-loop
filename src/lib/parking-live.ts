@@ -181,11 +181,12 @@ export function useMySharedSpot(userId: string | undefined) {
     setLoading(false);
   }, [userId]);
 
+  const uid = useId();
   useEffect(() => {
     load();
     if (!userId) return;
     const ch = supabase
-      .channel(`my-spot:${userId}`)
+      .channel(`my-spot:${userId}:${uid}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "parking_spots", filter: `user_id=eq.${userId}` }, () => load())
       .subscribe();
     return () => { supabase.removeChannel(ch); };
