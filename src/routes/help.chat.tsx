@@ -9,7 +9,7 @@ type Msg = { from: "you" | "bot"; text: string };
 
 function Chat() {
   const [msgs, setMsgs] = useState<Msg[]>([
-    { from: "bot", text: "Hi there! I'm ParkOut support. How can I help?" },
+    { from: "bot", text: "Hi there! I'm AndiPark support. How can I help?" },
   ]);
   const [text, setText] = useState("");
   const send = () => {

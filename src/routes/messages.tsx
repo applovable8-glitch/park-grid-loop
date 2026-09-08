@@ -10,10 +10,10 @@ export const Route = createFileRoute("/messages")({
   component: MessagesScreen,
   head: () => ({
     meta: [
-      { title: "Messages — ParkOut" },
-      { name: "description", content: "Chat with drivers about parking spots, exit times and handoffs on ParkOut." },
-      { property: "og:title", content: "Messages — ParkOut" },
-      { property: "og:description", content: "Chat with drivers about parking spots, exit times and handoffs on ParkOut." },
+      { title: "Messages — AndiPark" },
+      { name: "description", content: "Chat with drivers about parking spots, exit times and handoffs on AndiPark." },
+      { property: "og:title", content: "Messages — AndiPark" },
+      { property: "og:description", content: "Chat with drivers about parking spots, exit times and handoffs on AndiPark." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

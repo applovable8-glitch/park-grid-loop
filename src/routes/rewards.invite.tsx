@@ -29,8 +29,8 @@ function Invite() {
 
   const share = async () => {
     if (!link) return;
-    const text = ar ? "انضم إلي في ParkOut واحصل على 100 نقطة مجانية" : "Join me on ParkOut and get 100 free points";
-    if (navigator.share) { try { await navigator.share({ title: "ParkOut", text, url: link }); return; } catch { /* cancelled */ } }
+    const text = ar ? "انضم إلي في AndiPark واحصل على 100 نقطة مجانية" : "Join me on AndiPark and get 100 free points";
+    if (navigator.share) { try { await navigator.share({ title: "AndiPark", text, url: link }); return; } catch { /* cancelled */ } }
     await copy();
   };
 

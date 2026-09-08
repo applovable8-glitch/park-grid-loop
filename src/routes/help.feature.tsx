@@ -17,7 +17,7 @@ function Feature() {
   return (
     <Screen title="Feature request" back="/help">
       <form onSubmit={submit} className="space-y-3">
-        <Field label="What should we build?"><textarea value={idea} onChange={(e) => setIdea(e.target.value)} rows={6} className={inputCls} placeholder="I wish ParkOut could…" /></Field>
+        <Field label="What should we build?"><textarea value={idea} onChange={(e) => setIdea(e.target.value)} rows={6} className={inputCls} placeholder="I wish AndiPark could…" /></Field>
         <Button type="submit">Send suggestion</Button>
       </form>
     </Screen>

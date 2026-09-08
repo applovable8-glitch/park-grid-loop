@@ -8,7 +8,7 @@ const rewards = [
   { id: "coffee", icon: Coffee, title: "Free coffee", pts: 200, partner: "Blends & Brews" },
   { id: "fuel", icon: Fuel, title: "AED 20 fuel voucher", pts: 800, partner: "ADNOC" },
   { id: "ticket", icon: Ticket, title: "Cinema ticket", pts: 1200, partner: "VOX Cinemas" },
-  { id: "gift", icon: Gift, title: "Mystery reward", pts: 500, partner: "ParkOut" },
+  { id: "gift", icon: Gift, title: "Mystery reward", pts: 500, partner: "AndiPark" },
 ];
 
 function Redeem() {

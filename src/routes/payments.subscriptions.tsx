@@ -7,7 +7,7 @@ export const Route = createFileRoute("/payments/subscriptions")({ component: () 
     <Card>
       <div className="flex items-center justify-between">
         <div>
-          <p className="font-[var(--font-display)] text-lg font-bold">ParkOut Plus</p>
+          <p className="font-[var(--font-display)] text-lg font-bold">AndiPark Plus</p>
           <p className="text-xs text-muted-foreground">Unlimited reservations · Priority alerts</p>
         </div>
         <Badge tone="emerald">Active</Badge>

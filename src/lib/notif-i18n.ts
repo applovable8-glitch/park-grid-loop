@@ -43,7 +43,7 @@ const AR: Record<Kind, { title: string; body: string }> = {
   },
   referral: {
     title: "ربحت نقاطًا",
-    body: "انضم صديق إلى ParkOut عبر رابط دعوتك.",
+    body: "انضم صديق إلى AndiPark عبر رابط دعوتك.",
   },
 };
 

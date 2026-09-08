@@ -25,7 +25,7 @@ function Splash() {
           <MapPin className="relative h-12 w-12 text-white" strokeWidth={2.2} fill="var(--emerald)" />
         </div>
         <div className="text-center">
-          <h1 className="font-[var(--font-display)] text-4xl font-bold tracking-tight">ParkOut</h1>
+          <h1 className="font-[var(--font-display)] text-4xl font-bold tracking-tight">AndiPark</h1>
           <p className="mt-1 text-sm text-white/70">Community parking, in real time</p>
         </div>
       </div>

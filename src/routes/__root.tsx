@@ -50,10 +50,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "ParkOut — Community parking, in real time" },
-      { name: "description", content: "ParkOut helps drivers find parking by sharing spots the moment someone leaves. Community-powered, real-time, reward-driven." },
+      { title: "AndiPark — Community parking, in real time" },
+      { name: "description", content: "AndiPark helps drivers find parking by sharing spots the moment someone leaves. Community-powered, real-time, reward-driven." },
       { name: "theme-color", content: "#0F172A" },
-      { property: "og:title", content: "ParkOut — Community parking, in real time" },
+      { property: "og:title", content: "AndiPark — Community parking, in real time" },
       { property: "og:description", content: "Find parking the moment someone's leaving. Share your spot. Earn points." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

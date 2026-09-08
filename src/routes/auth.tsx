@@ -73,7 +73,7 @@ function Auth() {
         <div className="relative flex h-full flex-col justify-end p-6">
           <div className="flex items-center gap-2 text-white/80">
             <MapPin className="h-5 w-5" fill="var(--emerald)" strokeWidth={2} />
-            <span className="text-sm font-semibold tracking-wide">ParkOut</span>
+            <span className="text-sm font-semibold tracking-wide">AndiPark</span>
           </div>
           <h1 className="mt-2 font-[var(--font-display)] text-3xl font-bold leading-tight">
             {mode === "login" ? t("welcome_back") : t("join_movement")}

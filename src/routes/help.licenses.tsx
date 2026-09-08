@@ -3,7 +3,7 @@ import { Screen, Card } from "@/components/kit";
 
 export const Route = createFileRoute("/help/licenses")({ component: () => (
   <Screen title="Licenses" back="/help">
-    <p className="text-xs text-muted-foreground">Open-source packages that power ParkOut.</p>
+    <p className="text-xs text-muted-foreground">Open-source packages that power AndiPark.</p>
     <div className="mt-3 space-y-2">
       {[
         { n: "React", v: "19", l: "MIT" },

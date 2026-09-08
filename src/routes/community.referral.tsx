@@ -22,7 +22,7 @@ function ReferralProgram() {
       <Card>
         <div className="flex h-14 w-14 animate-scale-in items-center justify-center rounded-3xl bg-emerald/15 text-[color:var(--emerald)]"><Gift className="h-7 w-7" /></div>
         <h2 className="mt-3 font-[var(--font-display)] text-lg font-bold">
-          {ar ? `ادعُ ${GOAL} أصدقاء · افتح ParkOut Plus` : `Refer ${GOAL} friends · Unlock ParkOut Plus`}
+          {ar ? `ادعُ ${GOAL} أصدقاء · افتح AndiPark Plus` : `Refer ${GOAL} friends · Unlock AndiPark Plus`}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {ar ? `لقد دعوت ${count} من ${GOAL}.` : `You've referred ${count} out of ${GOAL}.`}
