@@ -72,7 +72,9 @@ function Auth() {
         <div className="absolute -end-10 -top-10 h-56 w-56 rounded-full bg-emerald/25 blur-3xl" />
         <div className="relative flex h-full flex-col justify-end p-6">
           <div className="flex items-center gap-2 text-white/80">
-            <MapPin className="h-5 w-5" fill="var(--emerald)" strokeWidth={2} />
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/95 p-1">
+              <img src="/andipark-logo.png" alt="AndiPark" className="h-full w-full object-contain" />
+            </span>
             <span className="text-sm font-semibold tracking-wide">AndiPark</span>
           </div>
           <h1 className="mt-2 font-[var(--font-display)] text-3xl font-bold leading-tight">
