@@ -17,7 +17,7 @@ export const Route = createFileRoute("/help/")({ component: () => (
     <RowGroup title="Legal & about">
       <Row icon={Shield} label="Privacy policy" to="/help/privacy" />
       <Row icon={ScrollText} label="Terms & conditions" to="/help/terms" />
-      <Row icon={Info} label="About ParkOut" to="/help/about" />
+      <Row icon={Info} label="About AndiPark" to="/help/about" />
       <Row icon={FileText} label="Open-source licenses" to="/help/licenses" />
     </RowGroup>
   </Screen>

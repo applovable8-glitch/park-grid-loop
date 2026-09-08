@@ -4,7 +4,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/community/guidelines")({ component: () => (
   <Screen title="Community guidelines" back="/community">
-    <p className="text-sm">ParkOut works because drivers help each other. Here's what we expect from everyone.</p>
+    <p className="text-sm">AndiPark works because drivers help each other. Here's what we expect from everyone.</p>
     <Card className="mt-4">
       <p className="text-sm font-semibold text-[color:var(--emerald)]">Do</p>
       <ul className="mt-2 space-y-2 text-sm">

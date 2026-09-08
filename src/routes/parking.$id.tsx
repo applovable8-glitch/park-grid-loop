@@ -74,7 +74,7 @@ function ParkingDetails() {
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold">{profile?.name || "ParkOut driver"}</p>
+            <p className="truncate text-sm font-semibold">{profile?.name || "AndiPark driver"}</p>
             <p className="flex items-center gap-1 text-xs text-muted-foreground">
               <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
               {profile ? Number(profile.reputation).toFixed(1) : "5.0"} · {profile?.shared_count ?? 0} spots shared
