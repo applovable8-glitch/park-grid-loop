@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { MapPin } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 
 export const Route = createFileRoute("/")({ component: Splash });
