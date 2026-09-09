@@ -116,6 +116,7 @@ import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -653,6 +654,12 @@ const ProfileVehiclesAddRoute = ProfileVehiclesAddRouteImport.update({
   path: '/add',
   getParentRoute: () => ProfileVehiclesRoute,
 } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -762,6 +769,7 @@ export interface FileRoutesByFullPath {
   '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -865,6 +873,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -975,6 +984,7 @@ export interface FileRoutesById {
   '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1086,6 +1096,7 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
+    | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1189,6 +1200,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
+    | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
@@ -1298,6 +1310,7 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
+    | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1344,6 +1357,7 @@ export interface RootRouteChildren {
   SuccessPasswordChangedRoute: typeof SuccessPasswordChangedRoute
   SuccessProfileUpdatedRoute: typeof SuccessProfileUpdatedRoute
   SuccessVehicleAddedRoute: typeof SuccessVehicleAddedRoute
+  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -2097,6 +2111,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileVehiclesAddRouteImport
       parentRoute: typeof ProfileVehiclesRoute
     }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -2382,6 +2403,7 @@ const rootRouteChildren: RootRouteChildren = {
   SuccessPasswordChangedRoute: SuccessPasswordChangedRoute,
   SuccessProfileUpdatedRoute: SuccessProfileUpdatedRoute,
   SuccessVehicleAddedRoute: SuccessVehicleAddedRoute,
+  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
