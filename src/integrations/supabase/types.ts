@@ -142,6 +142,42 @@ export type Database = {
         }
         Relationships: []
       }
+      point_purchases: {
+        Row: {
+          amount_total: number | null
+          created_at: string
+          currency: string | null
+          environment: string
+          id: string
+          points: number
+          price_id: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          amount_total?: number | null
+          created_at?: string
+          currency?: string | null
+          environment?: string
+          id?: string
+          points: number
+          price_id: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          amount_total?: number | null
+          created_at?: string
+          currency?: string | null
+          environment?: string
+          id?: string
+          points?: number
+          price_id?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       points_transactions: {
         Row: {
           created_at: string
@@ -393,6 +429,18 @@ export type Database = {
       complete_handoff: {
         Args: { p_reservation_id: string; p_taken: boolean }
         Returns: undefined
+      }
+      credit_purchased_points: {
+        Args: {
+          _amount_total: number
+          _currency: string
+          _environment: string
+          _points: number
+          _price_id: string
+          _session_id: string
+          _user_id: string
+        }
+        Returns: boolean
       }
       gen_referral_code: { Args: never; Returns: string }
       push_notification: {
