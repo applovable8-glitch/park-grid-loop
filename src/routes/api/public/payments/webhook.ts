@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
 
-let _supabase: ReturnType<typeof createClient> | null = null;
-function getSupabase() {
+// Untyped admin client: the new purchase RPC is not in the generated types yet.
+let _supabase: any = null;
+function getSupabase(): any {
   if (!_supabase) {
     _supabase = createClient(
       process.env["SUPABASE_URL"]!,
@@ -41,7 +42,7 @@ async function creditPoints(session: any, env: StripeEnv) {
       title: "Points added",
       body: `${points} points were added to your balance.`,
       icon: "points",
-      kind: "points_purchased",
+      metadata: { kind: "points_purchased", points },
     });
   }
 }
