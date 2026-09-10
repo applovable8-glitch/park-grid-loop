@@ -19,7 +19,6 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReservationSuccessRouteImport } from './routes/reservation-success'
 import { Route as ReservationCancelledRouteImport } from './routes/reservation-cancelled'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as ParkingReleasedRouteImport } from './routes/parking-released'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
@@ -36,7 +35,6 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as ProfileIndexRouteImport } from './routes/profile.index'
-import { Route as PaymentsIndexRouteImport } from './routes/payments.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -62,7 +60,6 @@ import { Route as RewardsLeaderboardRouteImport } from './routes/rewards.leaderb
 import { Route as RewardsInviteRouteImport } from './routes/rewards.invite'
 import { Route as RewardsHistoryRouteImport } from './routes/rewards.history'
 import { Route as RewardsDailyRouteImport } from './routes/rewards.daily'
-import { Route as RewardsBuyRouteImport } from './routes/rewards.buy'
 import { Route as RewardsAchievementsRouteImport } from './routes/rewards.achievements'
 import { Route as ReservationIdRouteImport } from './routes/reservation.$id'
 import { Route as ReportsUserRouteImport } from './routes/reports.user'
@@ -77,13 +74,6 @@ import { Route as ProfileHistoryRouteImport } from './routes/profile.history'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 import { Route as ProfileBadgesRouteImport } from './routes/profile.badges'
 import { Route as ProfileAchievementsRouteImport } from './routes/profile.achievements'
-import { Route as PaymentsSuccessRouteImport } from './routes/payments.success'
-import { Route as PaymentsSubscriptionsRouteImport } from './routes/payments.subscriptions'
-import { Route as PaymentsInvoicesRouteImport } from './routes/payments.invoices'
-import { Route as PaymentsHistoryRouteImport } from './routes/payments.history'
-import { Route as PaymentsFailedRouteImport } from './routes/payments.failed'
-import { Route as PaymentsCheckoutRouteImport } from './routes/payments.checkout'
-import { Route as PaymentsAddRouteImport } from './routes/payments.add'
 import { Route as ParkingIdRouteImport } from './routes/parking.$id'
 import { Route as NotificationsPreferencesRouteImport } from './routes/notifications.preferences'
 import { Route as NotificationsIdRouteImport } from './routes/notifications.$id'
@@ -116,7 +106,6 @@ import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
-import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -166,11 +155,6 @@ const ReservationCancelledRoute = ReservationCancelledRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PaymentsRoute = PaymentsRouteImport.update({
-  id: '/payments',
-  path: '/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ParkingReleasedRoute = ParkingReleasedRouteImport.update({
@@ -252,11 +236,6 @@ const ProfileIndexRoute = ProfileIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ProfileRoute,
-} as any)
-const PaymentsIndexRoute = PaymentsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PaymentsRoute,
 } as any)
 const HelpIndexRoute = HelpIndexRouteImport.update({
   id: '/',
@@ -383,11 +362,6 @@ const RewardsDailyRoute = RewardsDailyRouteImport.update({
   path: '/daily',
   getParentRoute: () => RewardsRoute,
 } as any)
-const RewardsBuyRoute = RewardsBuyRouteImport.update({
-  id: '/buy',
-  path: '/buy',
-  getParentRoute: () => RewardsRoute,
-} as any)
 const RewardsAchievementsRoute = RewardsAchievementsRouteImport.update({
   id: '/achievements',
   path: '/achievements',
@@ -457,41 +431,6 @@ const ProfileAchievementsRoute = ProfileAchievementsRouteImport.update({
   id: '/achievements',
   path: '/achievements',
   getParentRoute: () => ProfileRoute,
-} as any)
-const PaymentsSuccessRoute = PaymentsSuccessRouteImport.update({
-  id: '/success',
-  path: '/success',
-  getParentRoute: () => PaymentsRoute,
-} as any)
-const PaymentsSubscriptionsRoute = PaymentsSubscriptionsRouteImport.update({
-  id: '/subscriptions',
-  path: '/subscriptions',
-  getParentRoute: () => PaymentsRoute,
-} as any)
-const PaymentsInvoicesRoute = PaymentsInvoicesRouteImport.update({
-  id: '/invoices',
-  path: '/invoices',
-  getParentRoute: () => PaymentsRoute,
-} as any)
-const PaymentsHistoryRoute = PaymentsHistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
-  getParentRoute: () => PaymentsRoute,
-} as any)
-const PaymentsFailedRoute = PaymentsFailedRouteImport.update({
-  id: '/failed',
-  path: '/failed',
-  getParentRoute: () => PaymentsRoute,
-} as any)
-const PaymentsCheckoutRoute = PaymentsCheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
-  getParentRoute: () => PaymentsRoute,
-} as any)
-const PaymentsAddRoute = PaymentsAddRouteImport.update({
-  id: '/add',
-  path: '/add',
-  getParentRoute: () => PaymentsRoute,
 } as any)
 const ParkingIdRoute = ParkingIdRouteImport.update({
   id: '/parking/$id',
@@ -654,12 +593,6 @@ const ProfileVehiclesAddRoute = ProfileVehiclesAddRouteImport.update({
   path: '/add',
   getParentRoute: () => ProfileVehiclesRoute,
 } as any)
-const ApiPublicPaymentsWebhookRoute =
-  ApiPublicPaymentsWebhookRouteImport.update({
-    id: '/api/public/payments/webhook',
-    path: '/api/public/payments/webhook',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -676,7 +609,6 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
   '/parking-released': typeof ParkingReleasedRoute
-  '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRouteWithChildren
   '/reservation-cancelled': typeof ReservationCancelledRoute
   '/reservation-success': typeof ReservationSuccessRoute
@@ -717,13 +649,6 @@ export interface FileRoutesByFullPath {
   '/notifications/$id': typeof NotificationsIdRoute
   '/notifications/preferences': typeof NotificationsPreferencesRoute
   '/parking/$id': typeof ParkingIdRoute
-  '/payments/add': typeof PaymentsAddRoute
-  '/payments/checkout': typeof PaymentsCheckoutRoute
-  '/payments/failed': typeof PaymentsFailedRoute
-  '/payments/history': typeof PaymentsHistoryRoute
-  '/payments/invoices': typeof PaymentsInvoicesRoute
-  '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
-  '/payments/success': typeof PaymentsSuccessRoute
   '/profile/achievements': typeof ProfileAchievementsRoute
   '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
@@ -738,7 +663,6 @@ export interface FileRoutesByFullPath {
   '/reports/user': typeof ReportsUserRoute
   '/reservation/$id': typeof ReservationIdRoute
   '/rewards/achievements': typeof RewardsAchievementsRoute
-  '/rewards/buy': typeof RewardsBuyRoute
   '/rewards/daily': typeof RewardsDailyRoute
   '/rewards/history': typeof RewardsHistoryRoute
   '/rewards/invite': typeof RewardsInviteRoute
@@ -764,12 +688,10 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/community/': typeof CommunityIndexRoute
   '/help/': typeof HelpIndexRoute
-  '/payments/': typeof PaymentsIndexRoute
   '/profile/': typeof ProfileIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -821,13 +743,6 @@ export interface FileRoutesByTo {
   '/notifications/$id': typeof NotificationsIdRoute
   '/notifications/preferences': typeof NotificationsPreferencesRoute
   '/parking/$id': typeof ParkingIdRoute
-  '/payments/add': typeof PaymentsAddRoute
-  '/payments/checkout': typeof PaymentsCheckoutRoute
-  '/payments/failed': typeof PaymentsFailedRoute
-  '/payments/history': typeof PaymentsHistoryRoute
-  '/payments/invoices': typeof PaymentsInvoicesRoute
-  '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
-  '/payments/success': typeof PaymentsSuccessRoute
   '/profile/achievements': typeof ProfileAchievementsRoute
   '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
@@ -842,7 +757,6 @@ export interface FileRoutesByTo {
   '/reports/user': typeof ReportsUserRoute
   '/reservation/$id': typeof ReservationIdRoute
   '/rewards/achievements': typeof RewardsAchievementsRoute
-  '/rewards/buy': typeof RewardsBuyRoute
   '/rewards/daily': typeof RewardsDailyRoute
   '/rewards/history': typeof RewardsHistoryRoute
   '/rewards/invite': typeof RewardsInviteRoute
@@ -868,12 +782,10 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/community': typeof CommunityIndexRoute
   '/help': typeof HelpIndexRoute
-  '/payments': typeof PaymentsIndexRoute
   '/profile': typeof ProfileIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -891,7 +803,6 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/otp': typeof OtpRoute
   '/parking-released': typeof ParkingReleasedRoute
-  '/payments': typeof PaymentsRouteWithChildren
   '/profile': typeof ProfileRouteWithChildren
   '/reservation-cancelled': typeof ReservationCancelledRoute
   '/reservation-success': typeof ReservationSuccessRoute
@@ -932,13 +843,6 @@ export interface FileRoutesById {
   '/notifications/$id': typeof NotificationsIdRoute
   '/notifications/preferences': typeof NotificationsPreferencesRoute
   '/parking/$id': typeof ParkingIdRoute
-  '/payments/add': typeof PaymentsAddRoute
-  '/payments/checkout': typeof PaymentsCheckoutRoute
-  '/payments/failed': typeof PaymentsFailedRoute
-  '/payments/history': typeof PaymentsHistoryRoute
-  '/payments/invoices': typeof PaymentsInvoicesRoute
-  '/payments/subscriptions': typeof PaymentsSubscriptionsRoute
-  '/payments/success': typeof PaymentsSuccessRoute
   '/profile/achievements': typeof ProfileAchievementsRoute
   '/profile/badges': typeof ProfileBadgesRoute
   '/profile/edit': typeof ProfileEditRoute
@@ -953,7 +857,6 @@ export interface FileRoutesById {
   '/reports/user': typeof ReportsUserRoute
   '/reservation/$id': typeof ReservationIdRoute
   '/rewards/achievements': typeof RewardsAchievementsRoute
-  '/rewards/buy': typeof RewardsBuyRoute
   '/rewards/daily': typeof RewardsDailyRoute
   '/rewards/history': typeof RewardsHistoryRoute
   '/rewards/invite': typeof RewardsInviteRoute
@@ -979,12 +882,10 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/community/': typeof CommunityIndexRoute
   '/help/': typeof HelpIndexRoute
-  '/payments/': typeof PaymentsIndexRoute
   '/profile/': typeof ProfileIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1003,7 +904,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/otp'
     | '/parking-released'
-    | '/payments'
     | '/profile'
     | '/reservation-cancelled'
     | '/reservation-success'
@@ -1044,13 +944,6 @@ export interface FileRouteTypes {
     | '/notifications/$id'
     | '/notifications/preferences'
     | '/parking/$id'
-    | '/payments/add'
-    | '/payments/checkout'
-    | '/payments/failed'
-    | '/payments/history'
-    | '/payments/invoices'
-    | '/payments/subscriptions'
-    | '/payments/success'
     | '/profile/achievements'
     | '/profile/badges'
     | '/profile/edit'
@@ -1065,7 +958,6 @@ export interface FileRouteTypes {
     | '/reports/user'
     | '/reservation/$id'
     | '/rewards/achievements'
-    | '/rewards/buy'
     | '/rewards/daily'
     | '/rewards/history'
     | '/rewards/invite'
@@ -1091,12 +983,10 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/community/'
     | '/help/'
-    | '/payments/'
     | '/profile/'
     | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
-    | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1148,13 +1038,6 @@ export interface FileRouteTypes {
     | '/notifications/$id'
     | '/notifications/preferences'
     | '/parking/$id'
-    | '/payments/add'
-    | '/payments/checkout'
-    | '/payments/failed'
-    | '/payments/history'
-    | '/payments/invoices'
-    | '/payments/subscriptions'
-    | '/payments/success'
     | '/profile/achievements'
     | '/profile/badges'
     | '/profile/edit'
@@ -1169,7 +1052,6 @@ export interface FileRouteTypes {
     | '/reports/user'
     | '/reservation/$id'
     | '/rewards/achievements'
-    | '/rewards/buy'
     | '/rewards/daily'
     | '/rewards/history'
     | '/rewards/invite'
@@ -1195,12 +1077,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/community'
     | '/help'
-    | '/payments'
     | '/profile'
     | '/settings'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
-    | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
@@ -1217,7 +1097,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/otp'
     | '/parking-released'
-    | '/payments'
     | '/profile'
     | '/reservation-cancelled'
     | '/reservation-success'
@@ -1258,13 +1137,6 @@ export interface FileRouteTypes {
     | '/notifications/$id'
     | '/notifications/preferences'
     | '/parking/$id'
-    | '/payments/add'
-    | '/payments/checkout'
-    | '/payments/failed'
-    | '/payments/history'
-    | '/payments/invoices'
-    | '/payments/subscriptions'
-    | '/payments/success'
     | '/profile/achievements'
     | '/profile/badges'
     | '/profile/edit'
@@ -1279,7 +1151,6 @@ export interface FileRouteTypes {
     | '/reports/user'
     | '/reservation/$id'
     | '/rewards/achievements'
-    | '/rewards/buy'
     | '/rewards/daily'
     | '/rewards/history'
     | '/rewards/invite'
@@ -1305,12 +1176,10 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/community/'
     | '/help/'
-    | '/payments/'
     | '/profile/'
     | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
-    | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1328,7 +1197,6 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   OtpRoute: typeof OtpRoute
   ParkingReleasedRoute: typeof ParkingReleasedRoute
-  PaymentsRoute: typeof PaymentsRouteWithChildren
   ProfileRoute: typeof ProfileRouteWithChildren
   ReservationCancelledRoute: typeof ReservationCancelledRoute
   ReservationSuccessRoute: typeof ReservationSuccessRoute
@@ -1357,7 +1225,6 @@ export interface RootRouteChildren {
   SuccessPasswordChangedRoute: typeof SuccessPasswordChangedRoute
   SuccessProfileUpdatedRoute: typeof SuccessProfileUpdatedRoute
   SuccessVehicleAddedRoute: typeof SuccessVehicleAddedRoute
-  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1430,13 +1297,6 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/payments': {
-      id: '/payments'
-      path: '/payments'
-      fullPath: '/payments'
-      preLoaderRoute: typeof PaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parking-released': {
@@ -1550,13 +1410,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/profile/'
       preLoaderRoute: typeof ProfileIndexRouteImport
       parentRoute: typeof ProfileRoute
-    }
-    '/payments/': {
-      id: '/payments/'
-      path: '/'
-      fullPath: '/payments/'
-      preLoaderRoute: typeof PaymentsIndexRouteImport
-      parentRoute: typeof PaymentsRoute
     }
     '/help/': {
       id: '/help/'
@@ -1733,13 +1586,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RewardsDailyRouteImport
       parentRoute: typeof RewardsRoute
     }
-    '/rewards/buy': {
-      id: '/rewards/buy'
-      path: '/buy'
-      fullPath: '/rewards/buy'
-      preLoaderRoute: typeof RewardsBuyRouteImport
-      parentRoute: typeof RewardsRoute
-    }
     '/rewards/achievements': {
       id: '/rewards/achievements'
       path: '/achievements'
@@ -1837,55 +1683,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/profile/achievements'
       preLoaderRoute: typeof ProfileAchievementsRouteImport
       parentRoute: typeof ProfileRoute
-    }
-    '/payments/success': {
-      id: '/payments/success'
-      path: '/success'
-      fullPath: '/payments/success'
-      preLoaderRoute: typeof PaymentsSuccessRouteImport
-      parentRoute: typeof PaymentsRoute
-    }
-    '/payments/subscriptions': {
-      id: '/payments/subscriptions'
-      path: '/subscriptions'
-      fullPath: '/payments/subscriptions'
-      preLoaderRoute: typeof PaymentsSubscriptionsRouteImport
-      parentRoute: typeof PaymentsRoute
-    }
-    '/payments/invoices': {
-      id: '/payments/invoices'
-      path: '/invoices'
-      fullPath: '/payments/invoices'
-      preLoaderRoute: typeof PaymentsInvoicesRouteImport
-      parentRoute: typeof PaymentsRoute
-    }
-    '/payments/history': {
-      id: '/payments/history'
-      path: '/history'
-      fullPath: '/payments/history'
-      preLoaderRoute: typeof PaymentsHistoryRouteImport
-      parentRoute: typeof PaymentsRoute
-    }
-    '/payments/failed': {
-      id: '/payments/failed'
-      path: '/failed'
-      fullPath: '/payments/failed'
-      preLoaderRoute: typeof PaymentsFailedRouteImport
-      parentRoute: typeof PaymentsRoute
-    }
-    '/payments/checkout': {
-      id: '/payments/checkout'
-      path: '/checkout'
-      fullPath: '/payments/checkout'
-      preLoaderRoute: typeof PaymentsCheckoutRouteImport
-      parentRoute: typeof PaymentsRoute
-    }
-    '/payments/add': {
-      id: '/payments/add'
-      path: '/add'
-      fullPath: '/payments/add'
-      preLoaderRoute: typeof PaymentsAddRouteImport
-      parentRoute: typeof PaymentsRoute
     }
     '/parking/$id': {
       id: '/parking/$id'
@@ -2111,13 +1908,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileVehiclesAddRouteImport
       parentRoute: typeof ProfileVehiclesRoute
     }
-    '/api/public/payments/webhook': {
-      id: '/api/public/payments/webhook'
-      path: '/api/public/payments/webhook'
-      fullPath: '/api/public/payments/webhook'
-      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -2222,32 +2012,6 @@ const NotificationsRouteWithChildren = NotificationsRoute._addFileChildren(
   NotificationsRouteChildren,
 )
 
-interface PaymentsRouteChildren {
-  PaymentsAddRoute: typeof PaymentsAddRoute
-  PaymentsCheckoutRoute: typeof PaymentsCheckoutRoute
-  PaymentsFailedRoute: typeof PaymentsFailedRoute
-  PaymentsHistoryRoute: typeof PaymentsHistoryRoute
-  PaymentsInvoicesRoute: typeof PaymentsInvoicesRoute
-  PaymentsSubscriptionsRoute: typeof PaymentsSubscriptionsRoute
-  PaymentsSuccessRoute: typeof PaymentsSuccessRoute
-  PaymentsIndexRoute: typeof PaymentsIndexRoute
-}
-
-const PaymentsRouteChildren: PaymentsRouteChildren = {
-  PaymentsAddRoute: PaymentsAddRoute,
-  PaymentsCheckoutRoute: PaymentsCheckoutRoute,
-  PaymentsFailedRoute: PaymentsFailedRoute,
-  PaymentsHistoryRoute: PaymentsHistoryRoute,
-  PaymentsInvoicesRoute: PaymentsInvoicesRoute,
-  PaymentsSubscriptionsRoute: PaymentsSubscriptionsRoute,
-  PaymentsSuccessRoute: PaymentsSuccessRoute,
-  PaymentsIndexRoute: PaymentsIndexRoute,
-}
-
-const PaymentsRouteWithChildren = PaymentsRoute._addFileChildren(
-  PaymentsRouteChildren,
-)
-
 interface ProfileVehiclesRouteChildren {
   ProfileVehiclesAddRoute: typeof ProfileVehiclesAddRoute
 }
@@ -2289,7 +2053,6 @@ const ProfileRouteWithChildren =
 
 interface RewardsRouteChildren {
   RewardsAchievementsRoute: typeof RewardsAchievementsRoute
-  RewardsBuyRoute: typeof RewardsBuyRoute
   RewardsDailyRoute: typeof RewardsDailyRoute
   RewardsHistoryRoute: typeof RewardsHistoryRoute
   RewardsInviteRoute: typeof RewardsInviteRoute
@@ -2300,7 +2063,6 @@ interface RewardsRouteChildren {
 
 const RewardsRouteChildren: RewardsRouteChildren = {
   RewardsAchievementsRoute: RewardsAchievementsRoute,
-  RewardsBuyRoute: RewardsBuyRoute,
   RewardsDailyRoute: RewardsDailyRoute,
   RewardsHistoryRoute: RewardsHistoryRoute,
   RewardsInviteRoute: RewardsInviteRoute,
@@ -2374,7 +2136,6 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   OtpRoute: OtpRoute,
   ParkingReleasedRoute: ParkingReleasedRoute,
-  PaymentsRoute: PaymentsRouteWithChildren,
   ProfileRoute: ProfileRouteWithChildren,
   ReservationCancelledRoute: ReservationCancelledRoute,
   ReservationSuccessRoute: ReservationSuccessRoute,
@@ -2403,7 +2164,6 @@ const rootRouteChildren: RootRouteChildren = {
   SuccessPasswordChangedRoute: SuccessPasswordChangedRoute,
   SuccessProfileUpdatedRoute: SuccessProfileUpdatedRoute,
   SuccessVehicleAddedRoute: SuccessVehicleAddedRoute,
-  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

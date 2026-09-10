@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Gift, TrendingUp, Share2, CheckCircle2, Sparkles, CreditCard, Trophy, History as HistoryIcon, ChevronRight } from "lucide-react";
+import { Gift, TrendingUp, Share2, CheckCircle2, Sparkles, Trophy, History as HistoryIcon, ChevronRight } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
 import { BottomNav } from "@/components/BottomNav";
@@ -29,11 +29,8 @@ function Rewards() {
             {ar ? "التقييم" : "Reputation"} {(user?.reputation ?? 5).toFixed(1)} · {user?.shared ?? 0} {ar ? "مشاركة" : "shares"}
           </p>
 
-          <div className="mt-5 flex gap-2">
-            <Link to="/rewards/buy" className="flex-1 rounded-2xl bg-white py-3 text-center text-sm font-semibold text-foreground transition active:scale-95">
-              <span className="inline-flex items-center gap-2"><CreditCard className="h-4 w-4" /> {ar ? "شراء نقاط" : "Buy points"}</span>
-            </Link>
-            <Link to="/rewards/invite" className="flex-1 rounded-2xl bg-white/10 py-3 text-center text-sm font-semibold text-white ring-1 ring-white/15 backdrop-blur-md transition active:scale-95">
+          <div className="mt-5">
+            <Link to="/rewards/invite" className="block rounded-2xl bg-white/10 py-3 text-center text-sm font-semibold text-white ring-1 ring-white/15 backdrop-blur-md transition active:scale-95">
               <span className="inline-flex items-center gap-2"><Share2 className="h-4 w-4" /> {ar ? "دعوة أصدقاء" : "Invite friends"}</span>
             </Link>
           </div>
@@ -52,24 +49,6 @@ function Rewards() {
           <EarnRow icon={Share2} title={ar ? "شارك مكانك" : "Share your parking"} sub={ar ? "‎+15 إلى +25 نقطة لكل مشاركة" : "+15 to +25 points per share"} cta={ar ? "شارك الآن" : "Share now"} to="/leaving" />
           <EarnRow icon={CheckCircle2} title={ar ? "تسليم ناجح" : "Successful handoff"} sub={ar ? "مكافأة عند استلام سائق لمكانك" : "+10 bonus when a driver takes your spot"} cta={ar ? "التفاصيل" : "Learn"} to="/rewards/achievements" />
           <EarnRow icon={Gift} title={ar ? "ادعُ صديقاً" : "Invite a friend"} sub={ar ? "‎+100 نقطة لك ولصديقك" : "+100 points for you and your friend"} cta={ar ? "ادعُ" : "Invite"} to="/rewards/invite" />
-        </div>
-
-        <h2 className="mt-6 font-[var(--font-display)] text-lg font-bold">{ar ? "باقات النقاط" : "Point packages"}</h2>
-        <div className="mt-3 grid grid-cols-2 gap-3">
-          {[
-            { pts: 100, price: "AED 9", tag: null },
-            { pts: 500, price: "AED 39", tag: ar ? "الأكثر طلباً" : "Popular" },
-            { pts: 1200, price: "AED 79", tag: ar ? "أفضل قيمة" : "Best value" },
-            { pts: 3000, price: "AED 179", tag: null },
-          ].map((p) => (
-            <Link key={p.pts} to="/rewards/buy" className="relative rounded-3xl bg-card p-4 text-start shadow-[var(--shadow-card)] ring-1 ring-transparent transition hover:ring-[var(--emerald)] active:scale-95">
-              {p.tag && <span className="absolute -top-2 end-3 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">{p.tag}</span>}
-              <Sparkles className="h-4 w-4 text-[color:var(--emerald)]" />
-              <p className="mt-2 font-[var(--font-display)] text-2xl font-bold">{p.pts}</p>
-              <p className="text-xs text-muted-foreground">{ar ? "نقطة" : "points"}</p>
-              <p className="mt-2 text-sm font-semibold">{p.price}</p>
-            </Link>
-          ))}
         </div>
 
         <div className="mt-6 flex items-center justify-between">

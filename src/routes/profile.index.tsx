@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Star, Share2, CheckCircle2, Settings, Bell, CreditCard, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users, Gift } from "lucide-react";
+import { Star, Share2, CheckCircle2, Settings, Bell, HelpCircle, LogOut, ChevronRight, Shield, Pencil, Car, Clock, Award, Users, Gift } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
@@ -83,7 +83,6 @@ function Profile() {
           <Link to="/settings"><Row icon={Settings} label={t("settings")} hint={`${lang.toUpperCase()} · ${user.theme}`} /></Link>
           <Link to="/settings/notifications"><Row icon={Bell} label={t("notifications")} hint={notifSummary(user.notification_prefs, t)} /></Link>
           <Link to="/settings/privacy"><Row icon={Shield} label={t("privacy")} hint={user.location_prefs.share_location ? t("location_on") : t("location_off")} /></Link>
-          <Link to="/payments"><Row icon={CreditCard} label={t("payment_methods")} hint={t("payment_hint")} /></Link>
           <Link to="/community"><Row icon={Users} label={t("community")} hint={t("community_hint")} /></Link>
           <Link to="/help"><Row icon={HelpCircle} label={t("help_center")} hint={t("help_hint")} /></Link>
         </div>
