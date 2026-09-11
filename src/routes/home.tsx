@@ -64,8 +64,11 @@ function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showList, setShowList] = useState(false);
   const [onlyAvailable, setOnlyAvailable] = useState(false);
-  const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string }>>([]);
-  const tokenRef = useRef<GAny | null>(null);
+  const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string; lat?: number; lng?: number }>>([]);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const tokenRef = useRef<string | null>(null);
+  const reqRef = useRef(0);
   const [, setTick] = useState(0);
 
   // keep the shared-spot countdown ticking
