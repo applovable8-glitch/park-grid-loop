@@ -53,6 +53,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
   {
     title: "System",
     items: [
+      { label: "Website", icon: Globe, to: "/admin/website" },
       { label: "Security", icon: ShieldCheck, to: "/admin/security" },
       { label: "Audit Logs", icon: ScrollText, to: "/admin/audit" },
       { label: "Settings", icon: Settings, to: "/admin/settings" },
