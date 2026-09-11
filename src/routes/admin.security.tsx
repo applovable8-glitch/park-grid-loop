@@ -1,7 +1,66 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ShieldCheck, Lock, KeyRound } from "lucide-react";
+import { ShieldCheck, Lock, KeyRound, MailCheck, Smartphone, Loader2 } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { AdminHeader, NotConfigured } from "@/components/admin/AdminTable";
 import { MAPS_KEY } from "@/lib/google-maps";
+import { getVerificationSettings, saveVerificationSettings } from "@/lib/auth-settings.functions";
+
+function VerificationCard() {
+  const qc = useQueryClient();
+  const { data, isLoading } = useQuery({ queryKey: ["auth", "verification-policy"], queryFn: () => getVerificationSettings() });
+  const save = useMutation({
+    mutationFn: (emailVerification: boolean) => saveVerificationSettings({ data: { emailVerification } }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["auth", "verification-policy"] }); toast.success("Verification policy updated"); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  return (
+    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[#111827]">
+      <h2 className="border-b border-slate-100 px-4 py-3 text-sm font-bold dark:border-white/5">Account verification</h2>
+
+      <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 dark:border-white/5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          <MailCheck className="h-4 w-4" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-medium">Require email verification</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Users with an unconfirmed email are held on the confirmation screen until they confirm.
+          </p>
+        </div>
+        {isLoading ? (
+          <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+        ) : (
+          <button
+            type="button"
+            disabled={save.isPending}
+            onClick={() => save.mutate(!data?.emailVerification)}
+            className={`relative h-6 w-11 shrink-0 rounded-full transition-colors disabled:opacity-60 ${data?.emailVerification ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"}`}
+            role="switch"
+            aria-checked={!!data?.emailVerification}
+            aria-label="Require email verification"
+          >
+            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${data?.emailVerification ? "left-[22px]" : "left-0.5"}`} />
+          </button>
+        )}
+      </div>
+
+      <div className="flex items-center gap-3 px-4 py-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-500/10 text-slate-500 dark:text-slate-400">
+          <Smartphone className="h-4 w-4" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-medium">Require phone (SMS OTP) verification</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Backend configuration required — no SMS/OTP provider is connected to the auth backend.
+          </p>
+        </div>
+        <span className="rounded-full bg-slate-500/10 px-2.5 py-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">Unavailable</span>
+      </div>
+    </section>
+  );
+}
 
 export const Route = createFileRoute("/admin/security")({
   head: () => ({ meta: [{ title: "Security — AndiPark Admin" }, { name: "robots", content: "noindex" }] }),
@@ -41,6 +100,7 @@ function AdminSecurity() {
         </section>
 
         <section className="space-y-4">
+          <VerificationCard />
           <NotConfigured
             title="Failed logins & suspicious activity"
             detail="No security event store is connected, so failed sign-ins, blocked IPs and anomaly detection cannot be reported here."
