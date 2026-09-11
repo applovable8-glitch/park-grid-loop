@@ -33,6 +33,7 @@ const TIME_FILTERS = [
 ] as const;
 
 const NEAR_ME_KM = 3;
+const SEARCH_AREA_KM = 5;
 const FALLBACK_CENTER = ABU_DHABI; // Abu Dhabi (launch market) — used only when GPS and picked area are unavailable
 
 type TimeFilter = (typeof TIME_FILTERS)[number]["id"];
@@ -181,7 +182,7 @@ function Home() {
     const preset = TIME_FILTERS.find((f) => f.id === timeFilter) ?? TIME_FILTERS[0];
     return spots
       .filter((s) => s.user_id !== user?.id)
-      .filter((s) => (s.address ?? "").toLowerCase().includes(q.toLowerCase()) || !!place || nearMe)
+      .filter((s) => place || nearMe || !q.trim() || (s.address ?? "").toLowerCase().includes(q.toLowerCase()))
       .map((s) => ({
         ...s,
         distance: haversine(center, { lat: s.lat, lng: s.lng }),
@@ -190,6 +191,8 @@ function Home() {
       .filter((s) => {
         if (onlyAvailable && s.status === "reserved") return false;
         if (nearMe && s.distance > NEAR_ME_KM * 1000) return false;
+        // A picked search area only shows spots around that area.
+        if (place && !nearMe && s.distance > SEARCH_AREA_KM * 1000) return false;
         if (preset.maxMins !== Infinity) return s.mins <= preset.maxMins;
         return true;
       })
