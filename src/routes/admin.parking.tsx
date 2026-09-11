@@ -6,6 +6,7 @@ import { AdminHeader, AdminSearch, StatusPill, TableShell } from "@/components/a
 import { useAdminSpots, useUserDirectory, fmtDateTime, dash, useSearch, shortRef, type AdminSpot } from "@/lib/admin-tables";
 import { haversine, type LiveSpot } from "@/lib/parking-live";
 import { distanceLabel } from "@/lib/format";
+import { ABU_DHABI } from "@/lib/geo-defaults";
 
 export const Route = createFileRoute("/admin/parking")({
   head: () => ({ meta: [{ title: "Parking — AndiPark Admin" }, { name: "robots", content: "noindex" }] }),
@@ -47,7 +48,7 @@ function AdminParking() {
 
   const center = useMemo(() => {
     if (selected) return { lat: selected.lat, lng: selected.lng };
-    if (!mapSpots.length) return { lat: 25.2048, lng: 55.2708 };
+    if (!mapSpots.length) return ABU_DHABI;
     return {
       lat: mapSpots.reduce((a, s) => a + s.lat, 0) / mapSpots.length,
       lng: mapSpots.reduce((a, s) => a + s.lng, 0) / mapSpots.length,

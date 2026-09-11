@@ -105,6 +105,8 @@ import { Route as AuthSuccessRouteImport } from './routes/auth.success'
 import { Route as AdminWebhooksRouteImport } from './routes/admin.webhooks'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminRewardsRouteImport } from './routes/admin.rewards'
 import { Route as AdminReservationsRouteImport } from './routes/admin.reservations'
@@ -117,6 +119,7 @@ import { Route as AdminNotificationsRouteImport } from './routes/admin.notificat
 import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
 import { Route as AdminLiveRouteImport } from './routes/admin.live'
 import { Route as AdminEmailRouteImport } from './routes/admin.email'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
@@ -602,6 +605,16 @@ const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   path: '/transactions',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSecurityRoute = AdminSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminRolesRoute = AdminRolesRouteImport.update({
   id: '/roles',
   path: '/roles',
@@ -662,6 +675,11 @@ const AdminEmailRoute = AdminEmailRouteImport.update({
   path: '/email',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -704,6 +722,7 @@ export interface FileRoutesByFullPath {
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/email': typeof AdminEmailRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
@@ -716,6 +735,8 @@ export interface FileRoutesByFullPath {
   '/admin/reservations': typeof AdminReservationsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/security': typeof AdminSecurityRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
@@ -812,6 +833,7 @@ export interface FileRoutesByTo {
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/email': typeof AdminEmailRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
@@ -824,6 +846,8 @@ export interface FileRoutesByTo {
   '/admin/reservations': typeof AdminReservationsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/security': typeof AdminSecurityRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
@@ -926,6 +950,7 @@ export interface FileRoutesById {
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/email': typeof AdminEmailRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
@@ -938,6 +963,8 @@ export interface FileRoutesById {
   '/admin/reservations': typeof AdminReservationsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/security': typeof AdminSecurityRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
@@ -1041,6 +1068,7 @@ export interface FileRouteTypes {
     | '/verify-phone'
     | '/welcome'
     | '/admin/analytics'
+    | '/admin/audit'
     | '/admin/email'
     | '/admin/live'
     | '/admin/moderator'
@@ -1053,6 +1081,8 @@ export interface FileRouteTypes {
     | '/admin/reservations'
     | '/admin/rewards'
     | '/admin/roles'
+    | '/admin/security'
+    | '/admin/settings'
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
@@ -1149,6 +1179,7 @@ export interface FileRouteTypes {
     | '/verify-phone'
     | '/welcome'
     | '/admin/analytics'
+    | '/admin/audit'
     | '/admin/email'
     | '/admin/live'
     | '/admin/moderator'
@@ -1161,6 +1192,8 @@ export interface FileRouteTypes {
     | '/admin/reservations'
     | '/admin/rewards'
     | '/admin/roles'
+    | '/admin/security'
+    | '/admin/settings'
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
@@ -1262,6 +1295,7 @@ export interface FileRouteTypes {
     | '/verify-phone'
     | '/welcome'
     | '/admin/analytics'
+    | '/admin/audit'
     | '/admin/email'
     | '/admin/live'
     | '/admin/moderator'
@@ -1274,6 +1308,8 @@ export interface FileRouteTypes {
     | '/admin/reservations'
     | '/admin/rewards'
     | '/admin/roles'
+    | '/admin/security'
+    | '/admin/settings'
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
@@ -2069,6 +2105,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTransactionsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/security': {
+      id: '/admin/security'
+      path: '/security'
+      fullPath: '/admin/security'
+      preLoaderRoute: typeof AdminSecurityRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/roles': {
       id: '/admin/roles'
       path: '/roles'
@@ -2153,6 +2203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEmailRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/analytics': {
       id: '/admin/analytics'
       path: '/analytics'
@@ -2179,6 +2236,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminAuditRoute: typeof AdminAuditRoute
   AdminEmailRoute: typeof AdminEmailRoute
   AdminLiveRoute: typeof AdminLiveRoute
   AdminModeratorRoute: typeof AdminModeratorRoute
@@ -2191,6 +2249,8 @@ interface AdminRouteChildren {
   AdminReservationsRoute: typeof AdminReservationsRoute
   AdminRewardsRoute: typeof AdminRewardsRoute
   AdminRolesRoute: typeof AdminRolesRoute
+  AdminSecurityRoute: typeof AdminSecurityRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWebhooksRoute: typeof AdminWebhooksRoute
@@ -2199,6 +2259,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminAuditRoute: AdminAuditRoute,
   AdminEmailRoute: AdminEmailRoute,
   AdminLiveRoute: AdminLiveRoute,
   AdminModeratorRoute: AdminModeratorRoute,
@@ -2211,6 +2272,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReservationsRoute: AdminReservationsRoute,
   AdminRewardsRoute: AdminRewardsRoute,
   AdminRolesRoute: AdminRolesRoute,
+  AdminSecurityRoute: AdminSecurityRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWebhooksRoute: AdminWebhooksRoute,

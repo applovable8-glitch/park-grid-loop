@@ -16,6 +16,7 @@ import { useGeolocation } from "@/lib/use-geolocation";
 import { useAreaName } from "@/lib/use-area-name";
 import { useThreads } from "@/lib/chat";
 import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
+import { ABU_DHABI } from "@/lib/geo-defaults";
 import {
   clockOf, haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
   useMyRequest, useMySharedSpot, type LiveSpot,
@@ -32,7 +33,7 @@ const TIME_FILTERS = [
 ] as const;
 
 const NEAR_ME_KM = 3;
-const FALLBACK_CENTER = { lat: 25.2048, lng: 55.2708 }; // Dubai
+const FALLBACK_CENTER = ABU_DHABI; // Abu Dhabi (launch market) — used only when GPS and picked area are unavailable
 
 type TimeFilter = (typeof TIME_FILTERS)[number]["id"];
 
