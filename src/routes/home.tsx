@@ -430,6 +430,24 @@ function Home() {
   );
 }
 
+/** Small, quiet quick-filter chip. */
+function Chip({ active, onClick, icon: Icon, children }: {
+  active: boolean; onClick: () => void; icon?: typeof LocateFixed; children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className={`press flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold shadow-[var(--shadow-card)] transition-colors ${
+        active ? "bg-[var(--emerald)] text-white" : "bg-card/95 backdrop-blur"
+      }`}
+    >
+      {Icon && <Icon className="h-3.5 w-3.5" />}
+      {children}
+    </button>
+  );
+}
+
 function SpotCard({ spot, distance, mins, disabled, busy, onSelect }: {
   spot: LiveSpot; distance: number; mins: number; disabled: boolean; busy: boolean; onSelect: () => void;
 }) {
