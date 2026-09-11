@@ -80,6 +80,29 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           </span>
         </div>
 
+        {/* Single CTA — the decision comes before the details */}
+        <div className="mt-4">
+          {isMine ? (
+            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">This is your own shared spot.</p>
+          ) : (
+            <button
+              onClick={onRequest}
+              disabled={requestDisabled || requestBusy}
+              className={`press flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold ${
+                requestDisabled ? "bg-muted text-muted-foreground" : "text-white shadow-[var(--shadow-glow)]"
+              }`}
+              style={requestDisabled ? undefined : { background: "var(--gradient-emerald)" }}
+            >
+              <Zap className="h-4 w-4" />
+              {reserved ? "Already reserved" : requestBusy ? "Sending…" : "Request this spot"}
+            </button>
+          )}
+          {!isMine && !requestDisabled && (
+            <p className="mt-2 text-center text-[11px] text-muted-foreground">
+              {spot.cost} points · driver leaves at {clockOf(exitIso)}
+            </p>
+          )}
+        </div>
 
         {/* Progressive disclosure */}
         <button
@@ -173,29 +196,6 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           </div>
         )}
 
-        {/* Single CTA */}
-        <div className="mt-4">
-          {isMine ? (
-            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">This is your own shared spot.</p>
-          ) : (
-            <button
-              onClick={onRequest}
-              disabled={requestDisabled || requestBusy}
-              className={`press flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold ${
-                requestDisabled ? "bg-muted text-muted-foreground" : "text-white shadow-[var(--shadow-glow)]"
-              }`}
-              style={requestDisabled ? undefined : { background: "var(--gradient-emerald)" }}
-            >
-              <Zap className="h-4 w-4" />
-              {reserved ? "Already reserved" : requestBusy ? "Sending…" : "Request this spot"}
-            </button>
-          )}
-          {!isMine && !requestDisabled && (
-            <p className="mt-2 text-center text-[11px] text-muted-foreground">
-              {spot.cost} points · driver leaves at {clockOf(exitIso)} · {driveMinutes(distance) ?? "—"} min drive
-            </p>
-          )}
-        </div>
       </div>
     </div>
   );
