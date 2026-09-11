@@ -328,6 +328,18 @@ function Home() {
         </p>
 
         {/* Place suggestions */}
+        {(searching || searchError) && q.trim().length >= 2 && (
+          <div className="pointer-events-auto mt-2 rounded-2xl border border-border bg-card px-4 py-3 text-xs shadow-[var(--shadow-card)]">
+            {searching
+              ? <span className="text-muted-foreground">{ar ? "جارٍ البحث…" : "Searching…"}</span>
+              : <span className="text-[color:var(--danger)]">{searchError}</span>}
+          </div>
+        )}
+        {!searching && !searchError && q.trim().length >= 2 && suggestions.length === 0 && !(place && q === place.label) && (
+          <div className="pointer-events-auto mt-2 rounded-2xl border border-border bg-card px-4 py-3 text-xs text-muted-foreground shadow-[var(--shadow-card)]">
+            {ar ? "لا توجد نتائج مطابقة." : "No matching places."}
+          </div>
+        )}
         {suggestions.length > 0 && (
           <div className="pointer-events-auto animate-fade-up stagger mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
             {suggestions.map((s) => (
