@@ -278,7 +278,7 @@ export function AreaMap({
         delete markersRef.current[id];
       }
     });
-  }, [ready, spots, activeId, ownSpotId, tick]);
+  }, [ready, spots, activeId, ownSpotId, emphasisIds.join(","), tick]);
 
   const shell =
     variant === "full"
