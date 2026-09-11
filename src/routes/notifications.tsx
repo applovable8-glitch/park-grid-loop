@@ -30,11 +30,12 @@ interface DbNotification {
 }
 
 const iconMap: Record<string, { Icon: typeof MapPin; color: string }> = {
-  spot: { Icon: MapPin, color: "bg-emerald/15 text-[color:var(--emerald)]" },
-  points: { Icon: Gift, color: "bg-yellow-100 text-yellow-700" },
-  reserve: { Icon: UserCheck, color: "bg-blue-100 text-blue-700" },
-  expire: { Icon: Clock, color: "bg-red-100 text-red-700" },
+  spot: { Icon: MapPin, color: "bg-amber-500/12 text-amber-600 dark:text-amber-400" },
+  points: { Icon: Gift, color: "bg-emerald/12 text-[color:var(--emerald)]" },
+  reserve: { Icon: UserCheck, color: "bg-blue-500/12 text-blue-600 dark:text-blue-400" },
+  expire: { Icon: Clock, color: "bg-red-500/12 text-red-600 dark:text-red-400" },
 };
+
 
 function timeAgo(iso: string) {
   const s = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
@@ -79,44 +80,64 @@ function Notifs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
 
+  const unreadCount = items.filter((n) => !n.read).length;
+  const ar = lang === "ar";
+
   return (
     <div className="min-h-screen bg-background pb-28">
-      <header className="px-5 pt-6">
-        <h1 className="font-[var(--font-display)] text-2xl font-bold">{t("notifications")}</h1>
-        <p className="text-xs text-muted-foreground">{t("notifs_sub")}</p>
+      <header className="animate-fade-up px-5 pb-1 pt-8">
+        <h1 className="font-[var(--font-display)] text-[26px] font-bold tracking-tight">{t("notifications")}</h1>
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          {unreadCount > 0
+            ? ar ? `${unreadCount} إشعار جديد` : `${unreadCount} new`
+            : ar ? "لا توجد إشعارات جديدة" : "You’re all caught up"}
+        </p>
       </header>
 
-      <div className="mt-4 space-y-2 px-4">
+      <div className="mt-3 px-4">
         {loading ? (
           <SkeletonList n={3} />
         ) : items.length === 0 ? (
-          <EmptyState icon={Bell} title={t("no_notifs")} description={t("no_notifs_hint")} />
+          <EmptyState
+            icon={Bell}
+            title={ar ? "لا توجد إشعارات جديدة" : "You’re all caught up"}
+            description={ar ? "لا توجد إشعارات حالياً." : "No new notifications."}
+          />
         ) : (
-          items.map((n) => {
-            const { Icon, color } = iconMap[n.icon] ?? iconMap["spot"]!;
-            const copy = localizeNotification(lang, n.metadata?.kind, n.title, n.body);
-            return (
-              <div key={n.id} className={`rounded-2xl bg-card p-3.5 shadow-[var(--shadow-card)] animate-fade-up ${n.read ? "" : "ring-1 ring-[var(--emerald)]/30"}`}>
-                <div className="flex items-start gap-3">
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${color}`}>
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <p className="truncate text-sm font-semibold">{copy.title}</p>
-                      <span className="text-[10px] text-muted-foreground">{timeAgo(n.created_at)}</span>
+          <ul className="divide-y divide-border/60">
+            {items.map((n, i) => {
+              const { Icon, color } = iconMap[n.icon] ?? iconMap["spot"]!;
+              const copy = localizeNotification(lang, n.metadata?.kind, n.title, n.body);
+              const unread = !n.read;
+              return (
+                <li
+                  key={n.id}
+                  className={`animate-fade-up -mx-1 rounded-2xl px-2 py-3.5 ${unread ? "bg-emerald/[0.06]" : ""}`}
+                  style={{ animationDelay: `${Math.min(i, 8) * 30}ms` }}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${color}`}>
+                      <Icon className="h-4 w-4" />
+                      {unread && <span className="absolute -end-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-[color:var(--emerald)] ring-2 ring-background" />}
                     </div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{copy.body}</p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <p className={`truncate text-sm ${unread ? "font-bold text-foreground" : "font-semibold text-foreground/85"}`}>{copy.title}</p>
+                        <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">{timeAgo(n.created_at)}</span>
+                      </div>
+                      <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{copy.body}</p>
+                    </div>
                   </div>
-                </div>
-                {n.metadata?.reservation_id && (
-                  <RequestActions reservationId={n.metadata.reservation_id} notifId={n.id} />
-                )}
-              </div>
-            );
-          })
+                  {n.metadata?.reservation_id && (
+                    <RequestActions reservationId={n.metadata.reservation_id} notifId={n.id} />
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         )}
       </div>
+
 
       <BottomNav />
     </div>
