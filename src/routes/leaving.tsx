@@ -314,7 +314,7 @@ function Leaving() {
   );
 }
 
-function RequestCard({ id, state, exitIso, S }: { id: string; state: string; exitIso: string | null; S: (typeof STR)["en"] }) {
+function RequestCard({ id, state, exitIso, S }: { id: string; state: string; exitIso: string | null; S: Strings }) {
   const [busy, setBusy] = useState(false);
   const [showExtend, setShowExtend] = useState(false);
 
