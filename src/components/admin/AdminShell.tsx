@@ -3,6 +3,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Activity, Map, Users, Car, CalendarCheck, CreditCard,
   Gift, Bell, BarChart3, LifeBuoy, Settings, Menu, X, ArrowLeft,
+  Receipt, RotateCcw, Webhook, UserPlus, Mail, FileText,
 } from "lucide-react";
 
 type Item = { label: string; icon: typeof Users; to?: string };
@@ -13,24 +14,45 @@ const GROUPS: { title: string; items: Item[] }[] = [
     items: [
       { label: "Overview", icon: LayoutDashboard, to: "/admin" },
       { label: "Live Operations", icon: Activity, to: "/admin/live" },
+      { label: "Users", icon: Users, to: "/admin/users" },
+      { label: "Parking", icon: Car, to: "/admin/parking" },
+      { label: "Reservations", icon: CalendarCheck, to: "/admin/reservations" },
       { label: "Map", icon: Map },
     ],
   },
   {
-    title: "Manage",
+    title: "Finance",
     items: [
-      { label: "Users", icon: Users, to: "/admin/users" },
-      { label: "Parking", icon: Car, to: "/admin/parking" },
-      { label: "Reservations", icon: CalendarCheck, to: "/admin/reservations" },
-      { label: "Payments", icon: CreditCard },
-      { label: "Points & Rewards", icon: Gift },
+      { label: "Payments", icon: CreditCard, to: "/admin/payments" },
+      { label: "Transactions", icon: Receipt, to: "/admin/transactions" },
+      { label: "Refunds", icon: RotateCcw, to: "/admin/refunds" },
+      { label: "Webhooks", icon: Webhook, to: "/admin/webhooks" },
+    ],
+  },
+  {
+    title: "Growth",
+    items: [
+      { label: "Rewards", icon: Gift, to: "/admin/rewards" },
+      { label: "Referrals", icon: UserPlus, to: "/admin/referrals" },
+    ],
+  },
+  {
+    title: "Communications",
+    items: [
+      { label: "Notifications", icon: Bell, to: "/admin/notifications" },
+      { label: "Email", icon: Mail, to: "/admin/email" },
+    ],
+  },
+  {
+    title: "Insights",
+    items: [
+      { label: "Analytics", icon: BarChart3, to: "/admin/analytics" },
+      { label: "Reports", icon: FileText, to: "/admin/reports" },
     ],
   },
   {
     title: "System",
     items: [
-      { label: "Notifications", icon: Bell },
-      { label: "Analytics", icon: BarChart3 },
       { label: "Support", icon: LifeBuoy },
       { label: "Settings", icon: Settings },
     ],
