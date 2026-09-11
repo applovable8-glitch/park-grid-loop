@@ -30,11 +30,12 @@ interface DbNotification {
 }
 
 const iconMap: Record<string, { Icon: typeof MapPin; color: string }> = {
-  spot: { Icon: MapPin, color: "bg-emerald/15 text-[color:var(--emerald)]" },
-  points: { Icon: Gift, color: "bg-yellow-100 text-yellow-700" },
-  reserve: { Icon: UserCheck, color: "bg-blue-100 text-blue-700" },
-  expire: { Icon: Clock, color: "bg-red-100 text-red-700" },
+  spot: { Icon: MapPin, color: "bg-amber-500/12 text-amber-600 dark:text-amber-400" },
+  points: { Icon: Gift, color: "bg-emerald/12 text-[color:var(--emerald)]" },
+  reserve: { Icon: UserCheck, color: "bg-blue-500/12 text-blue-600 dark:text-blue-400" },
+  expire: { Icon: Clock, color: "bg-red-500/12 text-red-600 dark:text-red-400" },
 };
+
 
 function timeAgo(iso: string) {
   const s = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
