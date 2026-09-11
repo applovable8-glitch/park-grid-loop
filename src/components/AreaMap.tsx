@@ -26,11 +26,51 @@ interface Props {
   className?: string;
 }
 
+function isDarkTheme() {
+  return typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+}
+
+/** Minimal, label-light map skin for both themes. */
+function mapStyles(dark: boolean): GAny[] {
+  const base: GAny[] = [
+    { featureType: "poi", stylers: [{ visibility: "off" }] },
+    { featureType: "transit", stylers: [{ visibility: "off" }] },
+    { featureType: "landscape.man_made", elementType: "labels", stylers: [{ visibility: "off" }] },
+    { featureType: "administrative.neighborhood", stylers: [{ visibility: "off" }] },
+    { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
+    { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+    { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "off" }] },
+    { featureType: "road.arterial", elementType: "labels", stylers: [{ visibility: "simplified" }] },
+    { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
+  ];
+  if (!dark) {
+    return [
+      ...base,
+      { elementType: "geometry", stylers: [{ color: "#f1f5f9" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ color: "#dbeafe" }] },
+      { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#dcfce7" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#f8fafc" }] },
+    ];
+  }
+  return [
+    ...base,
+    { elementType: "geometry", stylers: [{ color: "#0b1120" }] },
+    { featureType: "road", elementType: "geometry", stylers: [{ color: "#1a2233" }] },
+    { featureType: "water", elementType: "geometry", stylers: [{ color: "#0a1a2b" }] },
+    { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#10241f" }] },
+    { elementType: "labels.text.fill", stylers: [{ color: "#94a3b8" }] },
+    { elementType: "labels.text.stroke", stylers: [{ color: "#0b1120" }] },
+  ];
+}
+
 function colorFor(s: LiveSpot, ownSpotId?: string | null) {
-  if (s.id === ownSpotId) return "#2563EB";
+  if (s.id === ownSpotId) return "#3B82F6";
   if (s.status === "reserved") return "#EF4444";
   return minutesUntil(s.planned_leave_at ?? s.leave_at) <= 1 ? "#10B981" : "#F59E0B";
 }
+
 
 function timeText(s: LiveSpot) {
   if (s.status === "reserved") return "held";
