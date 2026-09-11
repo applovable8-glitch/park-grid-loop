@@ -104,6 +104,7 @@ import { Route as ChatIdRouteImport } from './routes/chat.$id'
 import { Route as AuthSuccessRouteImport } from './routes/auth.success'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
+import { Route as AdminLiveRouteImport } from './routes/admin.live'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
 
@@ -583,6 +584,11 @@ const AdminModeratorRoute = AdminModeratorRouteImport.update({
   path: '/moderator',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLiveRoute = AdminLiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => AdminRoute,
+} as any)
 const RewardsRewardIdRoute = RewardsRewardIdRouteImport.update({
   id: '/reward/$id',
   path: '/reward/$id',
@@ -619,6 +625,7 @@ export interface FileRoutesByFullPath {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
@@ -713,6 +720,7 @@ export interface FileRoutesByTo {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
@@ -813,6 +821,7 @@ export interface FileRoutesById {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/roles': typeof AdminRolesRoute
   '/auth/success': typeof AuthSuccessRoute
@@ -914,6 +923,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/live'
     | '/admin/moderator'
     | '/admin/roles'
     | '/auth/success'
@@ -1008,6 +1018,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/live'
     | '/admin/moderator'
     | '/admin/roles'
     | '/auth/success'
@@ -1107,6 +1118,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/live'
     | '/admin/moderator'
     | '/admin/roles'
     | '/auth/success'
@@ -1894,6 +1906,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminModeratorRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/live': {
+      id: '/admin/live'
+      path: '/live'
+      fullPath: '/admin/live'
+      preLoaderRoute: typeof AdminLiveRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/rewards/reward/$id': {
       id: '/rewards/reward/$id'
       path: '/reward/$id'
@@ -1912,12 +1931,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminLiveRoute: typeof AdminLiveRoute
   AdminModeratorRoute: typeof AdminModeratorRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminLiveRoute: AdminLiveRoute,
   AdminModeratorRoute: AdminModeratorRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminIndexRoute: AdminIndexRoute,
