@@ -46,12 +46,62 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           </span>
         </div>
         <h2 className="mt-1.5 truncate text-xl font-extrabold leading-tight">{spot.address ?? "Shared parking spot"}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {distance == null ? "Distance unknown" : `~${driveMinutes(distance)} min away · ${distanceLabel(distance)}`}
+        </p>
 
         {/* Key facts only */}
         <div className="mt-4 grid grid-cols-3 gap-2">
           <Fact icon={Navigation2} label="Distance" value={distanceLabel(distance)} />
           <Fact icon={Footprints} label="Walk" value={distance == null ? "—" : `${walkMinutes(distance)} min`} />
           <Fact icon={Clock} label="Exit" value={clockOf(exitIso)} />
+        </div>
+
+        {/* Trust signal, before the decision */}
+        <div className="mt-3 flex items-center gap-3 rounded-2xl bg-muted px-4 py-3">
+          {loading ? (
+            <Skeleton className="h-9 w-9 rounded-full" />
+          ) : profile?.avatar_url ? (
+            <img src={profile.avatar_url} alt={profile.name} className="h-9 w-9 rounded-full object-cover" />
+          ) : (
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+              {(profile?.name?.[0] ?? "D").toUpperCase()}
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold">{profile?.name || "AndiPark driver"}</p>
+            <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Star className="h-3 w-3 fill-[var(--warning)] text-[var(--warning)]" />
+              {profile ? Number(profile.reputation).toFixed(1) : "5.0"} AndiScore · {profile?.shared_count ?? 0} shared
+            </p>
+          </div>
+          <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-[color:var(--emerald)]">
+            {spot.cost} pts
+          </span>
+        </div>
+
+        {/* Single CTA — the decision comes before the details */}
+        <div className="mt-4">
+          {isMine ? (
+            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">This is your own shared spot.</p>
+          ) : (
+            <button
+              onClick={onRequest}
+              disabled={requestDisabled || requestBusy}
+              className={`press flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold ${
+                requestDisabled ? "bg-muted text-muted-foreground" : "text-white shadow-[var(--shadow-glow)]"
+              }`}
+              style={requestDisabled ? undefined : { background: "var(--gradient-emerald)" }}
+            >
+              <Zap className="h-4 w-4" />
+              {reserved ? "Already reserved" : requestBusy ? "Sending…" : "Request this spot"}
+            </button>
+          )}
+          {!isMine && !requestDisabled && (
+            <p className="mt-2 text-center text-[11px] text-muted-foreground">
+              {spot.cost} points · driver leaves at {clockOf(exitIso)}
+            </p>
+          )}
         </div>
 
         {/* Progressive disclosure */}
@@ -146,29 +196,6 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           </div>
         )}
 
-        {/* Single CTA */}
-        <div className="mt-4">
-          {isMine ? (
-            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">This is your own shared spot.</p>
-          ) : (
-            <button
-              onClick={onRequest}
-              disabled={requestDisabled || requestBusy}
-              className={`press flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold ${
-                requestDisabled ? "bg-muted text-muted-foreground" : "text-white shadow-[var(--shadow-glow)]"
-              }`}
-              style={requestDisabled ? undefined : { background: "var(--gradient-emerald)" }}
-            >
-              <Zap className="h-4 w-4" />
-              {reserved ? "Already reserved" : requestBusy ? "Sending…" : "Request this spot"}
-            </button>
-          )}
-          {!isMine && !requestDisabled && (
-            <p className="mt-2 text-center text-[11px] text-muted-foreground">
-              {spot.cost} points · driver leaves at {clockOf(exitIso)} · {driveMinutes(distance) ?? "—"} min drive
-            </p>
-          )}
-        </div>
       </div>
     </div>
   );
