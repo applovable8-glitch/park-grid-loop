@@ -9,32 +9,19 @@ export interface AdminStats {
   handoffs: number | null;
 }
 
-async function countOf(
-  table: "profiles" | "parking_spots" | "reservations",
-  build?: (q: ReturnType<typeof baseQuery>) => ReturnType<typeof baseQuery>,
-) {
-  let q = baseQuery(table);
-  if (build) q = build(q);
-  const { count, error } = await q;
-  return error ? null : count ?? null;
-}
-
-function baseQuery(table: "profiles" | "parking_spots" | "reservations") {
-  return supabase.from(table).select("id", { count: "exact", head: true });
-}
-
 export function useAdminStats() {
   const [stats, setStats] = useState<AdminStats>({ users: null, activeSpots: null, reservations: null, handoffs: null });
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     const [users, activeSpots, reservations, handoffs] = await Promise.all([
-      countOf("profiles"),
-      countOf("parking_spots", (q) => q.in("status", ["available", "leaving", "reserved"])),
-      countOf("reservations"),
-      countOf("reservations", (q) => q.eq("status", "completed")),
+      supabase.from("profiles").select("id", { count: "exact", head: true }),
+      supabase.from("parking_spots").select("id", { count: "exact", head: true }).in("status", ["available", "leaving", "reserved"]),
+      supabase.from("reservations").select("id", { count: "exact", head: true }),
+      supabase.from("reservations").select("id", { count: "exact", head: true }).eq("status", "completed"),
     ]);
-    setStats({ users, activeSpots, reservations, handoffs });
+    const val = (r: { count: number | null; error: unknown }) => (r.error ? null : r.count ?? null);
+    setStats({ users: val(users), activeSpots: val(activeSpots), reservations: val(reservations), handoffs: val(handoffs) });
     setLoading(false);
   }, []);
 
@@ -66,10 +53,9 @@ export function useAdminActivity(limit = 20) {
 
     const out: ActivityEvent[] = [];
     for (const s of spotsRes.data ?? []) {
-      const done = s.status === "completed" || s.status === "taken";
       out.push({
         id: `spot-${s.id}`,
-        kind: done ? "spot_completed" : "spot_shared",
+        kind: "spot_shared",
         at: s.created_at,
         description: s.address ? String(s.address) : `Spot ${shortId(s.id)}`,
       });
@@ -77,7 +63,8 @@ export function useAdminActivity(limit = 20) {
     for (const r of resvRes.data ?? []) {
       const rs = String(r.request_status ?? "");
       const kind: ActivityKind =
-        rs === "confirmed" ? "res_accepted"
+        r.status === "completed" ? "spot_completed"
+        : rs === "confirmed" ? "res_accepted"
         : rs === "cancelled" || rs === "declined" ? "res_cancelled"
         : "res_requested";
       out.push({ id: `res-${r.id}`, kind, at: r.created_at, description: `Reservation ${shortId(r.id)}` });
