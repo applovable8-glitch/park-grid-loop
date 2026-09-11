@@ -62,6 +62,7 @@ function Home() {
   const [busy, setBusy] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showList, setShowList] = useState(false);
+  const [onlyAvailable, setOnlyAvailable] = useState(false);
   const [suggestions, setSuggestions] = useState<Array<{ id: string; text: string; sub: string }>>([]);
   const tokenRef = useRef<GAny | null>(null);
   const [, setTick] = useState(0);
@@ -164,12 +165,13 @@ function Home() {
         mins: minutesUntil(s.planned_leave_at ?? s.leave_at),
       }))
       .filter((s) => {
+        if (onlyAvailable && s.status === "reserved") return false;
         if (nearMe && s.distance > NEAR_ME_KM * 1000) return false;
         if (preset.maxMins !== Infinity) return s.mins <= preset.maxMins;
         return true;
       })
       .sort((a, b) => a.distance - b.distance);
-  }, [spots, q, place, timeFilter, center, nearMe, user?.id]);
+  }, [spots, q, place, timeFilter, center, nearMe, onlyAvailable, user?.id]);
 
   const mapSpots = useMemo<LiveSpot[]>(() => {
     const base: LiveSpot[] = [...list];
