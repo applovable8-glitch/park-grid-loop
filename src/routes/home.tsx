@@ -237,15 +237,16 @@ function Home() {
         />
       </div>
 
-      {/* Top: greeting → one question → search */}
-      <div className="relative z-20 px-4 pt-[max(14px,env(safe-area-inset-top))]">
-        <div className="animate-fade-in flex items-center gap-3">
+      {/* Top: greeting → one question → floating search */}
+      <div className="pointer-events-none relative z-20 px-4 pt-[max(10px,env(safe-area-inset-top))]">
+        <div className="pointer-events-auto animate-fade-in flex items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="truncate text-[11px] font-medium text-muted-foreground">
               {greeting}
               {user?.name ? `, ${user.name.split(" ")[0]}` : ""}
             </p>
-            <h1 className="truncate text-lg font-extrabold leading-tight">Find a spot</h1>
+            <h1 className="truncate text-[19px] font-extrabold leading-tight">Find a spot</h1>
+            <p className="truncate text-[11px] text-muted-foreground">Available near you right now</p>
           </div>
           <Link
             to="/messages"
@@ -268,34 +269,38 @@ function Home() {
           </Link>
         </div>
 
-        {/* Search + live area */}
-        <div className="mt-3 flex items-center gap-2 rounded-2xl bg-card px-4 py-3 shadow-[var(--shadow-card)]">
+        {/* Floating search control */}
+        <div className="pointer-events-auto mt-2.5 flex items-center gap-2 rounded-full bg-card/95 px-4 py-2.5 shadow-[var(--shadow-elevated)] backdrop-blur">
           <SearchIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
           <input
             value={q}
             onChange={(e) => { setQ(e.target.value); if (place && e.target.value !== place.label) setPlace(null); }}
             placeholder={t("where_park")}
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           {(q || place) && (
             <button onClick={() => { setQ(""); setPlace(null); }} aria-label="Clear search" className="press">
               <X className="h-4 w-4 text-muted-foreground" />
             </button>
           )}
-          <span className="flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-[color:var(--emerald)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--emerald)]" />
-            {available}
-          </span>
+          <button
+            onClick={enableNearMe}
+            aria-label="Use my location"
+            className="press flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent"
+          >
+            <LocateFixed className="h-3.5 w-3.5 text-[color:var(--emerald)]" />
+          </button>
         </div>
 
-        <p className="mt-1.5 flex items-center gap-1 px-1 text-[11px] text-muted-foreground">
+        <p className="pointer-events-auto mt-1.5 flex items-center gap-1 px-2 text-[11px] text-muted-foreground">
           <MapPin className="h-3 w-3 text-[color:var(--emerald)]" />
           <span className="truncate">{place ? place.label : (areaName ?? (position ? "Locating…" : "Enable location"))}</span>
+          <span className="ms-auto shrink-0 font-semibold text-[color:var(--emerald)]">{available} available</span>
         </p>
 
         {/* Place suggestions */}
         {suggestions.length > 0 && (
-          <div className="animate-fade-up stagger mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <div className="pointer-events-auto animate-fade-up stagger mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
             {suggestions.map((s) => (
               <button
                 key={s.id}
@@ -312,37 +317,34 @@ function Home() {
           </div>
         )}
 
-        {/* Filter chips */}
-        <div className="mt-2.5 flex gap-2 overflow-x-auto scrollbar-none pb-1">
-          <button
-            onClick={enableNearMe}
-            className={`press flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold shadow-[var(--shadow-card)] ${nearMe ? "bg-[var(--emerald)] text-white" : "bg-card"}`}
-          >
-            <LocateFixed className="h-3.5 w-3.5" /> Near me
-          </button>
-          {TIME_FILTERS.map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setTimeFilter(f.id)}
-              className={`press shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold shadow-[var(--shadow-card)] ${timeFilter === f.id ? "bg-primary text-primary-foreground" : "bg-card"}`}
-            >
-              {f.label}
-            </button>
-          ))}
+        {/* Quick filters — each one maps to data we already have */}
+        <div className="pointer-events-auto mt-2 flex gap-1.5 overflow-x-auto scrollbar-none pb-1">
+          <Chip active={nearMe} onClick={() => (nearMe ? setNearMe(false) : enableNearMe())} icon={LocateFixed}>
+            Nearby
+          </Chip>
+          <Chip active={timeFilter === "15"} onClick={() => setTimeFilter(timeFilter === "15" ? "any" : "15")}>
+            Leaving soon
+          </Chip>
+          <Chip active={timeFilter === "now"} onClick={() => setTimeFilter(timeFilter === "now" ? "any" : "now")}>
+            Free now
+          </Chip>
+          <Chip active={onlyAvailable} onClick={() => setOnlyAvailable((v) => !v)}>
+            Available
+          </Chip>
         </div>
       </div>
 
-      {/* Recenter button */}
+      {/* My location — thumb-reachable, above the bottom bar */}
       <button
         onClick={recenter}
         aria-label="My location"
-        className="press absolute end-4 top-[214px] z-20 flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
+        className="press glass absolute end-4 bottom-[186px] z-20 flex h-12 w-12 items-center justify-center rounded-full shadow-[var(--shadow-elevated)]"
       >
-        <LocateFixed className="h-4 w-4 text-[color:var(--emerald)]" />
+        <LocateFixed className="h-[18px] w-[18px] text-[color:var(--emerald)]" />
       </button>
 
       {/* Show-list toggle */}
-      {!selected && (
+      {!selected && list.length > 0 && (
         <button
           onClick={() => setShowList((v) => !v)}
           className="press absolute inset-x-0 bottom-[220px] z-20 mx-auto flex w-fit items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-[var(--shadow-elevated)]"
@@ -350,6 +352,21 @@ function Home() {
           <List className="h-3.5 w-3.5" /> {showList ? t("close") : `${list.length} spots`}
         </button>
       )}
+
+      {/* Empty state floats over the map — the map never disappears */}
+      {!selected && !loading && list.length === 0 && (
+        <div className="animate-fade-up absolute inset-x-6 bottom-[190px] z-20 rounded-3xl bg-card/95 p-4 text-center shadow-[var(--shadow-elevated)] backdrop-blur">
+          <p className="text-sm font-bold">No spots nearby yet</p>
+          <p className="mt-1 text-xs text-muted-foreground">Try expanding your search</p>
+          <button
+            onClick={() => { setNearMe(false); setTimeFilter("any"); setOnlyAvailable(false); }}
+            className="press mt-3 rounded-full bg-[var(--emerald)] px-4 py-2 text-xs font-bold text-white"
+          >
+            Expand search
+          </button>
+        </div>
+      )}
+
 
 
       {/* Reservation and handoff prompts live in Notifications — the map stays clean. */}
