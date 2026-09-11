@@ -229,7 +229,7 @@ export function AreaMap({
       return;
     }
     const pos = { lat: driverLocation.lat, lng: driverLocation.lng };
-    const icon = carIcon("#7C3AED", driverLabel, true);
+    const icon = spotIcon("#7C3AED", driverLabel, true, true);
     if (!driverRef.current) {
       driverRef.current = new google.maps.Marker({
         map: mapRef.current,
@@ -252,7 +252,12 @@ export function AreaMap({
     spots.forEach((s) => {
       seen.add(s.id);
       const pos = { lat: s.lat, lng: s.lng };
-      const icon = carIcon(colorFor(s, ownSpotId), timeText(s), activeId === s.id);
+      const icon = spotIcon(
+        colorFor(s, ownSpotId),
+        timeText(s),
+        activeId === s.id,
+        s.id === ownSpotId || emphasisIds.includes(s.id),
+      );
       let m = markersRef.current[s.id];
       if (!m) {
         m = new google.maps.Marker({ map, position: pos, title: s.address ?? "Parking spot", icon, zIndex: s.id === ownSpotId ? 20 : 10 });
