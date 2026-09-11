@@ -98,53 +98,71 @@ function Home() {
     });
   }, [driverPing?.reservation_id, user?.id]);
 
-  // Places autocomplete — debounced.
+  // Places autocomplete — debounced, served by our backend (Google Places).
   useEffect(() => {
-    if (!q.trim() || (place && q === place.label)) { setSuggestions([]); return; }
+    const term = q.trim();
+    if (term.length < 2 || (place && q === place.label)) {
+      setSuggestions([]); setSearching(false); setSearchError(null);
+      return;
+    }
+    const id = ++reqRef.current;
+    setSearching(true);
+    setSearchError(null);
     const handle = setTimeout(async () => {
+      if (!tokenRef.current) tokenRef.current = crypto.randomUUID();
       try {
-        const google = await loadGoogleMaps();
-        const lib = (await google.maps.importLibrary("places")) as GAny;
-        if (!tokenRef.current) tokenRef.current = new lib.AutocompleteSessionToken();
-        const { suggestions: s } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions({
-          input: q,
-          sessionToken: tokenRef.current,
+        let list = await placeSuggest({
+          data: {
+            input: term,
+            sessionToken: tokenRef.current,
+            language: ar ? "ar" : "en",
+            ...(pos ? { lat: pos.lat, lng: pos.lng } : {}),
+          },
         });
-        setSuggestions(
-          (s ?? [])
-            .filter((x: GAny) => x.placePrediction)
-            .map((x: GAny) => ({
-              id: x.placePrediction.placeId,
-              text: x.placePrediction.text?.text ?? "",
-              sub: x.placePrediction.secondaryText?.text ?? "",
-            }))
-            .slice(0, 5),
-        );
-      } catch {
+        if (list.length === 0) {
+          const found = await placeSearch({ data: { query: term, language: ar ? "ar" : "en" } });
+          list = found;
+        }
+        if (id !== reqRef.current) return;
+        setSuggestions(list);
+        setSearching(false);
+      } catch (e) {
+        if (id !== reqRef.current) return;
+        setSearching(false);
         setSuggestions([]);
+        const msg = e instanceof Error ? e.message : "";
+        setSearchError(
+          msg.includes("maps_not_configured")
+            ? ar ? "خدمة البحث غير مُهيّأة." : "Search is not configured yet."
+            : ar ? "تعذّر البحث الآن. تحقق من الاتصال." : "Search failed. Check your connection and try again.",
+        );
       }
     }, 350);
     return () => clearTimeout(handle);
-  }, [q, place]);
+  }, [q, place, ar, pos]);
 
-  const pickPlace = async (s: { id: string; text: string }) => {
+  const pickPlace = async (s: { id: string; text: string; lat?: number; lng?: number }) => {
     setSuggestions([]);
+    setSearchError(null);
     try {
-      const google = await loadGoogleMaps();
-      const lib = (await google.maps.importLibrary("places")) as GAny;
-      const p = new lib.Place({ id: s.id });
-      await p.fetchFields({ fields: ["location", "displayName", "formattedAddress"] });
-      const loc = p.location;
-      if (!loc) throw new Error("no location");
-      const label = p.displayName ?? s.text;
-      setPlace({ label, lat: loc.lat(), lng: loc.lng() });
+      const found = s.lat != null && s.lng != null
+        ? { label: s.text, lat: s.lat, lng: s.lng }
+        : await placeDetails({
+            data: {
+              placeId: s.id,
+              ...(tokenRef.current ? { sessionToken: tokenRef.current } : {}),
+              language: ar ? "ar" : "en",
+            },
+          });
+      const label = found.label || s.text;
+      setPlace({ label, lat: found.lat, lng: found.lng });
       setQ(label);
       setNearMe(false);
       setShowList(false);
       tokenRef.current = null;
-      toast.success(`Searching around ${label}`);
+      toast.success(ar ? `البحث حول ${label}` : `Searching around ${label}`);
     } catch {
-      toast.error("Could not locate that place.");
+      toast.error(ar ? "تعذّر تحديد هذا الموقع." : "Could not locate that place.");
     }
   };
 
