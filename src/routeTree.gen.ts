@@ -115,6 +115,7 @@ import { Route as AdminParkingRouteImport } from './routes/admin.parking'
 import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
 import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
 import { Route as AdminLiveRouteImport } from './routes/admin.live'
+import { Route as AdminEmailRouteImport } from './routes/admin.email'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
 
@@ -649,6 +650,11 @@ const AdminLiveRoute = AdminLiveRouteImport.update({
   path: '/live',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEmailRoute = AdminEmailRouteImport.update({
+  id: '/email',
+  path: '/email',
+  getParentRoute: () => AdminRoute,
+} as any)
 const RewardsRewardIdRoute = RewardsRewardIdRouteImport.update({
   id: '/reward/$id',
   path: '/reward/$id',
@@ -685,6 +691,7 @@ export interface FileRoutesByFullPath {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/email': typeof AdminEmailRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/notifications': typeof AdminNotificationsRoute
@@ -790,6 +797,7 @@ export interface FileRoutesByTo {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/email': typeof AdminEmailRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/notifications': typeof AdminNotificationsRoute
@@ -901,6 +909,7 @@ export interface FileRoutesById {
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/email': typeof AdminEmailRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
   '/admin/notifications': typeof AdminNotificationsRoute
@@ -1013,6 +1022,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/email'
     | '/admin/live'
     | '/admin/moderator'
     | '/admin/notifications'
@@ -1118,6 +1128,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/email'
     | '/admin/live'
     | '/admin/moderator'
     | '/admin/notifications'
@@ -1228,6 +1239,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
+    | '/admin/email'
     | '/admin/live'
     | '/admin/moderator'
     | '/admin/notifications'
@@ -2103,6 +2115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLiveRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/email': {
+      id: '/admin/email'
+      path: '/email'
+      fullPath: '/admin/email'
+      preLoaderRoute: typeof AdminEmailRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/rewards/reward/$id': {
       id: '/rewards/reward/$id'
       path: '/reward/$id'
@@ -2121,6 +2140,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminEmailRoute: typeof AdminEmailRoute
   AdminLiveRoute: typeof AdminLiveRoute
   AdminModeratorRoute: typeof AdminModeratorRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
@@ -2138,6 +2158,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminEmailRoute: AdminEmailRoute,
   AdminLiveRoute: AdminLiveRoute,
   AdminModeratorRoute: AdminModeratorRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,
