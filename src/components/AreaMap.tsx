@@ -129,6 +129,7 @@ export function AreaMap({
   radius = 1500,
   variant = "compact",
   activeId = null,
+  emphasisIds = [],
   userLocation = null,
   ownSpotId = null,
   driverLocation = null,
