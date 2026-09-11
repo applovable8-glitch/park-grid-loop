@@ -107,18 +107,7 @@ export function AreaMap({
           zoomControl: variant === "full",
           gestureHandling: "greedy",
           clickableIcons: false,
-          styles: [
-            { featureType: "poi", stylers: [{ visibility: "off" }] },
-            { featureType: "transit", stylers: [{ visibility: "off" }] },
-            { featureType: "landscape.man_made", elementType: "labels", stylers: [{ visibility: "off" }] },
-            { featureType: "administrative.neighborhood", stylers: [{ visibility: "off" }] },
-            { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
-            { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-            { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "off" }] },
-            { featureType: "road.arterial", elementType: "labels", stylers: [{ visibility: "simplified" }] },
-            { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
-          ],
-
+          styles: mapStyles(isDarkTheme()),
         });
         setReady(true);
       })
@@ -126,6 +115,17 @@ export function AreaMap({
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // keep the map skin in sync with light/dark mode
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const apply = () => mapRef.current?.setOptions({ styles: mapStyles(isDarkTheme()) });
+    apply();
+    const obs = new MutationObserver(apply);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, [ready]);
+
 
   // follow searched area
   useEffect(() => {
