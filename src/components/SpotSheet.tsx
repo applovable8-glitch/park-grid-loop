@@ -46,6 +46,9 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           </span>
         </div>
         <h2 className="mt-1.5 truncate text-xl font-extrabold leading-tight">{spot.address ?? "Shared parking spot"}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {distance == null ? "Distance unknown" : `~${driveMinutes(distance)} min away · ${distanceLabel(distance)}`}
+        </p>
 
         {/* Key facts only */}
         <div className="mt-4 grid grid-cols-3 gap-2">
@@ -53,6 +56,30 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           <Fact icon={Footprints} label="Walk" value={distance == null ? "—" : `${walkMinutes(distance)} min`} />
           <Fact icon={Clock} label="Exit" value={clockOf(exitIso)} />
         </div>
+
+        {/* Trust signal, before the decision */}
+        <div className="mt-3 flex items-center gap-3 rounded-2xl bg-muted px-4 py-3">
+          {loading ? (
+            <Skeleton className="h-9 w-9 rounded-full" />
+          ) : profile?.avatar_url ? (
+            <img src={profile.avatar_url} alt={profile.name} className="h-9 w-9 rounded-full object-cover" />
+          ) : (
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+              {(profile?.name?.[0] ?? "D").toUpperCase()}
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold">{profile?.name || "AndiPark driver"}</p>
+            <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Star className="h-3 w-3 fill-[var(--warning)] text-[var(--warning)]" />
+              {profile ? Number(profile.reputation).toFixed(1) : "5.0"} AndiScore · {profile?.shared_count ?? 0} shared
+            </p>
+          </div>
+          <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-[color:var(--emerald)]">
+            {spot.cost} pts
+          </span>
+        </div>
+
 
         {/* Progressive disclosure */}
         <button
