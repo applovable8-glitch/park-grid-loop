@@ -67,3 +67,22 @@ export function TableShell({ head, children, empty, loading, cols }: { head: Rea
     </div>
   );
 }
+
+export function NotConfigured({ title, detail }: { title: string; detail: string }) {
+  return (
+    <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-white/15 dark:bg-[#111827]">
+      <p className="font-[var(--font-display)] text-base font-bold">{title}</p>
+      <p className="mx-auto mt-1.5 max-w-md text-sm text-slate-500 dark:text-slate-400">{detail}</p>
+    </div>
+  );
+}
+
+export function KpiCard({ label, value, hint, index = 0 }: { label: string; value: string | number | null; hint?: string; index?: number }) {
+  return (
+    <div className="animate-fade-up rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#111827]" style={{ animationDelay: `${index * 40}ms` }}>
+      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
+      <p className="mt-2 font-[var(--font-display)] text-3xl font-bold tabular-nums">{value ?? "—"}</p>
+      {hint && <p className="mt-1 text-[11px] text-slate-400">{hint}</p>}
+    </div>
+  );
+}
