@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { AdminGate } from "@/components/admin/AdminGate";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -11,7 +12,9 @@ export const Route = createFileRoute("/admin")({
   }),
   component: () => (
     <AdminShell>
-      <Outlet />
+      <AdminGate>
+        <Outlet />
+      </AdminGate>
     </AdminShell>
   ),
 });
