@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
+import { Mail, Lock, ArrowRight, MapPin, Loader2, Eye, EyeOff, MailCheck } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
 import { captureReferralFromUrl, pendingReferralCode } from "@/lib/referrals";
@@ -22,6 +23,8 @@ function Auth() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState<null | "email" | "google" | "apple" | "reset">(null);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const [showPass, setShowPass] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
 
   useEffect(() => {
     captureReferralFromUrl();
