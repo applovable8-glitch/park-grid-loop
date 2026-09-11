@@ -14,6 +14,113 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          meta: Json
+          target: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json
+          target?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json
+          target?: string | null
+        }
+        Relationships: []
+      }
+      integration_secrets: {
+        Row: {
+          ciphertext: string
+          field: string
+          hint: string | null
+          id: string
+          integration_id: string
+          iv: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          ciphertext: string
+          field: string
+          hint?: string | null
+          id?: string
+          integration_id: string
+          iv: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          ciphertext?: string
+          field?: string
+          hint?: string | null
+          id?: string
+          integration_id?: string
+          iv?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_secrets_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "integration_settings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integration_settings: {
+        Row: {
+          config: Json
+          enabled: boolean
+          environment: string
+          id: string
+          last_test_message: string | null
+          last_test_ok: boolean | null
+          last_tested_at: string | null
+          provider: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config?: Json
+          enabled?: boolean
+          environment?: string
+          id: string
+          last_test_message?: string | null
+          last_test_ok?: boolean | null
+          last_tested_at?: string | null
+          provider?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config?: Json
+          enabled?: boolean
+          environment?: string
+          id?: string
+          last_test_message?: string | null
+          last_test_ok?: boolean | null
+          last_tested_at?: string | null
+          provider?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           body: string
@@ -416,6 +523,27 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -426,6 +554,7 @@ export type Database = {
         Returns: undefined
       }
       cancel_request: { Args: { p_reservation_id: string }; Returns: undefined }
+      claim_super_admin: { Args: never; Returns: boolean }
       complete_handoff: {
         Args: { p_reservation_id: string; p_taken: boolean }
         Returns: undefined
@@ -443,6 +572,13 @@ export type Database = {
         Returns: boolean
       }
       gen_referral_code: { Args: never; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       push_notification: {
         Args: {
           _body: string
@@ -471,12 +607,14 @@ export type Database = {
         Args: { p_leave_at: string; p_spot_id: string }
         Returns: undefined
       }
+      super_admin_exists: { Args: never; Returns: boolean }
       takeover_spot: {
         Args: { p_leave_at: string; p_reservation_id: string }
         Returns: string
       }
     }
     Enums: {
+      app_role: "super_admin" | "admin" | "moderator" | "support" | "analyst"
       reservation_status: "active" | "completed" | "expired" | "cancelled"
       spot_status:
         | "available"
@@ -612,6 +750,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["super_admin", "admin", "moderator", "support", "analyst"],
       reservation_status: ["active", "completed", "expired", "cancelled"],
       spot_status: [
         "available",
