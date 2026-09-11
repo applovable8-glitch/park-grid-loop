@@ -106,6 +106,7 @@ import { Route as AdminWebhooksRouteImport } from './routes/admin.webhooks'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
+import { Route as AdminRewardsRouteImport } from './routes/admin.rewards'
 import { Route as AdminReservationsRouteImport } from './routes/admin.reservations'
 import { Route as AdminRefundsRouteImport } from './routes/admin.refunds'
 import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
@@ -601,6 +602,11 @@ const AdminRolesRoute = AdminRolesRouteImport.update({
   path: '/roles',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRewardsRoute = AdminRewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminReservationsRoute = AdminReservationsRouteImport.update({
   id: '/reservations',
   path: '/reservations',
@@ -673,6 +679,7 @@ export interface FileRoutesByFullPath {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/refunds': typeof AdminRefundsRoute
   '/admin/reservations': typeof AdminReservationsRoute
+  '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -775,6 +782,7 @@ export interface FileRoutesByTo {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/refunds': typeof AdminRefundsRoute
   '/admin/reservations': typeof AdminReservationsRoute
+  '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -883,6 +891,7 @@ export interface FileRoutesById {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/refunds': typeof AdminRefundsRoute
   '/admin/reservations': typeof AdminReservationsRoute
+  '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -992,6 +1001,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/refunds'
     | '/admin/reservations'
+    | '/admin/rewards'
     | '/admin/roles'
     | '/admin/transactions'
     | '/admin/users'
@@ -1094,6 +1104,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/refunds'
     | '/admin/reservations'
+    | '/admin/rewards'
     | '/admin/roles'
     | '/admin/transactions'
     | '/admin/users'
@@ -1201,6 +1212,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/refunds'
     | '/admin/reservations'
+    | '/admin/rewards'
     | '/admin/roles'
     | '/admin/transactions'
     | '/admin/users'
@@ -2004,6 +2016,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRolesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/rewards': {
+      id: '/admin/rewards'
+      path: '/rewards'
+      fullPath: '/admin/rewards'
+      preLoaderRoute: typeof AdminRewardsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/reservations': {
       id: '/admin/reservations'
       path: '/reservations'
@@ -2070,6 +2089,7 @@ interface AdminRouteChildren {
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminRefundsRoute: typeof AdminRefundsRoute
   AdminReservationsRoute: typeof AdminReservationsRoute
+  AdminRewardsRoute: typeof AdminRewardsRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -2084,6 +2104,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminRefundsRoute: AdminRefundsRoute,
   AdminReservationsRoute: AdminReservationsRoute,
+  AdminRewardsRoute: AdminRewardsRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
