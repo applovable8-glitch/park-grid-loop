@@ -234,6 +234,7 @@ function Home() {
           driverLabel={driverLabel}
           spots={mapSpots}
           activeId={selected?.id ?? null}
+          emphasisIds={list.slice(0, 3).map((s) => s.id)}
           radius={nearMe ? NEAR_ME_KM * 1000 : 1800}
           onSpotClick={(id) => { setSelectedId(id); setShowList(false); }}
         />
