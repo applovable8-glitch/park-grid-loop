@@ -104,6 +104,7 @@ import { Route as ChatIdRouteImport } from './routes/chat.$id'
 import { Route as AuthSuccessRouteImport } from './routes/auth.success'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
+import { Route as AdminParkingRouteImport } from './routes/admin.parking'
 import { Route as AdminModeratorRouteImport } from './routes/admin.moderator'
 import { Route as AdminLiveRouteImport } from './routes/admin.live'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
@@ -585,6 +586,11 @@ const AdminRolesRoute = AdminRolesRouteImport.update({
   path: '/roles',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminParkingRoute = AdminParkingRouteImport.update({
+  id: '/parking',
+  path: '/parking',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminModeratorRoute = AdminModeratorRouteImport.update({
   id: '/moderator',
   path: '/moderator',
@@ -633,6 +639,7 @@ export interface FileRoutesByFullPath {
   '/welcome': typeof WelcomeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
+  '/admin/parking': typeof AdminParkingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/success': typeof AuthSuccessRoute
@@ -729,6 +736,7 @@ export interface FileRoutesByTo {
   '/welcome': typeof WelcomeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
+  '/admin/parking': typeof AdminParkingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/success': typeof AuthSuccessRoute
@@ -831,6 +839,7 @@ export interface FileRoutesById {
   '/welcome': typeof WelcomeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/moderator': typeof AdminModeratorRoute
+  '/admin/parking': typeof AdminParkingRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/success': typeof AuthSuccessRoute
@@ -934,6 +943,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/admin/live'
     | '/admin/moderator'
+    | '/admin/parking'
     | '/admin/roles'
     | '/admin/users'
     | '/auth/success'
@@ -1030,6 +1040,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/admin/live'
     | '/admin/moderator'
+    | '/admin/parking'
     | '/admin/roles'
     | '/admin/users'
     | '/auth/success'
@@ -1131,6 +1142,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/admin/live'
     | '/admin/moderator'
+    | '/admin/parking'
     | '/admin/roles'
     | '/admin/users'
     | '/auth/success'
@@ -1918,6 +1930,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRolesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/parking': {
+      id: '/admin/parking'
+      path: '/parking'
+      fullPath: '/admin/parking'
+      preLoaderRoute: typeof AdminParkingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/moderator': {
       id: '/admin/moderator'
       path: '/moderator'
@@ -1952,6 +1971,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminLiveRoute: typeof AdminLiveRoute
   AdminModeratorRoute: typeof AdminModeratorRoute
+  AdminParkingRoute: typeof AdminParkingRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1960,6 +1980,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminLiveRoute: AdminLiveRoute,
   AdminModeratorRoute: AdminModeratorRoute,
+  AdminParkingRoute: AdminParkingRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
