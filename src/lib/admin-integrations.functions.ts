@@ -232,6 +232,52 @@ async function testGoogleMaps(storedKey: string | null): Promise<{ ok: boolean; 
   return { ok: true, message: storedKey ? "Geocoding succeeded with the saved server key." : "Geocoding succeeded through the workspace Google Maps connection." };
 }
 
+async function testStripe(secret: string | null): Promise<{ ok: boolean; message: string }> {
+  if (!secret) return { ok: false, message: "No secret key stored. Save one first." };
+  const res = await fetch("https://api.stripe.com/v1/balance", { headers: { Authorization: `Bearer ${secret}` } });
+  const body = await res.text();
+  if (!res.ok) return { ok: false, message: `Stripe responded ${res.status}: ${body.slice(0, 200)}` };
+  return { ok: true, message: "Stripe credentials accepted. No checkout flow is built in the app yet, so nothing can be charged." };
+}
+
+async function testTwilio(sid: string, token: string | null): Promise<{ ok: boolean; message: string }> {
+  if (!sid) return { ok: false, message: "Account SID is empty." };
+  if (!token) return { ok: false, message: "No auth token stored. Save one first." };
+  const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(sid)}.json`, {
+    headers: { Authorization: `Basic ${btoa(`${sid}:${token}`)}` },
+  });
+  const body = await res.text();
+  if (!res.ok) return { ok: false, message: `Twilio responded ${res.status}: ${body.slice(0, 200)}` };
+  return { ok: true, message: "Twilio credentials accepted. Phone sign-in must still be switched on in the auth backend." };
+}
+
+async function testEmail(cfg: Record<string, unknown>, secret: string | null): Promise<{ ok: boolean; message: string }> {
+  const provider = String(cfg["provider"] ?? "Custom SMTP");
+  const to = String(cfg["test_recipient"] ?? "").trim();
+  const from = String(cfg["from_email"] ?? "").trim();
+  if (provider !== "Resend (HTTP API)") {
+    return {
+      ok: false,
+      message: "Raw SMTP needs a TCP socket this serverless runtime cannot open. Credentials are stored encrypted; switch the provider to the HTTP API to run a real send test.",
+    };
+  }
+  if (!secret) return { ok: false, message: "No API key stored. Save one first." };
+  if (!to || !from) return { ok: false, message: "Set both a From address and a test recipient before sending." };
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: cfg["from_name"] ? `${String(cfg["from_name"])} <${from}>` : from,
+      to: [to],
+      subject: "AndiPark integration test",
+      text: "This is a real test email sent from the AndiPark admin integration centre.",
+    }),
+  });
+  const body = await res.text();
+  if (!res.ok) return { ok: false, message: `Email provider responded ${res.status}: ${body.slice(0, 200)}` };
+  return { ok: true, message: `Test email sent to ${to}.` };
+}
+
 export const testIntegration = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().max(64) }).parse(d))
@@ -241,13 +287,33 @@ export const testIntegration = createServerFn({ method: "POST" })
     const def = integrationById(data.id);
     if (!def?.testable) throw new Error("This integration cannot be tested");
     const admin = await getAdmin();
+    const { data: row } = await admin.from("integration_settings").select("config").eq("id", def.id).maybeSingle();
+    const cfg = (row?.config ?? {}) as Record<string, unknown>;
 
     let result: { ok: boolean; message: string };
     if (def.id === "google_maps") {
       result = await testGoogleMaps(await readSecret(admin, "google_maps", "server_api_key"));
     } else if (def.id === "supabase") {
-      const { error, count } = await admin.from("profiles").select("id", { count: "exact", head: true });
+      const { error, count } = await admin.from("profiles").select("user_id", { count: "exact", head: true });
       result = error ? { ok: false, message: error.message } : { ok: true, message: `Database reachable — ${count ?? 0} profiles.` };
+    } else if (def.id === "payments") {
+      result =
+        String(cfg["provider"] ?? "") === "Stripe"
+          ? await testStripe(await readSecret(admin, "payments", "secret_key"))
+          : { ok: false, message: "Select a payment provider before testing." };
+    } else if (def.id === "otp") {
+      result =
+        String(cfg["provider"] ?? "") === "Twilio"
+          ? await testTwilio(String(cfg["account_sid"] ?? ""), await readSecret(admin, "otp", "auth_token"))
+          : { ok: false, message: "Select an OTP provider before testing." };
+    } else if (def.id === "smtp") {
+      result = await testEmail(cfg, await readSecret(admin, "smtp", "password"));
+    } else if (def.id === "webhooks") {
+      const secret = await readSecret(admin, "webhooks", "signing_secret");
+      const { count } = await admin.from("webhook_events").select("id", { count: "exact", head: true });
+      result = secret
+        ? { ok: true, message: `Signing secret stored — inbound calls to /api/public/webhooks/andipark are verified. ${count ?? 0} events recorded.` }
+        : { ok: false, message: "No signing secret stored, so every inbound webhook call is rejected." };
     } else {
       result = { ok: false, message: "No test is implemented for this integration." };
     }
@@ -270,6 +336,27 @@ export const testIntegration = createServerFn({ method: "POST" })
     await audit(admin, context.userId, "integration.test", def.id, { ok: result.ok });
     return { ...result, testedAt };
   });
+
+/* ---------------------------------------------------------- webhook events */
+
+export const listWebhookEvents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { getAdmin, requireSuperAdmin } = await import("./admin-integrations.server");
+    await requireSuperAdmin(context.supabase, context.userId);
+    const admin = await getAdmin();
+    const { data } = await admin.from("webhook_events").select("*").order("created_at", { ascending: false }).limit(50);
+    return (data ?? []).map((r) => ({
+      id: r.id,
+      source: r.source,
+      eventType: r.event_type,
+      ok: r.ok,
+      statusCode: r.status_code,
+      message: r.message,
+      createdAt: r.created_at,
+    }));
+  });
+
 
 /* ------------------------------------------------------------- audit feed */
 

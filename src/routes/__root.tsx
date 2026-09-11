@@ -99,7 +99,7 @@ function RootComponent() {
 
 function LocalizedShell() {
   const { dir } = useI18n();
-  const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
+  const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") || s.location.pathname === "/" });
   useEffect(() => { captureReferralFromUrl(); }, []);
   return (
     <>
