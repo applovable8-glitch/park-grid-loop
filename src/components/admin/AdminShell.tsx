@@ -3,7 +3,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Activity, Map, Users, Car, CalendarCheck, CreditCard,
   Gift, Bell, BarChart3, LifeBuoy, Settings, Menu, X, ArrowLeft,
-  Receipt, RotateCcw, Webhook, UserPlus, Mail, FileText,
+  Receipt, RotateCcw, Webhook, UserPlus, Mail, FileText, ShieldCheck, ScrollText,
 } from "lucide-react";
 
 type Item = { label: string; icon: typeof Users; to?: string };
