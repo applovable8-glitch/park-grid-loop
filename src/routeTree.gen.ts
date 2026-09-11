@@ -102,6 +102,7 @@ import { Route as CommunityReferralRouteImport } from './routes/community.referr
 import { Route as CommunityGuidelinesRouteImport } from './routes/community.guidelines'
 import { Route as ChatIdRouteImport } from './routes/chat.$id'
 import { Route as AuthSuccessRouteImport } from './routes/auth.success'
+import { Route as AdminWebhooksRouteImport } from './routes/admin.webhooks'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
@@ -580,6 +581,11 @@ const AuthSuccessRoute = AuthSuccessRouteImport.update({
   path: '/success',
   getParentRoute: () => AuthRoute,
 } as any)
+const AdminWebhooksRoute = AdminWebhooksRouteImport.update({
+  id: '/webhooks',
+  path: '/webhooks',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -670,6 +676,7 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/webhooks': typeof AdminWebhooksRoute
   '/auth/success': typeof AuthSuccessRoute
   '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
@@ -771,6 +778,7 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/webhooks': typeof AdminWebhooksRoute
   '/auth/success': typeof AuthSuccessRoute
   '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
@@ -878,6 +886,7 @@ export interface FileRoutesById {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/webhooks': typeof AdminWebhooksRoute
   '/auth/success': typeof AuthSuccessRoute
   '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
@@ -986,6 +995,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/transactions'
     | '/admin/users'
+    | '/admin/webhooks'
     | '/auth/success'
     | '/chat/$id'
     | '/community/guidelines'
@@ -1087,6 +1097,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/transactions'
     | '/admin/users'
+    | '/admin/webhooks'
     | '/auth/success'
     | '/chat/$id'
     | '/community/guidelines'
@@ -1193,6 +1204,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/transactions'
     | '/admin/users'
+    | '/admin/webhooks'
     | '/auth/success'
     | '/chat/$id'
     | '/community/guidelines'
@@ -1964,6 +1976,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSuccessRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/admin/webhooks': {
+      id: '/admin/webhooks'
+      path: '/webhooks'
+      fullPath: '/admin/webhooks'
+      preLoaderRoute: typeof AdminWebhooksRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
@@ -2054,6 +2073,7 @@ interface AdminRouteChildren {
   AdminRolesRoute: typeof AdminRolesRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  AdminWebhooksRoute: typeof AdminWebhooksRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -2067,6 +2087,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminRolesRoute: AdminRolesRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
+  AdminWebhooksRoute: AdminWebhooksRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
