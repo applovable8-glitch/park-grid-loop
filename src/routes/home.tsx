@@ -15,7 +15,7 @@ import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/use-geolocation";
 import { useAreaName } from "@/lib/use-area-name";
 import { useThreads } from "@/lib/chat";
-import { loadGoogleMaps, type GAny } from "@/lib/google-maps";
+import { placeSuggest, placeSearch, placeDetails } from "@/lib/places.functions";
 import { ABU_DHABI } from "@/lib/geo-defaults";
 import {
   clockOf, haversine, minutesUntil, publishSeekerLocation, requestSpot, useIncomingConfirmed, useLiveSpots,
@@ -46,7 +46,8 @@ interface PickedPlace {
 function Home() {
   const { ready } = useRequireProfile();
   const { user } = useApp();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const ar = lang === "ar";
   const nav = useNavigate();
   const { position } = useGeolocation();
   const areaName = useAreaName(position);
