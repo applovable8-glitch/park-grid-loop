@@ -102,10 +102,10 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
         {/* Single CTA — the decision comes before the details */}
         <div className="mt-4">
           {isMine ? (
-            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">This is your own shared spot.</p>
-          ) : (
+            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">{S.ownSpot}</p>
+          ) : !confirming ? (
             <button
-              onClick={onRequest}
+              onClick={() => setConfirming(true)}
               disabled={requestDisabled || requestBusy}
               className={`press flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold ${
                 requestDisabled ? "bg-muted text-muted-foreground" : "text-white shadow-[var(--shadow-glow)]"
@@ -113,12 +113,37 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
               style={requestDisabled ? undefined : { background: "var(--gradient-emerald)" }}
             >
               <Zap className="h-4 w-4" />
-              {reserved ? "Already reserved" : requestBusy ? "Sending…" : "Request this spot"}
+              {reserved ? S.alreadyReserved : requestBusy ? S.sending : S.requestThis}
             </button>
+          ) : (
+            <div className="animate-fade-up rounded-2xl border border-border bg-muted/60 p-4">
+              <p className="text-center font-[var(--font-display)] text-base font-bold">{S.requestQ}</p>
+              <p className="mt-1 text-center text-xs text-muted-foreground">
+                {headline} · {spot.cost} pts · {distance == null ? "" : `${distanceLabel(distance)} · `}{clockOf(exitIso)}
+              </p>
+              <div className="mt-3 grid grid-cols-[1fr_auto] gap-2">
+                <button
+                  onClick={onRequest}
+                  disabled={requestBusy}
+                  className="press flex items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-white shadow-[var(--shadow-glow)] disabled:opacity-60"
+                  style={{ background: "var(--gradient-emerald)" }}
+                >
+                  <Zap className="h-4 w-4" />
+                  {requestBusy ? S.sending : S.request}
+                </button>
+                <button
+                  onClick={() => setConfirming(false)}
+                  disabled={requestBusy}
+                  className="press rounded-2xl bg-card px-5 py-3.5 text-sm font-semibold ring-1 ring-border"
+                >
+                  {S.cancel}
+                </button>
+              </div>
+            </div>
           )}
-          {!isMine && !requestDisabled && (
+          {!isMine && !requestDisabled && !confirming && (
             <p className="mt-2 text-center text-[11px] text-muted-foreground">
-              {spot.cost} points · driver leaves at {clockOf(exitIso)}
+              {spot.cost} pts · {clockOf(exitIso)}
             </p>
           )}
         </div>
