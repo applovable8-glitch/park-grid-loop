@@ -53,8 +53,9 @@ const GROUPS: { title: string; items: Item[] }[] = [
   {
     title: "System",
     items: [
-      { label: "Support", icon: LifeBuoy },
-      { label: "Settings", icon: Settings },
+      { label: "Security", icon: ShieldCheck, to: "/admin/security" },
+      { label: "Audit Logs", icon: ScrollText, to: "/admin/audit" },
+      { label: "Settings", icon: Settings, to: "/admin/settings" },
     ],
   },
 ];
