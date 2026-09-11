@@ -19,9 +19,9 @@ const GROUPS: { title: string; items: Item[] }[] = [
   {
     title: "Manage",
     items: [
-      { label: "Users", icon: Users },
-      { label: "Parking", icon: Car },
-      { label: "Reservations", icon: CalendarCheck },
+      { label: "Users", icon: Users, to: "/admin/users" },
+      { label: "Parking", icon: Car, to: "/admin/parking" },
+      { label: "Reservations", icon: CalendarCheck, to: "/admin/reservations" },
       { label: "Payments", icon: CreditCard },
       { label: "Points & Rewards", icon: Gift },
     ],
