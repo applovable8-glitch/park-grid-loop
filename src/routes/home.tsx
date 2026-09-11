@@ -117,7 +117,7 @@ function Home() {
             input: term,
             sessionToken: tokenRef.current,
             language: ar ? "ar" : "en",
-            ...(pos ? { lat: pos.lat, lng: pos.lng } : {}),
+            ...(position ? { lat: position.lat, lng: position.lng } : {}),
           },
         });
         if (list.length === 0) {
@@ -140,7 +140,7 @@ function Home() {
       }
     }, 350);
     return () => clearTimeout(handle);
-  }, [q, place, ar, pos]);
+  }, [q, place, ar, position?.lat, position?.lng]);
 
   const pickPlace = async (s: { id: string; text: string; lat?: number; lng?: number }) => {
     setSuggestions([]);
