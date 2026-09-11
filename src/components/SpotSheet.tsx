@@ -5,6 +5,22 @@ import { carLabel, useDriverProfile } from "@/lib/chat";
 import { clockOf, minutesUntil, type LiveSpot } from "@/lib/parking-live";
 import { distanceLabel, driveMinutes, maskPlate, walkMinutes } from "@/lib/format";
 import { Skeleton } from "@/components/kit";
+import { useI18n } from "@/lib/i18n";
+
+const STR = {
+  en: {
+    requestThis: "Request this spot", requestQ: "Request this spot?", request: "Request spot", cancel: "Cancel",
+    sending: "Sending…", alreadyReserved: "Already reserved", ownSpot: "This is your own shared spot.",
+    leavingIn: (m: number) => `Leaving in ${m} min`, freeNow: "Free now", reserved: "Reserved",
+    moreDetails: "More details", fullDetails: "Full details", call: "Call", chat: "Chat",
+  },
+  ar: {
+    requestThis: "اطلب هذا الموقف", requestQ: "أتطلب هذا الموقف؟", request: "اطلب الموقف", cancel: "إلغاء",
+    sending: "جارٍ الإرسال…", alreadyReserved: "محجوز مسبقًا", ownSpot: "هذا موقفك الذي شاركته.",
+    leavingIn: (m: number) => `يغادر خلال ${m} دقيقة`, freeNow: "متاح الآن", reserved: "محجوز",
+    moreDetails: "تفاصيل أكثر", fullDetails: "كل التفاصيل", call: "اتصال", chat: "دردشة",
+  },
+} as const;
 
 interface Props {
   spot: LiveSpot;
@@ -19,14 +35,17 @@ interface Props {
 /** Modern bottom sheet: one clear answer first, details on demand. */
 export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled, requestBusy, isMine }: Props) {
   const { profile, loading } = useDriverProfile(spot.user_id);
+  const { lang } = useI18n();
+  const S = STR[lang];
   const [open, setOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const exitIso = spot.planned_leave_at ?? spot.leave_at;
   const mins = minutesUntil(exitIso);
   const phone = profile?.show_phone ? profile?.phone : null;
   const plate = maskPlate(profile?.plate);
 
   const reserved = spot.status === "reserved";
-  const headline = reserved ? "Reserved" : mins <= 0 ? "Free now" : `Leaving in ${mins} min`;
+  const headline = reserved ? S.reserved : mins <= 0 ? S.freeNow : S.leavingIn(mins);
   const tone = reserved ? "var(--danger)" : mins <= 2 ? "var(--emerald)" : "var(--warning)";
 
   return (
