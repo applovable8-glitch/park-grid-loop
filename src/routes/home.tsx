@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BottomNav } from "@/components/BottomNav";
 import { AreaMap } from "@/components/AreaMap";
 import { SpotSheet } from "@/components/SpotSheet";
+import { SkeletonList } from "@/components/kit";
 import { useRequireProfile } from "@/lib/use-require-auth";
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/use-geolocation";
