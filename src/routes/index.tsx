@@ -1,15 +1,17 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useApp } from "@/lib/parkout-store";
+import { hasSeenOnboarding } from "@/lib/onboarding";
 
-export const Route = createFileRoute("/")({ component: Splash });
+export const Route = createFileRoute("/")({ ssr: false, component: Splash });
 
 function Splash() {
   const navigate = useNavigate();
   const { session, loading } = useApp();
   useEffect(() => {
     if (loading) return;
-    const t = setTimeout(() => navigate({ to: session ? "/home" : "/auth" }), 900);
+    const to = session ? "/home" : hasSeenOnboarding() ? "/auth" : "/onboarding";
+    const t = setTimeout(() => navigate({ to }), 900);
     return () => clearTimeout(t);
   }, [navigate, session, loading]);
 

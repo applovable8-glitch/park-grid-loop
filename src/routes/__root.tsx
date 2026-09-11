@@ -104,6 +104,7 @@ function LocalizedShell() {
   return (
     <>
       <NotificationSound />
+      <VerificationGate />
       {isAdmin ? (
         <div dir={dir} className="min-h-screen w-full bg-background">
           <Outlet />
