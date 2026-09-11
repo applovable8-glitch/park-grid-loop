@@ -138,54 +138,88 @@
 }
 
 @utility glass {
-  background: color-mix(in oklab, white 78%, transparent);
-  backdrop-filter: saturate(140%) blur(14px);
-  -webkit-backdrop-filter: saturate(140%) blur(14px);
-  border: 1px solid color-mix(in oklab, white 60%, transparent);
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  backdrop-filter: saturate(150%) blur(16px);
+  -webkit-backdrop-filter: saturate(150%) blur(16px);
+  border: 1px solid var(--border);
 }
 
 @utility glass-dark {
-  background: color-mix(in oklab, oklch(0.22 0.05 260) 78%, transparent);
-  backdrop-filter: saturate(140%) blur(14px);
-  border: 1px solid color-mix(in oklab, white 12%, transparent);
-  color: white;
+  background: color-mix(in srgb, #0b1120 80%, transparent);
+  backdrop-filter: saturate(150%) blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+}
+
+@utility press {
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  &:active { transform: scale(0.965); }
 }
 
 @utility pulse-emerald {
-  box-shadow: 0 0 0 0 color-mix(in oklab, var(--emerald) 60%, transparent);
-  animation: pulseEmerald 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--emerald) 55%, transparent);
+  animation: pulseEmerald 2.1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes pulseEmerald {
-  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--emerald) 60%, transparent); }
-  70% { box-shadow: 0 0 0 18px color-mix(in oklab, var(--emerald) 0%, transparent); }
-  100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--emerald) 0%, transparent); }
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--emerald) 55%, transparent); }
+  70% { box-shadow: 0 0 0 16px color-mix(in srgb, var(--emerald) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--emerald) 0%, transparent); }
 }
 
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-up { animation: fade-up 0.4s ease-out both; }
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
+.animate-fade-up { animation: fade-up var(--dur-slow) var(--ease-out) both; }
 
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-in { animation: fade-in 0.35s ease-out both; }
+.animate-fade-in { animation: fade-in var(--dur-base) var(--ease-out) both; }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.94); }
   to { opacity: 1; transform: scale(1); }
 }
-.animate-scale-in { animation: scale-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-scale-in { animation: scale-in var(--dur-base) var(--ease-spring) both; }
+
+/* Bottom-sheet spring entrance */
+@keyframes sheet-up {
+  from { opacity: 0; transform: translateY(28px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-sheet { animation: sheet-up var(--dur-slow) var(--ease-spring) both; }
+
+/* Staggered list entrance */
+.stagger > * { animation: fade-up var(--dur-base) var(--ease-out) both; }
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 45ms; }
+.stagger > *:nth-child(3) { animation-delay: 90ms; }
+.stagger > *:nth-child(4) { animation-delay: 135ms; }
+.stagger > *:nth-child(5) { animation-delay: 180ms; }
+.stagger > *:nth-child(n+6) { animation-delay: 220ms; }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton {
+  background-image: linear-gradient(90deg,
+    color-mix(in srgb, var(--muted) 100%, transparent) 25%,
+    color-mix(in srgb, var(--card) 92%, var(--muted)) 50%,
+    color-mix(in srgb, var(--muted) 100%, transparent) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in, .animate-scale-in, .animate-fade-up { animation: none; }
+  .animate-fade-in, .animate-scale-in, .animate-fade-up, .animate-sheet,
+  .stagger > *, .skeleton, .pulse-emerald { animation: none !important; }
 }
+
 
