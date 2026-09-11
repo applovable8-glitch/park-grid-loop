@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Mail, Lock, ArrowRight, MapPin, Loader2 } from "lucide-react";
+import { Mail, Lock, ArrowRight, MapPin, Loader2, Eye, EyeOff, MailCheck } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useApp } from "@/lib/parkout-store";
 import { useI18n } from "@/lib/i18n";
 import { captureReferralFromUrl, pendingReferralCode } from "@/lib/referrals";
@@ -22,6 +23,8 @@ function Auth() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState<null | "email" | "google" | "apple" | "reset">(null);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const [showPass, setShowPass] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
 
   useEffect(() => {
     captureReferralFromUrl();
@@ -43,6 +46,14 @@ function Auth() {
       const { error } = await signUpWithEmail(email, password, name.trim());
       setBusy(null);
       if (error) { toast.error(error); return; }
+      // With email confirmation on, signUp returns no session — send the user to the
+      // confirmation screen instead of pretending they are signed in.
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        toast.success("Check your email to confirm your account");
+        setPendingEmail(email);
+        return;
+      }
       toast.success("Account created — complete your profile");
       nav({ to: "/create-profile" });
     }
@@ -107,6 +118,18 @@ function Auth() {
           </div>
         )}
 
+        {pendingEmail && (
+          <div className="animate-scale-in mt-4 flex items-start gap-3 rounded-2xl bg-emerald/10 p-3 ring-1 ring-emerald/30">
+            <MailCheck className="mt-0.5 h-5 w-5 shrink-0 text-[color:var(--emerald)]" />
+            <div className="min-w-0 text-start">
+              <p className="text-sm font-bold">Confirm your email</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                We sent a confirmation link to <span className="font-semibold text-foreground">{pendingEmail}</span>. Open it, then log in here.
+              </p>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={submit} className="animate-fade-up mt-5 space-y-3">
           {mode === "register" && (
             <label className="block">
@@ -127,9 +150,14 @@ function Auth() {
             <span className="mb-1 block text-xs font-medium text-muted-foreground">{t("password")}</span>
             <div className="relative">
               <Lock className="absolute start-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"
+              <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPass ? "text" : "password"}
                 autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={6}
-                className="w-full rounded-2xl border border-border bg-card py-3 ps-11 pe-4 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+                className="w-full rounded-2xl border border-border bg-card py-3 ps-11 pe-12 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15" />
+              <button type="button" onClick={() => setShowPass((v) => !v)}
+                aria-label={showPass ? "Hide password" : "Show password"}
+                className="absolute end-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:bg-muted">
+                {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
             </div>
           </label>
 

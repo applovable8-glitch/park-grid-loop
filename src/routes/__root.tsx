@@ -17,6 +17,7 @@ import { AppProvider } from "../lib/parkout-store";
 import { I18nProvider, useI18n } from "../lib/i18n";
 import { captureReferralFromUrl } from "../lib/referrals";
 import { NotificationSound } from "../lib/notification-sound";
+import { VerificationGate } from "../components/VerificationGate";
 
 function NotFoundComponent() {
   return (
@@ -103,6 +104,7 @@ function LocalizedShell() {
   return (
     <>
       <NotificationSound />
+      <VerificationGate />
       {isAdmin ? (
         <div dir={dir} className="min-h-screen w-full bg-background">
           <Outlet />

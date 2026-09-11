@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Bell, Shield, MapPin, Lock, Settings2, Languages, Palette, Ruler, KeyRound, Link2, HelpCircle, FileText, Users } from "lucide-react";
+import { Bell, Shield, MapPin, Lock, Settings2, Languages, Palette, Ruler, KeyRound, Link2, HelpCircle, FileText, Users, Sparkles } from "lucide-react";
 import { Screen, RowGroup, Row } from "@/components/kit";
 import { useI18n } from "@/lib/i18n";
 
@@ -29,6 +29,7 @@ function SettingsHome() {
         <Row icon={HelpCircle} label={t("help_center")} to="/help" />
         <Row icon={FileText} label={t("terms_privacy")} to="/help/terms" />
         <Row icon={Users} label={t("community")} to="/community/guidelines" />
+        <Row icon={Sparkles} label={lang === "ar" ? "جولة تعريفية" : "App tour"} to="/onboarding" />
       </RowGroup>
     </Screen>
   );
