@@ -110,7 +110,9 @@ function Leaving() {
   useRequireProfile();
   const { user } = useApp();
   const { lang } = useI18n();
-  const S = STR[lang];
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const S = STR[mounted ? lang : "en"];
   const { position, status } = useGeolocation();
   const [minutes, setMinutes] = useState<number | "custom">(0);
   const [custom, setCustom] = useState(() => toLocalInput(new Date(Date.now() + 60 * 60000)));
