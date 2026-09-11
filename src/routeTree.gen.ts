@@ -105,6 +105,7 @@ import { Route as AuthSuccessRouteImport } from './routes/auth.success'
 import { Route as AdminWebhooksRouteImport } from './routes/admin.webhooks'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
+import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminRewardsRouteImport } from './routes/admin.rewards'
 import { Route as AdminReservationsRouteImport } from './routes/admin.reservations'
@@ -602,6 +603,11 @@ const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   path: '/transactions',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSecurityRoute = AdminSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminRolesRoute = AdminRolesRouteImport.update({
   id: '/roles',
   path: '/roles',
@@ -716,6 +722,7 @@ export interface FileRoutesByFullPath {
   '/admin/reservations': typeof AdminReservationsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/security': typeof AdminSecurityRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
@@ -824,6 +831,7 @@ export interface FileRoutesByTo {
   '/admin/reservations': typeof AdminReservationsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/security': typeof AdminSecurityRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
@@ -938,6 +946,7 @@ export interface FileRoutesById {
   '/admin/reservations': typeof AdminReservationsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/roles': typeof AdminRolesRoute
+  '/admin/security': typeof AdminSecurityRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
@@ -1053,6 +1062,7 @@ export interface FileRouteTypes {
     | '/admin/reservations'
     | '/admin/rewards'
     | '/admin/roles'
+    | '/admin/security'
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
@@ -1161,6 +1171,7 @@ export interface FileRouteTypes {
     | '/admin/reservations'
     | '/admin/rewards'
     | '/admin/roles'
+    | '/admin/security'
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
@@ -1274,6 +1285,7 @@ export interface FileRouteTypes {
     | '/admin/reservations'
     | '/admin/rewards'
     | '/admin/roles'
+    | '/admin/security'
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
@@ -2069,6 +2081,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTransactionsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/security': {
+      id: '/admin/security'
+      path: '/security'
+      fullPath: '/admin/security'
+      preLoaderRoute: typeof AdminSecurityRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/roles': {
       id: '/admin/roles'
       path: '/roles'
@@ -2191,6 +2210,7 @@ interface AdminRouteChildren {
   AdminReservationsRoute: typeof AdminReservationsRoute
   AdminRewardsRoute: typeof AdminRewardsRoute
   AdminRolesRoute: typeof AdminRolesRoute
+  AdminSecurityRoute: typeof AdminSecurityRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWebhooksRoute: typeof AdminWebhooksRoute
@@ -2211,6 +2231,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReservationsRoute: AdminReservationsRoute,
   AdminRewardsRoute: AdminRewardsRoute,
   AdminRolesRoute: AdminRolesRoute,
+  AdminSecurityRoute: AdminSecurityRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWebhooksRoute: AdminWebhooksRoute,
