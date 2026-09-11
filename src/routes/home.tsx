@@ -212,6 +212,9 @@ function Home() {
 
   const selected = selectedId ? spots.find((s) => s.id === selectedId) ?? null : null;
   const available = list.filter((s) => s.status !== "reserved").length;
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+
 
   if (!ready) return null;
 
