@@ -3,6 +3,7 @@ import type { ParkingSpot } from "@/lib/parkout-store";
 import { Navigation, MapPin, Loader2 } from "lucide-react";
 import { loadGoogleMaps, MAPS_KEY, type GAny } from "@/lib/google-maps";
 import { useGeolocation } from "@/lib/use-geolocation";
+import { ABU_DHABI } from "@/lib/geo-defaults";
 
 interface Props {
   spots: ParkingSpot[];
@@ -14,7 +15,7 @@ interface Props {
   recenterSignal?: number;
 }
 
-const DEFAULT_CENTER = { lat: 25.1972, lng: 55.2744 }; // Downtown Dubai
+const DEFAULT_CENTER = ABU_DHABI; // Abu Dhabi fallback (GPS always wins)
 
 const COLORS: Record<ParkingSpot["status"], string> = {
   available: "#10B981",

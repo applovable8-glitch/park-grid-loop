@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { LocateFixed, Loader2, MapPin } from "lucide-react";
 import { loadGoogleMaps, MAPS_KEY, type GAny } from "@/lib/google-maps";
+import { ABU_DHABI } from "@/lib/geo-defaults";
 
 interface Props {
   /** Initial center, e.g. the user's GPS position */
@@ -25,7 +26,7 @@ export function PinPicker({ initial, onChange, className }: Props) {
       .then(() => {
         if (cancelled || !ref.current || mapRef.current) return;
         const map = new google.maps.Map(ref.current, {
-          center: initial ?? { lat: 25.2048, lng: 55.2708 },
+          center: initial ?? ABU_DHABI,
           zoom: initial ? 17 : 12,
           disableDefaultUI: true,
           gestureHandling: "greedy",

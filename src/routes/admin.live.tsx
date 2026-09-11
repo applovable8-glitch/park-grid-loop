@@ -4,6 +4,7 @@ import { AreaMap } from "@/components/AreaMap";
 import { AdminPanel } from "@/components/admin/AdminShell";
 import { useLiveSpots, minutesUntil, type LiveSpot } from "@/lib/parking-live";
 import { useAdminActivity, activityLabel, shortTime } from "@/lib/admin-data";
+import { ABU_DHABI } from "@/lib/geo-defaults";
 
 export const Route = createFileRoute("/admin/live")({ component: LiveOps });
 
@@ -33,7 +34,7 @@ function LiveOps() {
   }, [spots]);
 
   const center = useMemo(() => {
-    if (!spots.length) return { lat: 25.2048, lng: 55.2708 };
+    if (!spots.length) return ABU_DHABI;
     const lat = spots.reduce((a, s) => a + s.lat, 0) / spots.length;
     const lng = spots.reduce((a, s) => a + s.lng, 0) / spots.length;
     return { lat, lng };
