@@ -80,35 +80,43 @@ function timeText(s: LiveSpot) {
   return `${Math.round(m / 60)}h`;
 }
 
-/** Custom pill marker: car glyph + countdown, soft shadow, drawn as an inline SVG data URI. */
-function carIcon(color: string, text: string, active: boolean): GAny {
-  const w = 92;
-  const h = 68;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 92 68">
+/**
+ * Time-first spot marker: the countdown is the marker.
+ * `emphasis` (nearest / soonest spots) renders larger, solid and with a soft halo;
+ * de-emphasised spots stay small and quiet so the eye lands on the best option.
+ */
+function spotIcon(color: string, text: string, active: boolean, emphasis: boolean): GAny {
+  const strong = active || emphasis;
+  const w = strong ? 108 : 92;
+  const h = strong ? 62 : 54;
+  const pillW = strong ? 76 : 62;
+  const pillH = strong ? 32 : 26;
+  const x = (w - pillW) / 2;
+  const cx = w / 2;
+  const font = strong ? 14 : 12;
+  const halo = active ? 0.26 : emphasis ? 0.16 : 0;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
   <defs>
     <filter id="s" x="-40%" y="-40%" width="180%" height="200%">
-      <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#0f172a" flood-opacity="0.28"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="${strong ? 3.5 : 2.5}" flood-color="#0f172a" flood-opacity="0.22"/>
     </filter>
   </defs>
   <g filter="url(#s)">
-    ${active ? `<rect x="12" y="4" width="68" height="34" rx="17" fill="${color}" opacity="0.22" transform="translate(-4,-4) scale(1.1) translate(-2,0)"/>` : ""}
-    <rect x="16" y="6" width="60" height="30" rx="15" fill="${color}" stroke="#ffffff" stroke-width="${active ? 3.5 : 2.5}"/>
-    <g transform="translate(24,13) scale(0.62)" fill="#ffffff">
-      <path d="M4 14 L6.5 6.5 C6.9 5.2 8 4.5 9.3 4.5 H20.7 C22 4.5 23.1 5.2 23.5 6.5 L26 14 H27.5 C28.6 14 29.5 14.9 29.5 16 V21 C29.5 22.1 28.6 23 27.5 23 H2.5 C1.4 23 0.5 22.1 0.5 21 V16 C0.5 14.9 1.4 14 2.5 14 Z"/>
-      <circle cx="7" cy="23.5" r="3.2"/><circle cx="23" cy="23.5" r="3.2"/>
-    </g>
-    <text x="58" y="26" text-anchor="middle" font-family="Plus Jakarta Sans,system-ui,-apple-system,sans-serif" font-size="13" font-weight="800" fill="#ffffff">${text}</text>
-    <path d="M46 36 L52 36 L46 45 L40 36 Z" fill="${color}" stroke="#ffffff" stroke-width="2"/>
-    <circle cx="46" cy="49" r="3" fill="${color}" stroke="#ffffff" stroke-width="1.5"/>
+    ${halo ? `<rect x="${x - 6}" y="1" width="${pillW + 12}" height="${pillH + 12}" rx="${(pillH + 12) / 2}" fill="${color}" opacity="${halo}"/>` : ""}
+    <rect x="${x}" y="7" width="${pillW}" height="${pillH}" rx="${pillH / 2}" fill="${color}" stroke="#ffffff" stroke-width="${active ? 3 : 2}"/>
+    <circle cx="${x + pillH / 2}" cy="${7 + pillH / 2}" r="${strong ? 5 : 4}" fill="#ffffff" opacity="0.95"/>
+    <text x="${x + pillH / 2 + (strong ? 9 : 7)}" y="${7 + pillH / 2 + font / 3}" text-anchor="start" font-family="Plus Jakarta Sans,system-ui,-apple-system,sans-serif" font-size="${font}" font-weight="800" fill="#ffffff">${text}</text>
+    <path d="M${cx - 5} ${7 + pillH} L${cx + 5} ${7 + pillH} L${cx} ${7 + pillH + 8} Z" fill="${color}"/>
+    <circle cx="${cx}" cy="${7 + pillH + 13}" r="${strong ? 3 : 2.5}" fill="${color}" stroke="#ffffff" stroke-width="1.5"/>
   </g>
 </svg>`;
   return {
     url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
     scaledSize: new google.maps.Size(w, h),
-    anchor: new google.maps.Point(46, 49),
+    anchor: new google.maps.Point(cx, 7 + pillH + 13),
   };
-
 }
+
 
 /** Real-coordinate map for search results: centers on the searched area, plots live spots as cars. */
 export function AreaMap({
