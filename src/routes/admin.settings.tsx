@@ -13,7 +13,7 @@ import {
   type IntegrationDef,
   type IntegrationState,
 } from "@/lib/admin-integrations";
-import { listIntegrations, saveIntegration, setIntegrationEnabled, testIntegration, removeIntegrationSecret } from "@/lib/admin-integrations.functions";
+import { listIntegrations, listWebhookEvents, saveIntegration, setIntegrationEnabled, testIntegration, removeIntegrationSecret } from "@/lib/admin-integrations.functions";
 
 export const Route = createFileRoute("/admin/settings")({
   head: () => ({ meta: [{ title: "Settings — AndiPark Admin" }, { name: "robots", content: "noindex" }] }),
@@ -67,6 +67,21 @@ function Editor({
         >
           <option value="sandbox">Sandbox</option>
           <option value="production">Production</option>
+        </select>
+      );
+    }
+    if (f.type === "select") {
+      return (
+        <select
+          value={String(config[f.key] ?? f.options?.[0] ?? "")}
+          onChange={(e) => setConfig((c) => ({ ...c, [f.key]: e.target.value }))}
+          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-[#0B1120]"
+        >
+          {(f.options ?? []).map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
         </select>
       );
     }
@@ -151,6 +166,10 @@ function Editor({
             </div>
           ))}
         </div>
+
+        {def.runtimeNote && (
+          <p className="mt-4 rounded-lg bg-amber-500/10 p-3 text-[11px] leading-relaxed text-amber-600 dark:text-amber-400">{def.runtimeNote}</p>
+        )}
 
         <p className="mt-4 rounded-lg bg-slate-50 p-3 text-[11px] text-slate-500 dark:bg-white/5 dark:text-slate-400">
           Credentials are encrypted before storage and are never sent back to this browser. Once saved, a secret can only be replaced or removed.
@@ -299,6 +318,64 @@ function Section({ title, rows }: { title: string; rows: { label: string; value:
   );
 }
 
+type WebhookEvent = { id: string; source: string; eventType: string; ok: boolean; statusCode: number | null; message: string | null; createdAt: string };
+
+function WebhookEvents() {
+  const load = useServerFn(listWebhookEvents);
+  const [rows, setRows] = useState<WebhookEvent[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    load()
+      .then((r) => setRows(r as WebhookEvent[]))
+      .catch((e: unknown) => setError(e instanceof Error ? e.message : "Could not load webhook events"));
+  }, [load]);
+
+  const lastOk = (rows ?? []).find((r) => r.ok);
+  const failed = (rows ?? []).filter((r) => !r.ok).length;
+
+  return (
+    <section className="mt-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[#111827]">
+      <h2 className="text-sm font-bold">Webhook activity</h2>
+      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+        Endpoint <code className="font-mono">/api/public/webhooks/andipark</code> — signed with HMAC-SHA256 in <code className="font-mono">x-andipark-signature</code>.
+      </p>
+      {error && <p className="mt-3 text-xs text-red-500">{error}</p>}
+      {!error && (
+        <>
+          <dl className="mt-3 grid grid-cols-3 gap-3 text-xs">
+            <div>
+              <dt className="text-slate-400">Last event</dt>
+              <dd className="font-semibold">{rows?.[0] ? fmtTime(rows[0].createdAt) : "Never"}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-400">Last successful</dt>
+              <dd className="font-semibold">{lastOk ? fmtTime(lastOk.createdAt) : "Never"}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-400">Failed events</dt>
+              <dd className="font-semibold">{rows ? failed : "—"}</dd>
+            </div>
+          </dl>
+          <ul className="mt-3 space-y-1.5">
+            {(rows ?? []).slice(0, 10).map((r) => (
+              <li key={r.id} className="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2 text-[11px] dark:bg-white/5">
+                <span className="min-w-0 truncate">
+                  <span className={r.ok ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"}>{r.ok ? "OK" : "Failed"}</span> · {r.source}
+                  {r.eventType ? ` · ${r.eventType}` : ""} — {r.message ?? ""}
+                </span>
+                <span className="shrink-0 text-slate-400">{fmtTime(r.createdAt)}</span>
+              </li>
+            ))}
+            {rows && rows.length === 0 && <li className="text-[11px] text-slate-400">No webhook call has reached this endpoint yet.</li>}
+          </ul>
+        </>
+      )}
+    </section>
+  );
+}
+
+
 function AdminSettings() {
   const load = useServerFn(listIntegrations);
   const [states, setStates] = useState<IntegrationState[] | null>(null);
@@ -365,6 +442,8 @@ function AdminSettings() {
           }}
         />
       )}
+
+      <WebhookEvents />
 
       <h2 className="mt-8 font-[var(--font-display)] text-lg font-bold">Platform</h2>
       <div className="mt-3 grid gap-4 lg:grid-cols-2">

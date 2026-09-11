@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { ShieldAlert, ShieldCheck, Loader2 } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 import { getAdminAccess, claimSuperAdmin } from "@/lib/admin-integrations.functions";
 
 type Access = { roles: string[]; isSuperAdmin: boolean; isAdmin: boolean; needsBootstrap: boolean };
@@ -34,17 +35,25 @@ function Panel({ icon, title, detail, children }: { icon: ReactNode; title: stri
   return (
     <div className="mx-auto mt-16 max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm dark:border-white/10 dark:bg-[#111827]">
       <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5">{icon}</div>
-      <p className="mt-4 font-[var(--font-display)] text-lg font-bold">{title}</p>
+      <h1 className="mt-4 font-[var(--font-display)] text-lg font-bold">{title}</h1>
       <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">{detail}</p>
       {children && <div className="mt-5">{children}</div>}
     </div>
   );
 }
 
+/**
+ * Renders nothing of the console — and triggers no admin data loading — until the
+ * server has confirmed the caller holds an admin role. Every admin server function
+ * re-verifies the role independently, so this gate is a UI mirror of server truth,
+ * never the authorization itself.
+ */
 export function AdminGate({ children }: { children: ReactNode }) {
   const { access, error, loading, refresh } = useAdminAccess();
   const claim = useServerFn(claimSuperAdmin);
   const [claiming, setClaiming] = useState(false);
+  const { lang } = useI18n();
+  const ar = lang === "ar";
 
   if (loading) {
     return (
@@ -54,19 +63,20 @@ export function AdminGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (error || !access) {
-    return (
-      <Panel
-        icon={<ShieldAlert className="h-6 w-6 text-amber-500" />}
-        title="Sign in required"
-        detail="This console is only available to signed-in administrators."
-      >
-        <Link to="/auth" className="inline-flex rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">
-          Go to sign in
-        </Link>
-      </Panel>
-    );
-  }
+  const denied = (
+    <Panel
+      icon={<ShieldAlert className="h-6 w-6 text-red-500" />}
+      title={ar ? "غير مصرح بالدخول" : "Access Denied"}
+      detail={ar ? "ليس لديك صلاحية للوصول إلى لوحة الإدارة." : "You don't have permission to access this area."}
+    >
+      <Link to="/home" className="inline-flex rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">
+        {ar ? "العودة إلى AndiPark" : "Back to AndiPark"}
+      </Link>
+    </Panel>
+  );
+
+  // No session, invalid/expired token, or the permission check failed: deny.
+  if (error || !access) return denied;
 
   if (access.needsBootstrap) {
     return (
@@ -92,19 +102,7 @@ export function AdminGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!access.isAdmin) {
-    return (
-      <Panel
-        icon={<ShieldAlert className="h-6 w-6 text-red-500" />}
-        title="Access denied"
-        detail="Your account has no administrator role, so this console is not available to you."
-      >
-        <Link to="/home" className="inline-flex rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold dark:border-white/10">
-          Back to AndiPark
-        </Link>
-      </Panel>
-    );
-  }
+  if (!access.isAdmin) return denied;
 
   return <>{children}</>;
 }

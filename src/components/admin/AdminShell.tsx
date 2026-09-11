@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Activity, Map, Users, Car, CalendarCheck, CreditCard,
-  Gift, Bell, BarChart3, LifeBuoy, Settings, Menu, X, ArrowLeft,
+  Gift, Bell, Globe, BarChart3, LifeBuoy, Settings, Menu, X, ArrowLeft,
   Receipt, RotateCcw, Webhook, UserPlus, Mail, FileText, ShieldCheck, ScrollText,
 } from "lucide-react";
 
@@ -53,6 +53,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
   {
     title: "System",
     items: [
+      { label: "Website", icon: Globe, to: "/admin/website" },
       { label: "Security", icon: ShieldCheck, to: "/admin/security" },
       { label: "Audit Logs", icon: ScrollText, to: "/admin/audit" },
       { label: "Settings", icon: Settings, to: "/admin/settings" },

@@ -523,6 +523,168 @@ export type Database = {
           },
         ]
       }
+      site_faq: {
+        Row: {
+          answer_ar: string
+          answer_en: string
+          created_at: string
+          enabled: boolean
+          id: string
+          question_ar: string
+          question_en: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer_ar?: string
+          answer_en?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          question_ar?: string
+          question_en?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer_ar?: string
+          answer_en?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          question_ar?: string
+          question_en?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_media: {
+        Row: {
+          alt_ar: string
+          alt_en: string
+          caption_ar: string
+          caption_en: string
+          created_at: string
+          enabled: boolean
+          id: string
+          slot: string
+          sort_order: number
+          storage_path: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          alt_ar?: string
+          alt_en?: string
+          caption_ar?: string
+          caption_en?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          slot?: string
+          sort_order?: number
+          storage_path?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          alt_ar?: string
+          alt_en?: string
+          caption_ar?: string
+          caption_en?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          slot?: string
+          sort_order?: number
+          storage_path?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      site_sections: {
+        Row: {
+          data: Json
+          enabled: boolean
+          id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          data?: Json
+          enabled?: boolean
+          id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          data?: Json
+          enabled?: boolean
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      site_seo: {
+        Row: {
+          canonical_url: string
+          description_ar: string
+          description_en: string
+          keywords: string
+          noindex: boolean
+          og_description: string
+          og_image: string
+          og_title: string
+          page: string
+          title_ar: string
+          title_en: string
+          twitter_description: string
+          twitter_image: string
+          twitter_title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          canonical_url?: string
+          description_ar?: string
+          description_en?: string
+          keywords?: string
+          noindex?: boolean
+          og_description?: string
+          og_image?: string
+          og_title?: string
+          page: string
+          title_ar?: string
+          title_en?: string
+          twitter_description?: string
+          twitter_image?: string
+          twitter_title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          canonical_url?: string
+          description_ar?: string
+          description_en?: string
+          keywords?: string
+          noindex?: boolean
+          og_description?: string
+          og_image?: string
+          og_title?: string
+          page?: string
+          title_ar?: string
+          title_en?: string
+          twitter_description?: string
+          twitter_image?: string
+          twitter_title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -541,6 +703,36 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      webhook_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          message: string | null
+          ok: boolean
+          source: string
+          status_code: number | null
+        }
+        Insert: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          message?: string | null
+          ok?: boolean
+          source?: string
+          status_code?: number | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          message?: string | null
+          ok?: boolean
+          source?: string
+          status_code?: number | null
         }
         Relationships: []
       }

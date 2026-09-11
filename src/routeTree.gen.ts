@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as VerifyPhoneRouteImport } from './routes/verify-phone'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ReservationSuccessRouteImport } from './routes/reservation-success'
@@ -31,6 +33,7 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as CreateProfileRouteImport } from './routes/create-profile'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
@@ -102,6 +105,7 @@ import { Route as CommunityReferralRouteImport } from './routes/community.referr
 import { Route as CommunityGuidelinesRouteImport } from './routes/community.guidelines'
 import { Route as ChatIdRouteImport } from './routes/chat.$id'
 import { Route as AuthSuccessRouteImport } from './routes/auth.success'
+import { Route as AdminWebsiteRouteImport } from './routes/admin.website'
 import { Route as AdminWebhooksRouteImport } from './routes/admin.webhooks'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
@@ -123,6 +127,8 @@ import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as RewardsRewardIdRouteImport } from './routes/rewards.reward.$id'
 import { Route as ProfileVehiclesAddRouteImport } from './routes/profile.vehicles.add'
+import { Route as ApiPublicWebhooksAndiparkRouteImport } from './routes/api/public/webhooks/andipark'
+import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -139,6 +145,11 @@ const VerifyEmailRoute = VerifyEmailRouteImport.update({
   path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -147,6 +158,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RewardsRoute = RewardsRouteImport.update({
@@ -232,6 +248,11 @@ const CommunityRoute = CommunityRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -590,6 +611,11 @@ const AuthSuccessRoute = AuthSuccessRouteImport.update({
   path: '/success',
   getParentRoute: () => AuthRoute,
 } as any)
+const AdminWebsiteRoute = AdminWebsiteRouteImport.update({
+  id: '/website',
+  path: '/website',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminWebhooksRoute = AdminWebhooksRouteImport.update({
   id: '/webhooks',
   path: '/webhooks',
@@ -695,10 +721,22 @@ const ProfileVehiclesAddRoute = ProfileVehiclesAddRouteImport.update({
   path: '/add',
   getParentRoute: () => ProfileVehiclesRoute,
 } as any)
+const ApiPublicWebhooksAndiparkRoute =
+  ApiPublicWebhooksAndiparkRouteImport.update({
+    id: '/api/public/webhooks/andipark',
+    path: '/api/public/webhooks/andipark',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
+  id: '/api/public/media/$',
+  path: '/api/public/media/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
   '/community': typeof CommunityRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
@@ -716,8 +754,10 @@ export interface FileRoutesByFullPath {
   '/reservation-success': typeof ReservationSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/search': typeof SearchRouteWithChildren
   '/settings': typeof SettingsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
@@ -740,6 +780,7 @@ export interface FileRoutesByFullPath {
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
+  '/admin/website': typeof AdminWebsiteRoute
   '/auth/success': typeof AuthSuccessRoute
   '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
@@ -811,9 +852,12 @@ export interface FileRoutesByFullPath {
   '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/webhooks/andipark': typeof ApiPublicWebhooksAndiparkRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
   '/home': typeof HomeRoute
@@ -828,7 +872,9 @@ export interface FileRoutesByTo {
   '/reservation-success': typeof ReservationSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/search': typeof SearchRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
@@ -851,6 +897,7 @@ export interface FileRoutesByTo {
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
+  '/admin/website': typeof AdminWebsiteRoute
   '/auth/success': typeof AuthSuccessRoute
   '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
@@ -922,11 +969,14 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/webhooks/andipark': typeof ApiPublicWebhooksAndiparkRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
   '/community': typeof CommunityRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
@@ -944,8 +994,10 @@ export interface FileRoutesById {
   '/reservation-success': typeof ReservationSuccessRoute
   '/reset-password': typeof ResetPasswordRoute
   '/rewards': typeof RewardsRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/search': typeof SearchRouteWithChildren
   '/settings': typeof SettingsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/verify-email': typeof VerifyEmailRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/welcome': typeof WelcomeRoute
@@ -968,6 +1020,7 @@ export interface FileRoutesById {
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
+  '/admin/website': typeof AdminWebsiteRoute
   '/auth/success': typeof AuthSuccessRoute
   '/chat/$id': typeof ChatIdRoute
   '/community/guidelines': typeof CommunityGuidelinesRoute
@@ -1039,12 +1092,15 @@ export interface FileRoutesById {
   '/settings/': typeof SettingsIndexRoute
   '/profile/vehicles/add': typeof ProfileVehiclesAddRoute
   '/rewards/reward/$id': typeof RewardsRewardIdRoute
+  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/api/public/webhooks/andipark': typeof ApiPublicWebhooksAndiparkRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/app'
     | '/auth'
     | '/community'
     | '/create-profile'
@@ -1062,8 +1118,10 @@ export interface FileRouteTypes {
     | '/reservation-success'
     | '/reset-password'
     | '/rewards'
+    | '/robots.txt'
     | '/search'
     | '/settings'
+    | '/sitemap.xml'
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
@@ -1086,6 +1144,7 @@ export interface FileRouteTypes {
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
+    | '/admin/website'
     | '/auth/success'
     | '/chat/$id'
     | '/community/guidelines'
@@ -1157,9 +1216,12 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
+    | '/api/public/media/$'
+    | '/api/public/webhooks/andipark'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
     | '/auth'
     | '/create-profile'
     | '/home'
@@ -1174,7 +1236,9 @@ export interface FileRouteTypes {
     | '/reservation-success'
     | '/reset-password'
     | '/rewards'
+    | '/robots.txt'
     | '/search'
+    | '/sitemap.xml'
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
@@ -1197,6 +1261,7 @@ export interface FileRouteTypes {
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
+    | '/admin/website'
     | '/auth/success'
     | '/chat/$id'
     | '/community/guidelines'
@@ -1268,10 +1333,13 @@ export interface FileRouteTypes {
     | '/settings'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
+    | '/api/public/media/$'
+    | '/api/public/webhooks/andipark'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/app'
     | '/auth'
     | '/community'
     | '/create-profile'
@@ -1289,8 +1357,10 @@ export interface FileRouteTypes {
     | '/reservation-success'
     | '/reset-password'
     | '/rewards'
+    | '/robots.txt'
     | '/search'
     | '/settings'
+    | '/sitemap.xml'
     | '/verify-email'
     | '/verify-phone'
     | '/welcome'
@@ -1313,6 +1383,7 @@ export interface FileRouteTypes {
     | '/admin/transactions'
     | '/admin/users'
     | '/admin/webhooks'
+    | '/admin/website'
     | '/auth/success'
     | '/chat/$id'
     | '/community/guidelines'
@@ -1384,11 +1455,14 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/profile/vehicles/add'
     | '/rewards/reward/$id'
+    | '/api/public/media/$'
+    | '/api/public/webhooks/andipark'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  AppRoute: typeof AppRoute
   AuthRoute: typeof AuthRouteWithChildren
   CommunityRoute: typeof CommunityRouteWithChildren
   CreateProfileRoute: typeof CreateProfileRoute
@@ -1406,8 +1480,10 @@ export interface RootRouteChildren {
   ReservationSuccessRoute: typeof ReservationSuccessRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   RewardsRoute: typeof RewardsRouteWithChildren
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SearchRoute: typeof SearchRouteWithChildren
   SettingsRoute: typeof SettingsRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   VerifyPhoneRoute: typeof VerifyPhoneRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -1429,6 +1505,8 @@ export interface RootRouteChildren {
   SuccessPasswordChangedRoute: typeof SuccessPasswordChangedRoute
   SuccessProfileUpdatedRoute: typeof SuccessProfileUpdatedRoute
   SuccessVehicleAddedRoute: typeof SuccessVehicleAddedRoute
+  ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
+  ApiPublicWebhooksAndiparkRoute: typeof ApiPublicWebhooksAndiparkRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1454,6 +1532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -1466,6 +1551,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rewards': {
@@ -1585,6 +1677,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -2084,6 +2183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSuccessRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/admin/website': {
+      id: '/admin/website'
+      path: '/website'
+      fullPath: '/admin/website'
+      preLoaderRoute: typeof AdminWebsiteRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/webhooks': {
       id: '/admin/webhooks'
       path: '/webhooks'
@@ -2231,6 +2337,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileVehiclesAddRouteImport
       parentRoute: typeof ProfileVehiclesRoute
     }
+    '/api/public/webhooks/andipark': {
+      id: '/api/public/webhooks/andipark'
+      path: '/api/public/webhooks/andipark'
+      fullPath: '/api/public/webhooks/andipark'
+      preLoaderRoute: typeof ApiPublicWebhooksAndiparkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/media/$': {
+      id: '/api/public/media/$'
+      path: '/api/public/media/$'
+      fullPath: '/api/public/media/$'
+      preLoaderRoute: typeof ApiPublicMediaSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -2254,6 +2374,7 @@ interface AdminRouteChildren {
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWebhooksRoute: typeof AdminWebhooksRoute
+  AdminWebsiteRoute: typeof AdminWebsiteRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -2277,6 +2398,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWebhooksRoute: AdminWebhooksRoute,
+  AdminWebsiteRoute: AdminWebsiteRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -2481,6 +2603,7 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  AppRoute: AppRoute,
   AuthRoute: AuthRouteWithChildren,
   CommunityRoute: CommunityRouteWithChildren,
   CreateProfileRoute: CreateProfileRoute,
@@ -2498,8 +2621,10 @@ const rootRouteChildren: RootRouteChildren = {
   ReservationSuccessRoute: ReservationSuccessRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   RewardsRoute: RewardsRouteWithChildren,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SearchRoute: SearchRouteWithChildren,
   SettingsRoute: SettingsRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   VerifyPhoneRoute: VerifyPhoneRoute,
   WelcomeRoute: WelcomeRoute,
@@ -2521,6 +2646,8 @@ const rootRouteChildren: RootRouteChildren = {
   SuccessPasswordChangedRoute: SuccessPasswordChangedRoute,
   SuccessProfileUpdatedRoute: SuccessProfileUpdatedRoute,
   SuccessVehicleAddedRoute: SuccessVehicleAddedRoute,
+  ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
+  ApiPublicWebhooksAndiparkRoute: ApiPublicWebhooksAndiparkRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
