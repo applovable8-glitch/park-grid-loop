@@ -97,15 +97,22 @@ function RootComponent() {
 
 function LocalizedShell() {
   const { dir } = useI18n();
+  const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
   useEffect(() => { captureReferralFromUrl(); }, []);
   return (
     <>
       <NotificationSound />
-      <div dir={dir} className="min-h-screen w-full bg-[#eef2f6] dark:bg-[#070c16]">
-        <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background shadow-none md:my-6 md:min-h-[calc(100vh-3rem)] md:overflow-hidden md:rounded-[36px] md:shadow-[var(--shadow-elevated)] md:ring-1 md:ring-black/5">
+      {isAdmin ? (
+        <div dir={dir} className="min-h-screen w-full bg-background">
           <Outlet />
         </div>
-      </div>
+      ) : (
+        <div dir={dir} className="min-h-screen w-full bg-[#eef2f6] dark:bg-[#070c16]">
+          <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background shadow-none md:my-6 md:min-h-[calc(100vh-3rem)] md:overflow-hidden md:rounded-[36px] md:shadow-[var(--shadow-elevated)] md:ring-1 md:ring-black/5">
+            <Outlet />
+          </div>
+        </div>
+      )}
       <Toaster position="top-center" richColors closeButton dir={dir} />
     </>
   );
