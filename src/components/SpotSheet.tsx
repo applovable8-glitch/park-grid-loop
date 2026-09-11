@@ -154,7 +154,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           className="press mt-3 flex w-full items-center justify-between rounded-2xl bg-muted px-4 py-3 text-sm font-semibold"
           aria-expanded={open}
         >
-          More details
+          {S.moreDetails}
           <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
         </button>
 
@@ -216,7 +216,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
                       phone ? "bg-primary text-primary-foreground" : "pointer-events-none bg-muted text-muted-foreground"
                     }`}
                   >
-                    <Phone className="h-4 w-4" /> Call
+                    <Phone className="h-4 w-4" />{S.call}
                   </a>
                   <Link
                     to="/chat/$id"
@@ -224,7 +224,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
                     search={{ spot: spot.id }}
                     className="press flex items-center justify-center gap-2 rounded-2xl bg-muted py-3 text-sm font-semibold"
                   >
-                    <MessageCircle className="h-4 w-4" /> Chat
+                    <MessageCircle className="h-4 w-4" />{S.chat}
                   </Link>
                 </div>
               )}
@@ -235,7 +235,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
               params={{ id: spot.id }}
               className="press flex w-full items-center justify-center rounded-2xl bg-muted py-3 text-sm font-semibold"
             >
-              Full details
+              {S.fullDetails}
             </Link>
           </div>
         )}
