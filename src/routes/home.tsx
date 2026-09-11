@@ -367,7 +367,8 @@ function Home() {
             onClose={() => setSelectedId(null)}
           />
         ) : showList ? (
-          <div className="max-h-[42vh] space-y-3 overflow-y-auto scrollbar-none rounded-3xl animate-fade-up">
+          <div className="stagger max-h-[42vh] space-y-3 overflow-y-auto scrollbar-none rounded-3xl">
+            {loading && list.length === 0 && <SkeletonList n={2} />}
             {list.map((s) => (
               <SpotCard
                 key={s.id}
@@ -380,12 +381,25 @@ function Home() {
               />
             ))}
             {!loading && list.length === 0 && (
-              <div className="rounded-3xl bg-card p-6 text-center text-sm text-muted-foreground shadow-[var(--shadow-card)]">
-                {nearMe ? `No live spots within ${NEAR_ME_KM} km of you right now.` : "No live parking spots match your search."}
+              <div className="rounded-3xl bg-card p-6 text-center shadow-[var(--shadow-card)]">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-muted">
+                  <MapPin className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <p className="mt-3 text-sm font-bold">No spots nearby yet</p>
+                <p className="mt-1 text-xs text-muted-foreground">Try moving closer to a busy area.</p>
+                {(nearMe || timeFilter !== "any") && (
+                  <button
+                    onClick={() => { setNearMe(false); setTimeFilter("any"); }}
+                    className="press mt-4 rounded-full bg-[var(--emerald)] px-4 py-2 text-xs font-bold text-white"
+                  >
+                    Expand search
+                  </button>
+                )}
               </div>
             )}
           </div>
         ) : null}
+
       </div>
 
       {/* "I'm Leaving" now lives in the center of the bottom bar. */}
