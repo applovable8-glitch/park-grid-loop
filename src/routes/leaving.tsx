@@ -147,7 +147,7 @@ function Leaving() {
                   <button
                     key={o.m}
                     onClick={() => setMinutes(o.m)}
-                    className={`flex w-full items-center gap-3 rounded-3xl p-4 text-start transition-all ${
+                    className={`press flex w-full items-center gap-3 rounded-3xl p-4 text-start transition-all ${
                       active ? "bg-white text-foreground shadow-[var(--shadow-elevated)]" : "bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-md"
                     }`}
                   >
@@ -167,7 +167,7 @@ function Leaving() {
 
               <button
                 onClick={() => setMinutes("custom")}
-                className={`flex w-full items-center gap-3 rounded-3xl p-4 text-start transition-all ${
+                className={`press flex w-full items-center gap-3 rounded-3xl p-4 text-start transition-all ${
                   minutes === "custom" ? "bg-white text-foreground shadow-[var(--shadow-elevated)]" : "bg-white/10 text-white ring-1 ring-white/15 backdrop-blur-md"
                 }`}
               >
@@ -194,7 +194,7 @@ function Leaving() {
             <button
               onClick={confirm}
               disabled={busy}
-              className="mt-6 w-full max-w-sm rounded-2xl py-4 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-glow)] disabled:opacity-60"
+              className="press mt-6 w-full max-w-sm rounded-2xl py-4 font-[var(--font-display)] text-sm font-bold text-white shadow-[var(--shadow-glow)] disabled:opacity-60"
               style={{ background: "var(--gradient-emerald)" }}
             >
               {busy ? "Sharing…" : `Confirm · exit at ${Number.isNaN(leaveAt.getTime()) ? "--:--" : clockOf(leaveAt.toISOString())}`}

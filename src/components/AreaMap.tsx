@@ -26,11 +26,51 @@ interface Props {
   className?: string;
 }
 
+function isDarkTheme() {
+  return typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+}
+
+/** Minimal, label-light map skin for both themes. */
+function mapStyles(dark: boolean): GAny[] {
+  const base: GAny[] = [
+    { featureType: "poi", stylers: [{ visibility: "off" }] },
+    { featureType: "transit", stylers: [{ visibility: "off" }] },
+    { featureType: "landscape.man_made", elementType: "labels", stylers: [{ visibility: "off" }] },
+    { featureType: "administrative.neighborhood", stylers: [{ visibility: "off" }] },
+    { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
+    { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+    { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "off" }] },
+    { featureType: "road.arterial", elementType: "labels", stylers: [{ visibility: "simplified" }] },
+    { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
+  ];
+  if (!dark) {
+    return [
+      ...base,
+      { elementType: "geometry", stylers: [{ color: "#f1f5f9" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ color: "#dbeafe" }] },
+      { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#dcfce7" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#f8fafc" }] },
+    ];
+  }
+  return [
+    ...base,
+    { elementType: "geometry", stylers: [{ color: "#0b1120" }] },
+    { featureType: "road", elementType: "geometry", stylers: [{ color: "#1a2233" }] },
+    { featureType: "water", elementType: "geometry", stylers: [{ color: "#0a1a2b" }] },
+    { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#10241f" }] },
+    { elementType: "labels.text.fill", stylers: [{ color: "#94a3b8" }] },
+    { elementType: "labels.text.stroke", stylers: [{ color: "#0b1120" }] },
+  ];
+}
+
 function colorFor(s: LiveSpot, ownSpotId?: string | null) {
-  if (s.id === ownSpotId) return "#2563EB";
+  if (s.id === ownSpotId) return "#3B82F6";
   if (s.status === "reserved") return "#EF4444";
   return minutesUntil(s.planned_leave_at ?? s.leave_at) <= 1 ? "#10B981" : "#F59E0B";
 }
+
 
 function timeText(s: LiveSpot) {
   if (s.status === "reserved") return "held";
@@ -40,26 +80,34 @@ function timeText(s: LiveSpot) {
   return `${Math.round(m / 60)}h`;
 }
 
-/** Car-shaped marker with a countdown badge, drawn as an inline SVG data URI. */
+/** Custom pill marker: car glyph + countdown, soft shadow, drawn as an inline SVG data URI. */
 function carIcon(color: string, text: string, active: boolean): GAny {
-  const w = 78;
-  const h = 60;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 78 60">
-  <g filter="none">
-    <rect x="9" y="4" width="60" height="30" rx="12" fill="${color}" stroke="#ffffff" stroke-width="${active ? 4 : 3}"/>
-    <g transform="translate(17,11) scale(0.68)" fill="#ffffff">
+  const w = 92;
+  const h = 68;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 92 68">
+  <defs>
+    <filter id="s" x="-40%" y="-40%" width="180%" height="200%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#0f172a" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <g filter="url(#s)">
+    ${active ? `<rect x="12" y="4" width="68" height="34" rx="17" fill="${color}" opacity="0.22" transform="translate(-4,-4) scale(1.1) translate(-2,0)"/>` : ""}
+    <rect x="16" y="6" width="60" height="30" rx="15" fill="${color}" stroke="#ffffff" stroke-width="${active ? 3.5 : 2.5}"/>
+    <g transform="translate(24,13) scale(0.62)" fill="#ffffff">
       <path d="M4 14 L6.5 6.5 C6.9 5.2 8 4.5 9.3 4.5 H20.7 C22 4.5 23.1 5.2 23.5 6.5 L26 14 H27.5 C28.6 14 29.5 14.9 29.5 16 V21 C29.5 22.1 28.6 23 27.5 23 H2.5 C1.4 23 0.5 22.1 0.5 21 V16 C0.5 14.9 1.4 14 2.5 14 Z"/>
       <circle cx="7" cy="23.5" r="3.2"/><circle cx="23" cy="23.5" r="3.2"/>
     </g>
-    <text x="52" y="24" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" font-weight="700" fill="#ffffff">${text}</text>
-    <path d="M39 34 L45 34 L39 42 L33 34 Z" fill="${color}" stroke="#ffffff" stroke-width="2"/>
+    <text x="58" y="26" text-anchor="middle" font-family="Plus Jakarta Sans,system-ui,-apple-system,sans-serif" font-size="13" font-weight="800" fill="#ffffff">${text}</text>
+    <path d="M46 36 L52 36 L46 45 L40 36 Z" fill="${color}" stroke="#ffffff" stroke-width="2"/>
+    <circle cx="46" cy="49" r="3" fill="${color}" stroke="#ffffff" stroke-width="1.5"/>
   </g>
 </svg>`;
   return {
     url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
     scaledSize: new google.maps.Size(w, h),
-    anchor: new google.maps.Point(39, 42),
+    anchor: new google.maps.Point(46, 49),
   };
+
 }
 
 /** Real-coordinate map for search results: centers on the searched area, plots live spots as cars. */
@@ -107,18 +155,7 @@ export function AreaMap({
           zoomControl: variant === "full",
           gestureHandling: "greedy",
           clickableIcons: false,
-          styles: [
-            { featureType: "poi", stylers: [{ visibility: "off" }] },
-            { featureType: "transit", stylers: [{ visibility: "off" }] },
-            { featureType: "landscape.man_made", elementType: "labels", stylers: [{ visibility: "off" }] },
-            { featureType: "administrative.neighborhood", stylers: [{ visibility: "off" }] },
-            { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
-            { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-            { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "off" }] },
-            { featureType: "road.arterial", elementType: "labels", stylers: [{ visibility: "simplified" }] },
-            { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
-          ],
-
+          styles: mapStyles(isDarkTheme()),
         });
         setReady(true);
       })
@@ -126,6 +163,17 @@ export function AreaMap({
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // keep the map skin in sync with light/dark mode
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const apply = () => mapRef.current?.setOptions({ styles: mapStyles(isDarkTheme()) });
+    apply();
+    const obs = new MutationObserver(apply);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, [ready]);
+
 
   // follow searched area
   useEffect(() => {

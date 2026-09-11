@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BottomNav } from "@/components/BottomNav";
 import { AreaMap } from "@/components/AreaMap";
 import { SpotSheet } from "@/components/SpotSheet";
+import { SkeletonList } from "@/components/kit";
 import { useRequireProfile } from "@/lib/use-require-auth";
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/use-geolocation";
@@ -212,6 +213,9 @@ function Home() {
 
   const selected = selectedId ? spots.find((s) => s.id === selectedId) ?? null : null;
   const available = list.filter((s) => s.status !== "reserved").length;
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+
 
   if (!ready) return null;
 
@@ -233,36 +237,38 @@ function Home() {
         />
       </div>
 
-      {/* Top bar: current area + avatar */}
-      <div className="relative z-20 px-4 pt-4">
-        <div className="glass flex items-center gap-3 rounded-2xl px-3.5 py-3 shadow-[var(--shadow-card)]">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <MapPin className="h-4 w-4" fill="var(--emerald)" strokeWidth={2} />
-          </div>
+      {/* Top: greeting → one question → search */}
+      <div className="relative z-20 px-4 pt-[max(14px,env(safe-area-inset-top))]">
+        <div className="animate-fade-in flex items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">{t("current_area")}</p>
-            <p className="truncate text-sm font-semibold">
-              {place ? place.label : (areaName ?? (position ? "Locating…" : "Enable location"))}
+            <p className="truncate text-[11px] font-medium text-muted-foreground">
+              {greeting}
+              {user?.name ? `, ${user.name.split(" ")[0]}` : ""}
             </p>
+            <h1 className="truncate text-lg font-extrabold leading-tight">Find a spot</h1>
           </div>
           <Link
             to="/messages"
             aria-label="Messages"
-            className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted"
+            className="press glass relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl shadow-[var(--shadow-card)]"
           >
-            <MessageCircle className="h-4 w-4" />
+            <MessageCircle className="h-[18px] w-[18px]" />
             {totalUnread > 0 && (
-              <span className="absolute -top-1 -end-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--emerald)] px-1 text-[9px] font-bold text-white">
+              <span className="animate-scale-in absolute -top-1 -end-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--danger)] px-1 text-[9px] font-bold text-white">
                 {totalUnread}
               </span>
             )}
           </Link>
-          <Link to="/profile" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald text-emerald-foreground font-bold text-sm">
-            {user?.name?.[0] ?? "U"}
+          <Link
+            to="/profile"
+            aria-label="Profile"
+            className="press flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground"
+          >
+            {user?.name?.[0]?.toUpperCase() ?? "U"}
           </Link>
         </div>
 
-        {/* Search input */}
+        {/* Search + live area */}
         <div className="mt-3 flex items-center gap-2 rounded-2xl bg-card px-4 py-3 shadow-[var(--shadow-card)]">
           <SearchIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
           <input
@@ -272,18 +278,24 @@ function Home() {
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           {(q || place) && (
-            <button onClick={() => { setQ(""); setPlace(null); }} aria-label="Clear search">
+            <button onClick={() => { setQ(""); setPlace(null); }} aria-label="Clear search" className="press">
               <X className="h-4 w-4 text-muted-foreground" />
             </button>
           )}
-          <span className="rounded-full bg-emerald/15 px-2 py-0.5 text-[10px] font-semibold text-[color:var(--emerald)]">
-            {available} {t("live")}
+          <span className="flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-[color:var(--emerald)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--emerald)]" />
+            {available}
           </span>
         </div>
 
+        <p className="mt-1.5 flex items-center gap-1 px-1 text-[11px] text-muted-foreground">
+          <MapPin className="h-3 w-3 text-[color:var(--emerald)]" />
+          <span className="truncate">{place ? place.label : (areaName ?? (position ? "Locating…" : "Enable location"))}</span>
+        </p>
+
         {/* Place suggestions */}
         {suggestions.length > 0 && (
-          <div className="mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <div className="animate-fade-up stagger mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
             {suggestions.map((s) => (
               <button
                 key={s.id}
@@ -304,15 +316,15 @@ function Home() {
         <div className="mt-2.5 flex gap-2 overflow-x-auto scrollbar-none pb-1">
           <button
             onClick={enableNearMe}
-            className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold shadow-[var(--shadow-card)] ${nearMe ? "bg-primary text-primary-foreground" : "bg-card"}`}
+            className={`press flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold shadow-[var(--shadow-card)] ${nearMe ? "bg-[var(--emerald)] text-white" : "bg-card"}`}
           >
-            <LocateFixed className="h-3.5 w-3.5" /> Near me · {NEAR_ME_KM} km
+            <LocateFixed className="h-3.5 w-3.5" /> Near me
           </button>
           {TIME_FILTERS.map((f) => (
             <button
               key={f.id}
               onClick={() => setTimeFilter(f.id)}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold shadow-[var(--shadow-card)] ${timeFilter === f.id ? "bg-primary text-primary-foreground" : "bg-card"}`}
+              className={`press shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold shadow-[var(--shadow-card)] ${timeFilter === f.id ? "bg-primary text-primary-foreground" : "bg-card"}`}
             >
               {f.label}
             </button>
@@ -324,7 +336,7 @@ function Home() {
       <button
         onClick={recenter}
         aria-label="My location"
-        className="absolute end-4 top-[210px] z-20 flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
+        className="press absolute end-4 top-[214px] z-20 flex h-11 w-11 items-center justify-center rounded-2xl bg-card shadow-[var(--shadow-card)]"
       >
         <LocateFixed className="h-4 w-4 text-[color:var(--emerald)]" />
       </button>
@@ -333,11 +345,12 @@ function Home() {
       {!selected && (
         <button
           onClick={() => setShowList((v) => !v)}
-          className="absolute inset-x-0 bottom-[220px] z-20 mx-auto flex w-fit items-center gap-1.5 rounded-full bg-card px-4 py-2 text-xs font-semibold shadow-[var(--shadow-card)]"
+          className="press absolute inset-x-0 bottom-[220px] z-20 mx-auto flex w-fit items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-[var(--shadow-elevated)]"
         >
           <List className="h-3.5 w-3.5" /> {showList ? t("close") : `${list.length} spots`}
         </button>
       )}
+
 
       {/* Reservation and handoff prompts live in Notifications — the map stays clean. */}
 
@@ -355,7 +368,8 @@ function Home() {
             onClose={() => setSelectedId(null)}
           />
         ) : showList ? (
-          <div className="max-h-[42vh] space-y-3 overflow-y-auto scrollbar-none rounded-3xl animate-fade-up">
+          <div className="stagger max-h-[42vh] space-y-3 overflow-y-auto scrollbar-none rounded-3xl">
+            {loading && list.length === 0 && <SkeletonList n={2} />}
             {list.map((s) => (
               <SpotCard
                 key={s.id}
@@ -368,12 +382,25 @@ function Home() {
               />
             ))}
             {!loading && list.length === 0 && (
-              <div className="rounded-3xl bg-card p-6 text-center text-sm text-muted-foreground shadow-[var(--shadow-card)]">
-                {nearMe ? `No live spots within ${NEAR_ME_KM} km of you right now.` : "No live parking spots match your search."}
+              <div className="rounded-3xl bg-card p-6 text-center shadow-[var(--shadow-card)]">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-muted">
+                  <MapPin className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <p className="mt-3 text-sm font-bold">No spots nearby yet</p>
+                <p className="mt-1 text-xs text-muted-foreground">Try moving closer to a busy area.</p>
+                {(nearMe || timeFilter !== "any") && (
+                  <button
+                    onClick={() => { setNearMe(false); setTimeFilter("any"); }}
+                    className="press mt-4 rounded-full bg-[var(--emerald)] px-4 py-2 text-xs font-bold text-white"
+                  >
+                    Expand search
+                  </button>
+                )}
               </div>
             )}
           </div>
         ) : null}
+
       </div>
 
       {/* "I'm Leaving" now lives in the center of the bottom bar. */}

@@ -52,7 +52,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "AndiPark — Community parking, in real time" },
       { name: "description", content: "AndiPark helps drivers find parking by sharing spots the moment someone leaves. Community-powered, real-time, reward-driven." },
-      { name: "theme-color", content: "#0F172A" },
+      { name: "theme-color", content: "#10B981" },
       { property: "og:title", content: "AndiPark — Community parking, in real time" },
       { property: "og:description", content: "Find parking the moment someone's leaving. Share your spot. Earn points." },
       { property: "og:type", content: "website" },
@@ -61,7 +61,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/favicon.png" },
@@ -101,7 +101,7 @@ function LocalizedShell() {
   return (
     <>
       <NotificationSound />
-      <div dir={dir} className="min-h-screen w-full bg-[oklch(0.94_0.01_240)]">
+      <div dir={dir} className="min-h-screen w-full bg-[#eef2f6] dark:bg-[#070c16]">
         <div className="mx-auto min-h-screen w-full max-w-[440px] bg-background shadow-none md:my-6 md:min-h-[calc(100vh-3rem)] md:overflow-hidden md:rounded-[36px] md:shadow-[var(--shadow-elevated)] md:ring-1 md:ring-black/5">
           <Outlet />
         </div>

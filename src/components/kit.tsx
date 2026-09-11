@@ -97,17 +97,18 @@ export function Badge({ tone = "muted", children }: { tone?: "emerald" | "orange
 export function Button({ children, variant = "primary", full = true, ...p }: {
   children: ReactNode; variant?: "primary" | "secondary" | "emerald" | "ghost" | "danger"; full?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const base = "inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-semibold transition-transform active:scale-[0.98] disabled:opacity-60";
+  const base = "press inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-semibold disabled:opacity-60 disabled:active:scale-100";
   const v = {
     primary: "bg-primary text-primary-foreground",
     secondary: "bg-card text-foreground ring-1 ring-border",
     emerald: "text-white shadow-[var(--shadow-glow)]",
     ghost: "bg-muted text-foreground",
-    danger: "bg-red-50 text-[color:var(--danger)] ring-1 ring-red-200",
+    danger: "bg-red-50 text-[color:var(--danger)] ring-1 ring-red-200 dark:bg-red-500/10 dark:ring-red-500/25",
   }[variant];
   const style = variant === "emerald" ? { background: "var(--gradient-emerald)" } : undefined;
   return <button {...p} style={style} className={`${base} ${v} ${full ? "w-full" : ""} ${p.className ?? ""}`}>{children}</button>;
 }
+
 
 /* -------------------- Input -------------------- */
 export const inputCls = "w-full rounded-2xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-[var(--emerald)] focus:ring-4 focus:ring-emerald/15";
@@ -168,20 +169,49 @@ export function OfflineState({ action }: { action?: ReactNode }) {
 }
 
 /* -------------------- Skeletons -------------------- */
+export function Skeleton({ className = "" }: { className?: string }) {
+  return <div className={`skeleton rounded-2xl bg-muted ${className}`} />;
+}
 export function SkeletonCard() {
-  return <div className="h-24 w-full animate-pulse rounded-3xl bg-muted" />;
+  return (
+    <div className="rounded-3xl bg-card p-4 shadow-[var(--shadow-card)]">
+      <Skeleton className="h-3 w-24" />
+      <Skeleton className="mt-2.5 h-4 w-2/3" />
+      <div className="mt-3 flex gap-2">
+        <Skeleton className="h-3 w-14" />
+        <Skeleton className="h-3 w-16" />
+        <Skeleton className="h-3 w-12" />
+      </div>
+    </div>
+  );
 }
 export function SkeletonList({ n = 4 }: { n?: number }) {
   return <div className="space-y-3">{Array.from({ length: n }).map((_, i) => <SkeletonCard key={i} />)}</div>;
 }
-export function SkeletonMap() {
+export function SkeletonRows({ n = 5 }: { n?: number }) {
   return (
-    <div className="relative h-64 w-full overflow-hidden rounded-3xl bg-muted">
-      <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-muted via-background/40 to-muted" />
-      <Loader2 className="absolute inset-0 m-auto h-6 w-6 animate-spin text-muted-foreground" />
+    <div className="space-y-2">
+      {Array.from({ length: n }).map((_, i) => (
+        <div key={i} className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-[var(--shadow-card)]">
+          <Skeleton className="h-10 w-10 rounded-xl" />
+          <div className="flex-1">
+            <Skeleton className="h-3 w-1/2" />
+            <Skeleton className="mt-2 h-2.5 w-1/3" />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
+export function SkeletonMap() {
+  return (
+    <div className="relative h-64 w-full overflow-hidden rounded-3xl">
+      <Skeleton className="absolute inset-0 rounded-3xl" />
+      <Loader2 className="absolute inset-0 m-auto h-5 w-5 animate-spin text-muted-foreground" />
+    </div>
+  );
+}
+
 
 /* -------------------- Countdown -------------------- */
 export function Countdown({ seconds, onEnd, label }: { seconds: number; onEnd?: () => void; label?: string }) {
