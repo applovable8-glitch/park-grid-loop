@@ -5,6 +5,22 @@ import { carLabel, useDriverProfile } from "@/lib/chat";
 import { clockOf, minutesUntil, type LiveSpot } from "@/lib/parking-live";
 import { distanceLabel, driveMinutes, maskPlate, walkMinutes } from "@/lib/format";
 import { Skeleton } from "@/components/kit";
+import { useI18n } from "@/lib/i18n";
+
+const STR = {
+  en: {
+    requestThis: "Request this spot", requestQ: "Request this spot?", request: "Request spot", cancel: "Cancel",
+    sending: "Sending…", alreadyReserved: "Already reserved", ownSpot: "This is your own shared spot.",
+    leavingIn: (m: number) => `Leaving in ${m} min`, freeNow: "Free now", reserved: "Reserved",
+    moreDetails: "More details", fullDetails: "Full details", call: "Call", chat: "Chat",
+  },
+  ar: {
+    requestThis: "اطلب هذا الموقف", requestQ: "أتطلب هذا الموقف؟", request: "اطلب الموقف", cancel: "إلغاء",
+    sending: "جارٍ الإرسال…", alreadyReserved: "محجوز مسبقًا", ownSpot: "هذا موقفك الذي شاركته.",
+    leavingIn: (m: number) => `يغادر خلال ${m} دقيقة`, freeNow: "متاح الآن", reserved: "محجوز",
+    moreDetails: "تفاصيل أكثر", fullDetails: "كل التفاصيل", call: "اتصال", chat: "دردشة",
+  },
+} as const;
 
 interface Props {
   spot: LiveSpot;
@@ -19,14 +35,17 @@ interface Props {
 /** Modern bottom sheet: one clear answer first, details on demand. */
 export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled, requestBusy, isMine }: Props) {
   const { profile, loading } = useDriverProfile(spot.user_id);
+  const { lang } = useI18n();
+  const S = STR[lang];
   const [open, setOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const exitIso = spot.planned_leave_at ?? spot.leave_at;
   const mins = minutesUntil(exitIso);
   const phone = profile?.show_phone ? profile?.phone : null;
   const plate = maskPlate(profile?.plate);
 
   const reserved = spot.status === "reserved";
-  const headline = reserved ? "Reserved" : mins <= 0 ? "Free now" : `Leaving in ${mins} min`;
+  const headline = reserved ? S.reserved : mins <= 0 ? S.freeNow : S.leavingIn(mins);
   const tone = reserved ? "var(--danger)" : mins <= 2 ? "var(--emerald)" : "var(--warning)";
 
   return (
@@ -83,10 +102,10 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
         {/* Single CTA — the decision comes before the details */}
         <div className="mt-4">
           {isMine ? (
-            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">This is your own shared spot.</p>
-          ) : (
+            <p className="rounded-2xl bg-muted p-4 text-center text-sm text-muted-foreground">{S.ownSpot}</p>
+          ) : !confirming ? (
             <button
-              onClick={onRequest}
+              onClick={() => setConfirming(true)}
               disabled={requestDisabled || requestBusy}
               className={`press flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold ${
                 requestDisabled ? "bg-muted text-muted-foreground" : "text-white shadow-[var(--shadow-glow)]"
@@ -94,12 +113,37 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
               style={requestDisabled ? undefined : { background: "var(--gradient-emerald)" }}
             >
               <Zap className="h-4 w-4" />
-              {reserved ? "Already reserved" : requestBusy ? "Sending…" : "Request this spot"}
+              {reserved ? S.alreadyReserved : requestBusy ? S.sending : S.requestThis}
             </button>
+          ) : (
+            <div className="animate-fade-up rounded-2xl border border-border bg-muted/60 p-4">
+              <p className="text-center font-[var(--font-display)] text-base font-bold">{S.requestQ}</p>
+              <p className="mt-1 text-center text-xs text-muted-foreground">
+                {headline} · {spot.cost} pts · {distance == null ? "" : `${distanceLabel(distance)} · `}{clockOf(exitIso)}
+              </p>
+              <div className="mt-3 grid grid-cols-[1fr_auto] gap-2">
+                <button
+                  onClick={onRequest}
+                  disabled={requestBusy}
+                  className="press flex items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-white shadow-[var(--shadow-glow)] disabled:opacity-60"
+                  style={{ background: "var(--gradient-emerald)" }}
+                >
+                  <Zap className="h-4 w-4" />
+                  {requestBusy ? S.sending : S.request}
+                </button>
+                <button
+                  onClick={() => setConfirming(false)}
+                  disabled={requestBusy}
+                  className="press rounded-2xl bg-card px-5 py-3.5 text-sm font-semibold ring-1 ring-border"
+                >
+                  {S.cancel}
+                </button>
+              </div>
+            </div>
           )}
-          {!isMine && !requestDisabled && (
+          {!isMine && !requestDisabled && !confirming && (
             <p className="mt-2 text-center text-[11px] text-muted-foreground">
-              {spot.cost} points · driver leaves at {clockOf(exitIso)}
+              {spot.cost} pts · {clockOf(exitIso)}
             </p>
           )}
         </div>
@@ -110,7 +154,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
           className="press mt-3 flex w-full items-center justify-between rounded-2xl bg-muted px-4 py-3 text-sm font-semibold"
           aria-expanded={open}
         >
-          More details
+          {S.moreDetails}
           <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
         </button>
 
@@ -172,7 +216,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
                       phone ? "bg-primary text-primary-foreground" : "pointer-events-none bg-muted text-muted-foreground"
                     }`}
                   >
-                    <Phone className="h-4 w-4" /> Call
+                    <Phone className="h-4 w-4" />{S.call}
                   </a>
                   <Link
                     to="/chat/$id"
@@ -180,7 +224,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
                     search={{ spot: spot.id }}
                     className="press flex items-center justify-center gap-2 rounded-2xl bg-muted py-3 text-sm font-semibold"
                   >
-                    <MessageCircle className="h-4 w-4" /> Chat
+                    <MessageCircle className="h-4 w-4" />{S.chat}
                   </Link>
                 </div>
               )}
@@ -191,7 +235,7 @@ export function SpotSheet({ spot, distance, onClose, onRequest, requestDisabled,
               params={{ id: spot.id }}
               className="press flex w-full items-center justify-center rounded-2xl bg-muted py-3 text-sm font-semibold"
             >
-              Full details
+              {S.fullDetails}
             </Link>
           </div>
         )}
