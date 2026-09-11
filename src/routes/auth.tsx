@@ -43,6 +43,14 @@ function Auth() {
       const { error } = await signUpWithEmail(email, password, name.trim());
       setBusy(null);
       if (error) { toast.error(error); return; }
+      // With email confirmation on, signUp returns no session — send the user to the
+      // confirmation screen instead of pretending they are signed in.
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        toast.success("Check your email to confirm your account");
+        setPendingEmail(email);
+        return;
+      }
       toast.success("Account created — complete your profile");
       nav({ to: "/create-profile" });
     }
